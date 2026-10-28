@@ -55,10 +55,26 @@ export default function AdminDashboardPage() {
   const [selectedLead, setSelectedLead] = useState<CRMLead | null>(null);
   const [proposalLead, setProposalLead] = useState<CRMLead | null>(null);
 
-  // Load from localStorage safely on mount with cloud sync
+  // Load from localStorage safely on mount with authentication & cloud sync
   useEffect(() => {
     setMounted(true);
-    // 1. Instant local render (0ms)
+
+    // 1. Verify persistent authentication session
+    const existing = getAdminAuthSession();
+    if (existing && existing.user) {
+      setAuthSession(existing);
+      if (existing.user.name === "Harsh Sood") {
+        setActiveFounder("Harsh Sood");
+      } else {
+        setActiveFounder("Suraj Uniyal");
+      }
+      if (existing.user.role) {
+        setActiveRole(existing.user.role);
+      }
+    }
+    setIsCheckingAuth(false);
+
+    // 2. Instant local render (0ms)
     const stored = getStoredLeads();
     setLeads(stored);
 
@@ -247,7 +263,7 @@ export default function AdminDashboardPage() {
   const newLeadsCount = leads.filter((l) => l.status === "New Lead").length;
   const activeTravelersCount = leads.filter((l) => l.status === "On-Ground Active").length + ACTIVE_TRAVELERS.length;
 
-  if (!mounted) {
+  if (!mounted || isCheckingAuth) {
     return (
       <div className="min-h-screen bg-[#111111] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
@@ -258,6 +274,11 @@ export default function AdminDashboardPage() {
         </div>
       </div>
     );
+  }
+
+  // If not authenticated or locked, present the secure Login Gate!
+  if (!authSession) {
+    return <AdminAuthGate onLoginSuccess={handleLoginSuccess} />;
   }
 
   return (
