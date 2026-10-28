@@ -253,21 +253,22 @@ export default function AdminDashboardPage() {
   };
 
   // Filter leads by global search query
-  const filteredLeads = leads.filter((l) => {
+  const filteredLeads = (leads || []).filter((l) => {
+    if (!l) return false;
     if (!searchQuery.trim()) return true;
     const q = searchQuery.toLowerCase();
     return (
-      l.clientName.toLowerCase().includes(q) ||
-      l.referenceCode.toLowerCase().includes(q) ||
-      l.destinationSummary.toLowerCase().includes(q) ||
-      l.email.toLowerCase().includes(q) ||
-      l.phone.toLowerCase().includes(q)
+      (l.clientName || "").toLowerCase().includes(q) ||
+      (l.referenceCode || "").toLowerCase().includes(q) ||
+      (l.destinationSummary || "").toLowerCase().includes(q) ||
+      (l.email || "").toLowerCase().includes(q) ||
+      (l.phone || "").toLowerCase().includes(q)
     );
   });
 
-  const totalPipelineValueINR = leads.reduce((acc, curr) => acc + curr.estimatedValueINR, 0);
-  const newLeadsCount = leads.filter((l) => l.status === "New Lead").length;
-  const activeTravelersCount = leads.filter((l) => l.status === "On-Ground Active").length + ACTIVE_TRAVELERS.length;
+  const totalPipelineValueINR = (leads || []).reduce((acc, curr) => acc + (curr?.estimatedValueINR || 0), 0);
+  const newLeadsCount = (leads || []).filter((l) => l?.status === "New Lead").length;
+  const activeTravelersCount = (leads || []).filter((l) => l?.status === "On-Ground Active").length + (ACTIVE_TRAVELERS || []).length;
 
   if (!mounted || isCheckingAuth) {
     return (
@@ -313,7 +314,7 @@ export default function AdminDashboardPage() {
           newLeadsCount={newLeadsCount}
           activeTravelersCount={activeTravelersCount}
           activeRole={activeRole}
-          rolePermissions={rolePermissions[activeRole] || ROLE_PERMISSIONS[activeRole]}
+          rolePermissions={rolePermissions?.[activeRole] || ROLE_PERMISSIONS[activeRole] || ROLE_PERMISSIONS["Founder (Unrestricted)"]}
           onLockedClick={(tabLabel) => {
             setLockedToast(`Access Denied: '${tabLabel}' is locked for '${activeRole}' by the Founder in the Permissions Matrix.`);
             setTimeout(() => setLockedToast(null), 4500);
@@ -324,7 +325,7 @@ export default function AdminDashboardPage() {
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#111111]">
           <div className="max-w-7xl mx-auto space-y-6">
             {/* Locked Tab Gate */}
-            {isTabLockedForRole(currentTab, rolePermissions[activeRole] || ROLE_PERMISSIONS[activeRole]) ? (
+            {isTabLockedForRole(currentTab, rolePermissions?.[activeRole] || ROLE_PERMISSIONS[activeRole] || ROLE_PERMISSIONS["Founder (Unrestricted)"]) ? (
               <div className="bg-[#181818] border border-amber-500/40 rounded-2xl p-8 max-w-lg mx-auto text-center space-y-4 my-16 shadow-2xl animate-in fade-in">
                 <div className="w-16 h-16 rounded-full bg-amber-950/60 border border-amber-500/50 text-amber-400 mx-auto flex items-center justify-center shadow-lg">
                   <Lock className="w-7 h-7" />

@@ -230,7 +230,7 @@ export default function AdminHeader({
                   {activeFounder}
                 </span>
                 <span className="text-[9px] text-[#C5A059] block uppercase tracking-wider leading-none">
-                  {activeRole.replace(" (Unrestricted)", "")}
+                  {(activeRole || "Founder").replace(" (Unrestricted)", "")}
                 </span>
               </div>
               <ChevronDown className="w-3 h-3 text-[#A1A1AA]" />

@@ -97,28 +97,6 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
     }, 400);
   };
 
-  const handleQuickLogin = (founder: "Suraj Uniyal" | "Harsh Sood") => {
-    setErrorMessage(null);
-    const email = founder === "Suraj Uniyal" ? "suraj@soulsventure.com" : "harsh@soulsventure.com";
-    const pin = founder === "Suraj Uniyal" ? "812635" : "931984";
-    setLoginEmailOrPhone(email);
-    setLoginPassword(pin);
-
-    const verifiedUser = verifyAdminLogin(email, pin);
-    if (verifiedUser) {
-      const session: AdminAuthSession = {
-        token: `sv-auth-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
-        user: verifiedUser,
-        loginTime: new Date().toISOString(),
-      };
-      saveAdminAuthSession(session);
-      setSuccessMessage(`Founder access verified for ${founder}. Launching dashboard...`);
-      setTimeout(() => {
-        onLoginSuccess(session);
-      }, 350);
-    }
-  };
-
   const handleRegisterSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
@@ -269,7 +247,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                     required
                     value={loginEmailOrPhone}
                     onChange={(e) => setLoginEmailOrPhone(e.target.value)}
-                    placeholder="e.g. suraj@soulsventure.com or 8126357353"
+                    placeholder="e.g. curator@soulsventure.com or 9876543210"
                     className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-10 pr-3 py-3 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] transition-colors"
                   />
                 </div>
@@ -289,7 +267,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="Enter your login password or founder PIN"
+                    placeholder="Enter your password or security PIN"
                     className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-10 pr-10 py-3 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] transition-colors font-mono"
                   />
                   <button
@@ -313,49 +291,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              {/* FOUNDER FAST-PASS 1-CLICK ACCESS */}
-              <div className="pt-4 mt-3 border-t border-[#262626] space-y-2">
-                <span className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold block text-center">
-                  Founder 1-Click Fast Pass
-                </span>
-                <div className="grid grid-cols-2 gap-2.5">
-                  <button
-                    type="button"
-                    onClick={() => handleQuickLogin("Suraj Uniyal")}
-                    className="px-3.5 py-2.5 bg-[#202020] hover:bg-[#282828] border border-[#2F2F2F] hover:border-[#C5A059]/60 rounded-lg text-left transition-all cursor-pointer group"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-[#C5A059]/20 border border-[#C5A059]/50 flex items-center justify-center text-[10px] text-[#C5A059] font-bold">
-                        SU
-                      </div>
-                      <div>
-                        <span className="text-xs font-medium text-[#FDFBF7] block group-hover:text-[#C5A059]">
-                          Suraj Uniyal
-                        </span>
-                        <span className="text-[9px] text-[#71717A] block font-mono">PIN: 812635</span>
-                      </div>
-                    </div>
-                  </button>
 
-                  <button
-                    type="button"
-                    onClick={() => handleQuickLogin("Harsh Sood")}
-                    className="px-3.5 py-2.5 bg-[#202020] hover:bg-[#282828] border border-[#2F2F2F] hover:border-[#C5A059]/60 rounded-lg text-left transition-all cursor-pointer group"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-full bg-[#C5A059]/20 border border-[#C5A059]/50 flex items-center justify-center text-[10px] text-[#C5A059] font-bold">
-                        HS
-                      </div>
-                      <div>
-                        <span className="text-xs font-medium text-[#FDFBF7] block group-hover:text-[#C5A059]">
-                          Harsh Sood
-                        </span>
-                        <span className="text-[9px] text-[#71717A] block font-mono">PIN: 931984</span>
-                      </div>
-                    </div>
-                  </button>
-                </div>
-              </div>
             </form>
           ) : (
             /* TAB 2: REGISTER NEW STAFF */
@@ -450,7 +386,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                   required
                   value={regAuthKey}
                   onChange={(e) => setRegAuthKey(e.target.value)}
-                  placeholder="Enter Master Founder Passcode (812635)"
+                  placeholder="Enter Founder Authorization Passcode"
                   className="w-full bg-[#131313] text-xs text-[#FDFBF7] px-3 py-1.5 rounded border border-[#3A3A3A] focus:outline-none focus:border-[#C5A059] font-mono"
                 />
                 <span className="text-[10px] text-[#71717A] block leading-tight">
@@ -474,7 +410,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
               <ShieldCheck className="w-3 h-3 text-[#C5A059]" />
               <span>Soulsventure Luxury Travel Concierge OS v3.8</span>
             </p>
-            <p>Direct Inquiries or Founder Assistance: +91 8126357353</p>
+            <p>Bespoke Luxury Travel Management Terminal • Authorized Access Only</p>
           </div>
         </div>
       </div>
