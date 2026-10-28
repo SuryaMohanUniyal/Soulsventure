@@ -73,56 +73,68 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     setMounted(true);
 
-    // 1. Verify persistent authentication session
-    const existing = getAdminAuthSession();
-    if (existing && existing.user) {
-      setAuthSession(existing);
-      if (existing.user.name === "Harsh Sood") {
-        setActiveFounder("Harsh Sood");
-      } else {
-        setActiveFounder("Suraj Uniyal");
+    // Apply strict dark background to html & body while in /admin to eliminate white borders on mobile swipe
+    if (typeof document !== "undefined") {
+      const origHtmlBg = document.documentElement.style.backgroundColor;
+      const origBodyBg = document.body.style.backgroundColor;
+      document.documentElement.style.backgroundColor = "#111111";
+      document.body.style.backgroundColor = "#111111";
+      document.documentElement.style.overflowX = "hidden";
+      document.body.style.overflowX = "hidden";
+
+      // 1. Verify persistent authentication session
+      const existing = getAdminAuthSession();
+      if (existing && existing.user) {
+        setAuthSession(existing);
+        if (existing.user.name === "Harsh Sood") {
+          setActiveFounder("Harsh Sood");
+        } else {
+          setActiveFounder("Suraj Uniyal");
+        }
+        if (existing.user.role) {
+          setActiveRole(existing.user.role);
+        }
       }
-      if (existing.user.role) {
-        setActiveRole(existing.user.role);
-      }
+      setIsCheckingAuth(false);
+
+      // 2. Instant local render (0ms)
+      const stored = getStoredLeads();
+      setLeads(stored);
+
+      // 2. Immediate cloud database fetch & merge
+      syncLeadsWithCloud()
+        .then((synced) => {
+          setLeads([...synced]);
+        })
+        .catch((e) => console.warn("Initial cloud sync deferred:", e));
+      syncTeamWithCloud().catch(() => {});
+
+      // 3. Multi-tab local sync listener
+      const handleSync = () => {
+        const refreshed = getStoredLeads();
+        setLeads([...refreshed]);
+        setRolePermissions(getStoredRolePermissions());
+      };
+      window.addEventListener("storage", handleSync);
+
+      // 4. Polling cloud database every 10 seconds for real-time mobile submissions
+      const cloudInterval = setInterval(() => {
+        if (typeof document !== "undefined" && document.visibilityState === "visible") {
+          syncLeadsWithCloud()
+            .then((synced) => {
+              setLeads([...synced]);
+            })
+            .catch(() => {});
+        }
+      }, 10000);
+
+      return () => {
+        window.removeEventListener("storage", handleSync);
+        clearInterval(cloudInterval);
+        document.documentElement.style.backgroundColor = origHtmlBg;
+        document.body.style.backgroundColor = origBodyBg;
+      };
     }
-    setIsCheckingAuth(false);
-
-    // 2. Instant local render (0ms)
-    const stored = getStoredLeads();
-    setLeads(stored);
-
-    // 2. Immediate cloud database fetch & merge
-    syncLeadsWithCloud()
-      .then((synced) => {
-        setLeads([...synced]);
-      })
-      .catch((e) => console.warn("Initial cloud sync deferred:", e));
-    syncTeamWithCloud().catch(() => {});
-
-    // 3. Multi-tab local sync listener
-    const handleSync = () => {
-      const refreshed = getStoredLeads();
-      setLeads([...refreshed]);
-      setRolePermissions(getStoredRolePermissions());
-    };
-    window.addEventListener("storage", handleSync);
-
-    // 4. Polling cloud database every 10 seconds for real-time mobile submissions
-    const cloudInterval = setInterval(() => {
-      if (typeof document !== "undefined" && document.visibilityState === "visible") {
-        syncLeadsWithCloud()
-          .then((synced) => {
-            setLeads([...synced]);
-          })
-          .catch(() => {});
-      }
-    }, 10000);
-
-    return () => {
-      window.removeEventListener("storage", handleSync);
-      clearInterval(cloudInterval);
-    };
   }, []);
 
   const handleLoginSuccess = (session: AdminAuthSession) => {
@@ -290,7 +302,7 @@ export default function AdminDashboardPage() {
 
   if (!mounted || isCheckingAuth) {
     return (
-      <div className="min-h-screen bg-[#111111] flex items-center justify-center">
+      <div className="min-h-dvh w-full max-w-full overflow-hidden bg-[#111111] flex items-center justify-center">
         <div className="flex flex-col items-center gap-3">
           <div className="w-8 h-8 rounded-full border-2 border-[#C5A059] border-t-transparent animate-spin" />
           <span className="text-xs font-serif tracking-[0.2em] uppercase text-[#C5A059]">
@@ -307,7 +319,7 @@ export default function AdminDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-[#111111] flex flex-col font-sans text-[#FDFBF7]">
+    <div className="min-h-dvh w-full max-w-full overflow-x-hidden bg-[#111111] flex flex-col font-sans text-[#FDFBF7]">
       {/* Sticky Top Bar */}
       <AdminHeader
         searchQuery={searchQuery}
@@ -326,7 +338,7 @@ export default function AdminDashboardPage() {
       />
 
       {/* Mobile Horizontal Quick-Tab Strip for One-Tap Navigation */}
-      <div className="md:hidden bg-[#161616] border-b border-[#262626] px-3 py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none flex-shrink-0">
+      <div className="md:hidden bg-[#161616] border-b border-[#262626] px-2.5 py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none flex-shrink-0 w-full max-w-full">
         {quickTabs.map((tab) => {
           const isSelected = currentTab === tab.id;
           const isLocked = isTabLockedForRole(
@@ -364,7 +376,7 @@ export default function AdminDashboardPage() {
       </div>
 
       {/* Main Workspace Body */}
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 overflow-hidden w-full max-w-full">
         {/* Navigation Sidebar (Desktop persistent + Mobile slide-over drawer) */}
         <AdminSidebar
           currentTab={currentTab}
@@ -382,8 +394,8 @@ export default function AdminDashboardPage() {
         />
 
         {/* Tab Content Display */}
-        <main className="flex-1 overflow-y-auto p-3 sm:p-6 lg:p-8 bg-[#111111]">
-          <div className="max-w-7xl mx-auto space-y-6">
+        <main className="flex-1 overflow-y-auto overflow-x-hidden w-full max-w-full p-2.5 sm:p-6 lg:p-8 bg-[#111111] min-w-0">
+          <div className="max-w-7xl mx-auto space-y-4 sm:space-y-6 w-full max-w-full min-w-0">
             {/* Locked Tab Gate */}
             {isTabLockedForRole(currentTab, rolePermissions?.[activeRole] || ROLE_PERMISSIONS[activeRole] || ROLE_PERMISSIONS["Founder (Unrestricted)"]) ? (
               <div className="bg-[#181818] border border-amber-500/40 rounded-2xl p-6 sm:p-8 max-w-lg mx-auto text-center space-y-4 my-10 sm:my-16 shadow-2xl animate-in fade-in">

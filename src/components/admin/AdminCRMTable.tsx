@@ -132,9 +132,9 @@ export default function AdminCRMTable({
   };
 
   return (
-    <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-4 sm:space-y-6 w-full max-w-full overflow-hidden animate-in fade-in duration-300">
       {/* Top Controls & Filter Bar */}
-      <div className="bg-[#181818] border border-[#2A2A2A] rounded-xl p-4 sm:p-5 space-y-4 shadow-lg">
+      <div className="bg-[#181818] border border-[#2A2A2A] rounded-xl p-4 sm:p-5 space-y-4 shadow-lg w-full max-w-full">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
             <h2 className="font-serif text-xl sm:text-2xl font-light text-[#FDFBF7]">
@@ -410,9 +410,9 @@ export default function AdminCRMTable({
       </div>
 
       {/* 2. DESKTOP CRM MASTER TABLE (hidden md:block) */}
-      <div className="hidden md:block bg-[#181818] border border-[#2A2A2A] rounded-xl overflow-hidden shadow-2xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs border-collapse">
+      <div className="hidden md:block bg-[#181818] border border-[#2A2A2A] rounded-xl overflow-hidden shadow-2xl w-full max-w-full">
+        <div className="overflow-x-auto scrollbar-thin">
+          <table className="w-full text-left text-xs border-collapse min-w-[680px]">
             <thead>
               <tr className="bg-[#141414] border-b border-[#2A2A2A] text-[10px] uppercase tracking-wider text-[#71717A] font-medium">
                 <th className="py-3.5 px-4">Client & Ref</th>

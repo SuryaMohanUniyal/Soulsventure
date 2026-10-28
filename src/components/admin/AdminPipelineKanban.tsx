@@ -60,9 +60,9 @@ export default function AdminPipelineKanban({
   ];
 
   return (
-    <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-4 sm:space-y-6 w-full max-w-full overflow-hidden animate-in fade-in duration-300">
       {/* Header */}
-      <div className="p-4 sm:p-5 bg-[#181818] border border-[#2A2A2A] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+      <div className="p-4 sm:p-5 bg-[#181818] border border-[#2A2A2A] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg w-full max-w-full">
         <div>
           <h2 className="font-serif text-xl sm:text-2xl font-light text-[#FDFBF7]">
             Trip Stage Pipeline & Guest Lifecycle

@@ -84,199 +84,207 @@ export default function AdminCalendarView({ leads, onOpenDossier }: AdminCalenda
   const selectedDepartures = selectedDate ? departuresByDate[selectedDate] || [] : [];
 
   return (
-    <div className="space-y-8 animate-in fade-in duration-300">
+    <div className="space-y-4 sm:space-y-6 w-full max-w-full overflow-hidden animate-in fade-in duration-300">
       {/* Calendar Header Bar */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-5 bg-[#181818] border border-[#2A2A2A] rounded-xl shadow-lg">
-        <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-lg bg-[#C5A059]/15 border border-[#C5A059]/30 flex items-center justify-center text-[#C5A059]">
-            <CalendarIcon className="w-5 h-5" />
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3.5 sm:p-5 bg-[#181818] border border-[#2A2A2A] rounded-xl shadow-lg w-full max-w-full">
+        <div className="flex items-center gap-2.5 sm:gap-3">
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-[#C5A059]/15 border border-[#C5A059]/30 flex items-center justify-center text-[#C5A059] flex-shrink-0">
+            <CalendarIcon className="w-4 h-4 sm:w-5 sm:h-5" />
           </div>
           <div>
-            <h2 className="font-serif text-2xl font-light text-[#FDFBF7]">
+            <h2 className="font-serif text-lg sm:text-2xl font-light text-[#FDFBF7]">
               {monthNames[currentMonth]} {currentYear}
             </h2>
-            <span className="text-[10px] uppercase tracking-[0.22em] text-[#A1A1AA]">
+            <span className="text-[9px] sm:text-[10px] uppercase tracking-[0.2em] text-[#A1A1AA] block">
               Bespoke Inquiries & Departure Schedule
             </span>
           </div>
         </div>
 
         {/* Legend & Month Controls */}
-        <div className="flex items-center gap-4 flex-wrap">
-          <div className="flex items-center gap-3 text-xs text-[#A1A1AA] bg-[#202020] px-3 py-1.5 rounded-lg border border-[#2E2E2E]">
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-[#C5A059]" />
+        <div className="flex items-center justify-between sm:justify-end gap-2 sm:gap-4 flex-wrap w-full sm:w-auto">
+          <div className="flex items-center gap-2 text-[10px] sm:text-xs text-[#A1A1AA] bg-[#202020] px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-[#2E2E2E]">
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
               Inquiry
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span className="flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
               Departure
             </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-purple-400" />
-              Season Window
+            <span className="hidden xs:flex items-center gap-1">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+              Peak
             </span>
           </div>
 
           <div className="flex items-center gap-1">
             <button
               onClick={handlePrevMonth}
-              className="p-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#FDFBF7] border border-[#2F2F2F] transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#FDFBF7] border border-[#2F2F2F] transition-colors cursor-pointer"
             >
-              <ChevronLeft className="w-4 h-4" />
+              <ChevronLeft className="w-3.5 h-3.5" />
             </button>
             <button
               onClick={() => {
                 setCurrentYear(2026);
                 setCurrentMonth(9);
               }}
-              className="px-3 py-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-xs font-medium text-[#C5A059] border border-[#2F2F2F] transition-colors cursor-pointer"
+              className="px-2.5 sm:px-3 py-1.5 sm:py-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-xs font-medium text-[#C5A059] border border-[#2F2F2F] transition-colors cursor-pointer"
             >
               Today
             </button>
             <button
               onClick={handleNextMonth}
-              className="p-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#FDFBF7] border border-[#2F2F2F] transition-colors cursor-pointer"
+              className="p-1.5 sm:p-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#FDFBF7] border border-[#2F2F2F] transition-colors cursor-pointer"
             >
-              <ChevronRight className="w-4 h-4" />
+              <ChevronRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
       </div>
 
-      {/* Main Calendar Grid */}
-      <div className="bg-[#181818] border border-[#2A2A2A] rounded-xl overflow-hidden shadow-2xl">
-        {/* Days of Week Row */}
-        <div className="grid grid-cols-7 border-b border-[#2A2A2A] bg-[#141414] text-center text-xs uppercase tracking-widest font-medium text-[#71717A] py-3">
-          {daysOfWeek.map((d, idx) => (
-            <div key={idx} className={idx === 0 || idx === 6 ? "text-[#A1A1AA]" : ""}>
-              {d}
-            </div>
-          ))}
+      {/* Main Calendar Grid Container (With Horizontal Scroll Isolation for Mobile) */}
+      <div className="bg-[#181818] border border-[#2A2A2A] rounded-xl overflow-hidden shadow-2xl w-full max-w-full">
+        {/* Mobile Swipe Notice */}
+        <div className="flex md:hidden items-center justify-between px-3 py-1.5 bg-[#141414] border-b border-[#242424] text-[10px] text-[#A1A1AA]">
+          <span>7-Day Calendar Grid</span>
+          <span className="text-[#C5A059] font-mono flex items-center gap-1">
+            Swipe horizontally ⟷
+          </span>
         </div>
 
-        {/* Day Cells Grid */}
-        <div className="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-[#242424]">
-          {/* Empty cells before 1st of month */}
-          {Array.from({ length: firstDayOfMonth }).map((_, i) => (
-            <div key={`empty-${i}`} className="min-h-[110px] sm:min-h-[125px] bg-[#131313]/50 p-2.5 opacity-30" />
-          ))}
+        {/* Scrollable Container */}
+        <div className="overflow-x-auto scrollbar-thin">
+          <div className="min-w-[620px] sm:min-w-0">
+            {/* Days of Week Row */}
+            <div className="grid grid-cols-7 border-b border-[#2A2A2A] bg-[#141414] text-center text-xs uppercase tracking-widest font-medium text-[#71717A] py-2.5 sm:py-3">
+              {daysOfWeek.map((d, idx) => (
+                <div key={idx} className={idx === 0 || idx === 6 ? "text-[#A1A1AA]" : ""}>
+                  {d}
+                </div>
+              ))}
+            </div>
 
-          {/* Month Days */}
-          {Array.from({ length: daysInMonth }).map((_, i) => {
-            const dayNum = i + 1;
-            const monthStr = (currentMonth + 1).toString().padStart(2, "0");
-            const dayStr = dayNum.toString().padStart(2, "0");
-            const dateStr = `${currentYear}-${monthStr}-${dayStr}`;
+            {/* Day Cells Grid */}
+            <div className="grid grid-cols-7 auto-rows-fr divide-x divide-y divide-[#242424]">
+              {/* Empty cells before 1st of month */}
+              {Array.from({ length: firstDayOfMonth }).map((_, i) => (
+                <div key={`empty-${i}`} className="min-h-[90px] sm:min-h-[125px] bg-[#131313]/50 p-2 sm:p-2.5 opacity-30" />
+              ))}
 
-            const dayLeads = leadsByDate[dateStr] || [];
-            const dayDepartures = departuresByDate[dateStr] || [];
-            const isToday = dateStr === "2026-10-25";
-            const isSelected = selectedDate === dateStr;
+              {/* Month Days */}
+              {Array.from({ length: daysInMonth }).map((_, i) => {
+                const dayNum = i + 1;
+                const monthStr = (currentMonth + 1).toString().padStart(2, "0");
+                const dayStr = dayNum.toString().padStart(2, "0");
+                const dateStr = `${currentYear}-${monthStr}-${dayStr}`;
 
-            // Check if special season alert touches this date
-            const hasSeasonalAlert =
-              (currentMonth === 9 && dayNum >= 24 && dayNum <= 28) ||
-              (currentMonth === 10 && dayNum >= 1 && dayNum <= 15);
+                const dayLeads = leadsByDate[dateStr] || [];
+                const dayDepartures = departuresByDate[dateStr] || [];
+                const isToday = dateStr === "2026-10-25";
+                const isSelected = selectedDate === dateStr;
 
-            return (
-              <div
-                key={dateStr}
-                onClick={() => handleDateClick(dateStr)}
-                className={`min-h-[110px] sm:min-h-[125px] p-2 sm:p-2.5 flex flex-col justify-between transition-all cursor-pointer relative group ${
-                  isSelected
-                    ? "bg-[#C5A059]/10 ring-1 ring-[#C5A059]"
-                    : "hover:bg-[#202020]"
-                } ${isToday ? "bg-[#1E1E1E]" : "bg-[#181818]"}`}
-              >
-                {/* Date Header */}
-                <div className="flex items-center justify-between">
-                  <span
-                    className={`text-xs font-mono font-medium rounded-full w-6 h-6 flex items-center justify-center ${
-                      isToday
-                        ? "bg-[#C5A059] text-[#111111] font-bold shadow-md shadow-[#C5A059]/20"
-                        : isSelected
-                        ? "text-[#C5A059] font-bold"
-                        : "text-[#A1A1AA] group-hover:text-[#FDFBF7]"
-                    }`}
+                // Check if special season alert touches this date
+                const hasSeasonalAlert =
+                  (currentMonth === 9 && dayNum >= 24 && dayNum <= 28) ||
+                  (currentMonth === 10 && dayNum >= 1 && dayNum <= 15);
+
+                return (
+                  <div
+                    key={dateStr}
+                    onClick={() => handleDateClick(dateStr)}
+                    className={`min-h-[90px] sm:min-h-[125px] p-1.5 sm:p-2.5 flex flex-col justify-between transition-all cursor-pointer relative group ${
+                      isSelected
+                        ? "bg-[#C5A059]/10 ring-1 ring-[#C5A059]"
+                        : "hover:bg-[#202020]"
+                    } ${isToday ? "bg-[#1E1E1E]" : "bg-[#181818]"}`}
                   >
-                    {dayNum}
-                  </span>
+                    {/* Date Header */}
+                    <div className="flex items-center justify-between">
+                      <span
+                        className={`text-xs font-mono font-medium rounded-full w-5 h-5 sm:w-6 sm:h-6 flex items-center justify-center ${
+                          isToday
+                            ? "bg-[#C5A059] text-[#111111] font-bold shadow-md shadow-[#C5A059]/20"
+                            : isSelected
+                            ? "text-[#C5A059] font-bold"
+                            : "text-[#A1A1AA] group-hover:text-[#FDFBF7]"
+                        }`}
+                      >
+                        {dayNum}
+                      </span>
 
-                  {/* Indicator Dots */}
-                  <div className="flex items-center gap-1">
-                    {dayLeads.length > 0 && (
-                      <span className="w-2 h-2 rounded-full bg-[#C5A059] shadow-sm shadow-[#C5A059]/50 animate-pulse" />
-                    )}
-                    {dayDepartures.length > 0 && (
-                      <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
-                    )}
-                    {hasSeasonalAlert && (
-                      <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
-                    )}
+                      {/* Indicator Dots */}
+                      <div className="flex items-center gap-1">
+                        {dayLeads.length > 0 && (
+                          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-[#C5A059] shadow-sm shadow-[#C5A059]/50 animate-pulse" />
+                        )}
+                        {dayDepartures.length > 0 && (
+                          <span className="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50" />
+                        )}
+                        {hasSeasonalAlert && (
+                          <span className="w-1.5 h-1.5 rounded-full bg-purple-400" />
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Event Tags inside the cell */}
+                    <div className="space-y-1 my-1 overflow-hidden">
+                      {dayLeads.slice(0, 1).map((lead) => (
+                        <div
+                          key={lead.id}
+                          className="px-1 py-0.5 rounded text-[9px] sm:text-[10px] leading-tight bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 truncate font-medium"
+                        >
+                          {lead.firstName}: {lead.destinations[0]?.split(" ")[0]}
+                        </div>
+                      ))}
+
+                      {dayDepartures.slice(0, 1).map((dep) => (
+                        <div
+                          key={dep.id}
+                          className="px-1 py-0.5 rounded text-[9px] sm:text-[10px] leading-tight bg-emerald-950/70 text-emerald-400 border border-emerald-800/40 truncate flex items-center gap-1"
+                        >
+                          <Plane className="w-2.5 h-2.5 flex-shrink-0" />
+                          <span>{dep.firstName} Dep.</span>
+                        </div>
+                      ))}
+
+                      {dayLeads.length > 1 && (
+                        <span className="text-[8px] sm:text-[9px] text-[#A1A1AA] block pl-1">
+                          +{dayLeads.length - 1} more
+                        </span>
+                      )}
+
+                      {hasSeasonalAlert && dayLeads.length === 0 && dayDepartures.length === 0 && (
+                        <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] bg-purple-950/50 text-purple-300 border border-purple-800/30 truncate">
+                          Peak Window
+                        </span>
+                      )}
+                    </div>
+
+                    {/* Cell Footer Hint */}
+                    <div className="text-[8px] sm:text-[9px] text-right text-[#52525B] group-hover:text-[#C5A059] transition-colors">
+                      View →
+                    </div>
                   </div>
-                </div>
-
-                {/* Event Tags inside the cell */}
-                <div className="space-y-1 my-1 overflow-hidden">
-                  {dayLeads.slice(0, 1).map((lead) => (
-                    <div
-                      key={lead.id}
-                      className="px-1.5 py-0.5 rounded text-[10px] leading-tight bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 truncate font-medium"
-                    >
-                      {lead.firstName}: {lead.destinations[0]?.split(" ")[0]}
-                    </div>
-                  ))}
-
-                  {dayDepartures.slice(0, 1).map((dep) => (
-                    <div
-                      key={dep.id}
-                      className="px-1.5 py-0.5 rounded text-[10px] leading-tight bg-emerald-950/70 text-emerald-400 border border-emerald-800/40 truncate flex items-center gap-1"
-                    >
-                      <Plane className="w-2.5 h-2.5 flex-shrink-0" />
-                      <span>{dep.firstName} Dep.</span>
-                    </div>
-                  ))}
-
-                  {dayLeads.length > 1 && (
-                    <span className="text-[9px] text-[#A1A1AA] block pl-1">
-                      +{dayLeads.length - 1} more inquiry
-                    </span>
-                  )}
-
-                  {hasSeasonalAlert && dayLeads.length === 0 && dayDepartures.length === 0 && (
-                    <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[9px] bg-purple-950/50 text-purple-300 border border-purple-800/30 truncate">
-                      Peak Window
-                    </span>
-                  )}
-                </div>
-
-                {/* Bottom Footer count */}
-                <div className="text-[9px] text-[#52525B] flex justify-between items-center pt-1 border-t border-[#222222]">
-                  <span>
-                    {dayLeads.length > 0 ? `${dayLeads.length} leads` : ""}
-                  </span>
-                  <span className="text-[#3F3F46] group-hover:text-[#C5A059] transition-colors">
-                    View →
-                  </span>
-                </div>
-              </div>
-            );
-          })}
+                );
+              })}
+            </div>
+          </div>
         </div>
       </div>
 
       {/* Date Detail Slide-Over Drawer */}
       {isDrawerOpen && selectedDate && (
-        <div className="fixed inset-0 z-50 flex justify-end bg-black/60 backdrop-blur-xs animate-in fade-in duration-200">
+        <div className="fixed inset-0 z-50 flex justify-end bg-black/75 backdrop-blur-xs animate-in fade-in duration-200">
           <div className="w-full max-w-xl bg-[#161616] border-l border-[#2E2E2E] h-full shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-right duration-300">
             {/* Drawer Header */}
-            <div className="p-6 border-b border-[#282828] flex items-center justify-between bg-[#191919]">
+            <div className="p-4 sm:p-6 border-b border-[#282828] flex items-center justify-between bg-[#191919]">
               <div>
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-semibold flex items-center gap-1.5">
                   <CalendarIcon className="w-3.5 h-3.5" /> Date Dossier
                 </span>
-                <h3 className="font-serif text-2xl font-light text-[#FDFBF7] mt-1">
+                <h3 className="font-serif text-lg sm:text-2xl font-light text-[#FDFBF7] mt-1">
                   {new Date(selectedDate + "T00:00:00").toLocaleDateString("en-IN", {
                     weekday: "long",
                     year: "numeric",
@@ -294,9 +302,9 @@ export default function AdminCalendarView({ leads, onOpenDossier }: AdminCalenda
             </div>
 
             {/* Drawer Body */}
-            <div className="p-6 overflow-y-auto space-y-6 flex-1">
+            <div className="p-4 sm:p-6 overflow-y-auto space-y-4 sm:space-y-6 flex-1 text-xs">
               {/* Seasonal Intelligence Banner */}
-              <div className="p-4 rounded-lg bg-gradient-to-r from-purple-950/40 via-[#1C1C1C] to-[#1C1C1C] border border-purple-800/30 space-y-1.5">
+              <div className="p-3.5 sm:p-4 rounded-lg bg-gradient-to-r from-purple-950/40 via-[#1C1C1C] to-[#1C1C1C] border border-purple-800/30 space-y-1.5">
                 <span className="text-[10px] uppercase tracking-wider text-purple-400 font-semibold flex items-center gap-1.5">
                   <Sparkles className="w-3 h-3" /> Seasonal Intelligence Indicator
                 </span>
@@ -318,7 +326,7 @@ export default function AdminCalendarView({ leads, onOpenDossier }: AdminCalenda
                 </div>
 
                 {selectedLeads.length === 0 ? (
-                  <div className="p-8 text-center bg-[#1A1A1A] rounded-lg border border-[#262626]">
+                  <div className="p-6 sm:p-8 text-center bg-[#1A1A1A] rounded-lg border border-[#262626]">
                     <p className="text-xs text-[#71717A] italic">
                       No online client inquiries recorded on this exact date.
                     </p>
@@ -328,7 +336,7 @@ export default function AdminCalendarView({ leads, onOpenDossier }: AdminCalenda
                     {selectedLeads.map((lead) => (
                       <div
                         key={lead.id}
-                        className="p-4 bg-[#1E1E1E] border border-[#2B2B2B] hover:border-[#C5A059]/60 rounded-xl space-y-3 transition-colors shadow-md"
+                        className="p-3.5 sm:p-4 bg-[#1E1E1E] border border-[#2B2B2B] hover:border-[#C5A059]/60 rounded-xl space-y-3 transition-colors shadow-md"
                       >
                         <div className="flex items-center justify-between">
                           <span className="text-xs font-serif text-[#C5A059] font-medium">
@@ -350,7 +358,7 @@ export default function AdminCalendarView({ leads, onOpenDossier }: AdminCalenda
                         </div>
 
                         <div>
-                          <h5 className="font-serif text-lg font-medium text-[#FDFBF7]">
+                          <h5 className="font-serif text-base sm:text-lg font-medium text-[#FDFBF7]">
                             {lead.clientName}
                           </h5>
                           <span className="text-xs text-[#A1A1AA] flex items-center gap-1 mt-0.5">
@@ -434,15 +442,15 @@ export default function AdminCalendarView({ leads, onOpenDossier }: AdminCalenda
       )}
 
       {/* Seasonal Intelligence Master Reference */}
-      <div className="p-6 bg-[#181818] border border-[#2A2A2A] rounded-xl shadow-lg space-y-4">
+      <div className="p-4 sm:p-6 bg-[#181818] border border-[#2A2A2A] rounded-xl shadow-lg space-y-4 w-full max-w-full overflow-hidden">
         <div className="flex items-center justify-between border-b border-[#2A2A2A] pb-3">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#C5A059]" />
-            <h3 className="font-serif text-lg font-light text-[#FDFBF7]">
+            <h3 className="font-serif text-base sm:text-lg font-light text-[#FDFBF7]">
               Seasonal Travel Windows & Peak Intelligence
             </h3>
           </div>
-          <span className="text-xs text-[#A1A1AA]">Curated for High-Net-Worth Advisory</span>
+          <span className="text-xs text-[#A1A1AA] hidden sm:inline-block">Curated for High-Net-Worth Advisory</span>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5">

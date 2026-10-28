@@ -322,9 +322,9 @@ export function AdminVendorLedger() {
       </div>
 
       {/* Partners Master Table */}
-      <div className="bg-[#181818] border border-[#262626] rounded-xl overflow-hidden shadow-2xl">
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+      <div className="bg-[#181818] border border-[#262626] rounded-xl overflow-hidden shadow-2xl w-full max-w-full">
+        <div className="overflow-x-auto scrollbar-thin">
+          <table className="w-full text-left text-xs min-w-[750px]">
             <thead>
               <tr className="border-b border-[#262626] bg-[#141414] text-[#888888] font-serif uppercase tracking-wider">
                 <th className="py-3.5 px-4 font-normal">Category</th>

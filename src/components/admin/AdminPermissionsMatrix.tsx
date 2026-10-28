@@ -364,8 +364,8 @@ export function AdminPermissionsMatrix({
           </span>
         </div>
 
-        <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+        <div className="overflow-x-auto scrollbar-thin w-full max-w-full">
+          <table className="w-full text-left text-xs min-w-[580px]">
             <thead>
               <tr className="border-b border-[#2A2A2A] bg-[#141414] text-[#888888] font-serif uppercase tracking-wider">
                 <th className="py-3 px-4 font-normal w-1/3">System Privilege / Scope</th>

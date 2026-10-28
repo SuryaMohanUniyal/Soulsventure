@@ -106,40 +106,40 @@ export default function AdminHeader({
   ];
 
   return (
-    <header className="sticky top-0 z-30 bg-[#161616]/95 backdrop-blur-md border-b border-[#262626] px-3 sm:px-6 lg:px-8 py-2.5 sm:py-3.5">
-      <div className="flex items-center justify-between gap-2 sm:gap-4">
+    <header className="sticky top-0 z-30 bg-[#161616]/95 backdrop-blur-md border-b border-[#262626] px-2.5 sm:px-6 lg:px-8 py-2 sm:py-3.5 w-full max-w-full overflow-hidden">
+      <div className="flex items-center justify-between gap-1.5 sm:gap-4 w-full max-w-full">
         {/* Left Branding & Mobile Hamburger */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-3 min-w-0 flex-1 sm:flex-initial">
           {onToggleMobileMenu && (
             <button
               type="button"
               onClick={onToggleMobileMenu}
               aria-label={isMobileMenuOpen ? "Close navigation menu" : "Open navigation menu"}
-              className="p-1.5 sm:p-2 -ml-1 text-[#C5A059] hover:text-[#FDFBF7] hover:bg-[#222222] rounded-lg transition-colors md:hidden cursor-pointer"
+              className="p-1.5 text-[#C5A059] hover:text-[#FDFBF7] hover:bg-[#222222] rounded-lg transition-colors md:hidden cursor-pointer flex-shrink-0"
             >
               {isMobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           )}
 
-          <Link href="/admin" className="flex items-center gap-2 sm:gap-2.5 group">
-            <CreativeSoulMark className="w-7 h-7 sm:w-8 sm:h-8 text-[#C5A059] flex-shrink-0" isScrolled={false} />
-            <div className="flex flex-col">
-              <div className="flex items-center gap-1.5 sm:gap-2">
-                <span className="font-serif tracking-[0.2em] sm:tracking-[0.24em] text-sm sm:text-base text-[#FDFBF7] font-light">
+          <Link href="/admin" className="flex items-center gap-1.5 sm:gap-2.5 group min-w-0">
+            <CreativeSoulMark className="w-6 h-6 sm:w-8 sm:h-8 text-[#C5A059] flex-shrink-0" isScrolled={false} />
+            <div className="flex flex-col min-w-0">
+              <div className="flex items-center gap-1.5 min-w-0">
+                <span className="font-serif tracking-[0.16em] sm:tracking-[0.24em] text-xs sm:text-base text-[#FDFBF7] font-light truncate">
                   SOULSVENTURE
                 </span>
-                <span className="px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] tracking-widest uppercase bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 font-semibold">
+                <span className="hidden sm:inline-block px-1.5 py-0.5 rounded text-[8px] sm:text-[9px] tracking-widest uppercase bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 font-semibold flex-shrink-0">
                   CONCIERGE OS
                 </span>
               </div>
-              <span className="text-[9px] tracking-[0.22em] text-[#A1A1AA] uppercase hidden sm:block">
+              <span className="text-[9px] tracking-[0.22em] text-[#A1A1AA] uppercase hidden md:block">
                 Private Hospitality CRM • Dehradun HQ
               </span>
             </div>
           </Link>
         </div>
 
-        {/* Center Search & Live IST Time (Desktop) */}
+        {/* Center Search & Live IST Time (Desktop Only) */}
         <div className="hidden md:flex items-center gap-4 flex-1 max-w-md mx-4">
           <div className="relative w-full">
             <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#A1A1AA]" />
@@ -158,9 +158,9 @@ export default function AdminHeader({
           </div>
         </div>
 
-        {/* Right Actions & Profile */}
-        <div className="flex items-center gap-1.5 sm:gap-3">
-          {/* Quick Stats Pill (Desktop) */}
+        {/* Right Actions & Profile (Optimized for Mobile) */}
+        <div className="flex items-center gap-1 sm:gap-2.5 flex-shrink-0">
+          {/* Quick Stats Pill (Desktop Only) */}
           <div className="hidden lg:flex items-center gap-3 px-3 py-1.5 bg-[#1F1F1F] rounded-md border border-[#2E2E2E] text-[11px]">
             <span className="text-[#A1A1AA]">
               Pipeline:{" "}
@@ -179,11 +179,11 @@ export default function AdminHeader({
             </span>
           </div>
 
-          {/* Refresh Button */}
+          {/* Refresh Button (Desktop only; on mobile accessible via drawer) */}
           <button
             onClick={onRefresh}
             title="Refresh CRM Leads & Calendar"
-            className="p-1.5 sm:p-2 text-[#A1A1AA] hover:text-[#C5A059] hover:bg-[#222222] rounded-md transition-colors cursor-pointer"
+            className="hidden sm:inline-flex p-1.5 sm:p-2 text-[#A1A1AA] hover:text-[#C5A059] hover:bg-[#222222] rounded-md transition-colors cursor-pointer"
           >
             <RefreshCw className="w-4 h-4" />
           </button>
@@ -196,11 +196,11 @@ export default function AdminHeader({
               title="Concierge Notifications"
             >
               <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-[#C5A059] ring-2 ring-[#161616]" />
+              <span className="absolute top-1 right-1 w-2 h-2 rounded-full bg-[#C5A059] ring-2 ring-[#161616]" />
             </button>
 
             {showNotifications && (
-              <div className="absolute right-0 mt-2 w-72 sm:w-80 md:w-96 bg-[#1A1A1A] border border-[#2E2E2E] rounded-lg shadow-2xl p-4 space-y-3 z-50">
+              <div className="fixed sm:absolute right-2 sm:right-0 top-14 sm:top-auto sm:mt-2 w-[calc(100vw-16px)] sm:w-80 md:w-96 max-w-sm bg-[#1A1A1A] border border-[#2E2E2E] rounded-lg shadow-2xl p-4 space-y-3 z-50">
                 <div className="flex items-center justify-between pb-2 border-b border-[#2A2A2A]">
                   <span className="text-xs uppercase tracking-wider font-semibold text-[#C5A059]">
                     Operations Log & Alerts
@@ -237,7 +237,7 @@ export default function AdminHeader({
           <div className="relative">
             <button
               onClick={() => setShowFounderDropdown(!showFounderDropdown)}
-              className="flex items-center gap-1.5 sm:gap-2 px-2 py-1.5 bg-[#202020] hover:bg-[#262626] border border-[#2F2F2F] rounded-md text-xs cursor-pointer transition-colors"
+              className="flex items-center gap-1 sm:gap-2 p-1 sm:px-2.5 sm:py-1.5 bg-[#202020] hover:bg-[#262626] border border-[#2F2F2F] rounded-md text-xs cursor-pointer transition-colors"
             >
               <div className="w-6 h-6 rounded-full bg-[#C5A059]/20 border border-[#C5A059] flex items-center justify-center text-[10px] text-[#C5A059] font-medium flex-shrink-0">
                 {activeFounder === "Suraj Uniyal" ? "SU" : "HS"}
@@ -312,7 +312,7 @@ export default function AdminHeader({
             )}
           </div>
 
-          {/* View Public Website Link (Desktop) */}
+          {/* View Public Website Link (Desktop Only) */}
           <Link
             href="/"
             target="_blank"
@@ -322,7 +322,7 @@ export default function AdminHeader({
             <ExternalLink className="w-3.5 h-3.5 text-[#A1A1AA]" />
           </Link>
 
-          {/* Secure Log Out Button */}
+          {/* Secure Log Out Button (Compact on mobile) */}
           {onLogout && (
             <button
               type="button"
@@ -331,7 +331,7 @@ export default function AdminHeader({
                 e.stopPropagation();
                 onLogout();
               }}
-              className="inline-flex items-center gap-1 sm:gap-1.5 px-2.5 sm:px-3 py-1.5 rounded-md text-xs font-semibold text-rose-300 hover:text-white bg-rose-950/70 hover:bg-rose-900 border border-rose-800/70 shadow-sm transition-all cursor-pointer"
+              className="inline-flex items-center gap-1 sm:gap-1.5 p-1.5 sm:px-3 sm:py-1.5 rounded-md text-xs font-semibold text-rose-300 hover:text-white bg-rose-950/70 hover:bg-rose-900 border border-rose-800/70 shadow-sm transition-all cursor-pointer flex-shrink-0"
               title="Log Out of Concierge OS"
             >
               <LogOut className="w-3.5 h-3.5 text-rose-400" />
