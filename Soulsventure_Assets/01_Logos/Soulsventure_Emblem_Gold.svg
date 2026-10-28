@@ -1,0 +1,33 @@
+<svg viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="goldGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#DFCDAE" />
+      <stop offset="50%" stop-color="#C5A880" />
+      <stop offset="100%" stop-color="#9E7E50" />
+    </linearGradient>
+    <linearGradient id="spiritGradient" x1="0%" y1="100%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#C5A880" />
+      <stop offset="60%" stop-color="#1A1A1A" />
+      <stop offset="100%" stop-color="#DFCDAE" />
+    </linearGradient>
+  </defs>
+  <!-- Celestial Meridian Ring -->
+  <circle cx="32" cy="32" r="28.5" stroke="#C5A880" stroke-width="1.2" stroke-opacity="0.8" />
+  <circle cx="32" cy="32" r="24" stroke="#1A1A1A" stroke-width="0.6" stroke-dasharray="2 3" stroke-opacity="0.4" />
+  <!-- Cardinal Points -->
+  <polygon points="32,2 34,7 32,9 30,7" fill="url(#goldGradient)" />
+  <polygon points="32,62 34,57 32,55 30,57" fill="url(#goldGradient)" />
+  <polygon points="62,32 57,34 55,32 57,30" fill="url(#goldGradient)" />
+  <polygon points="2,32 7,34 9,32 7,30" fill="url(#goldGradient)" />
+  <!-- Ascending Soul Flame -->
+  <path d="M 32 10 C 37 10, 46 16, 44 26 C 42 34, 25 32, 23 41 C 21 49, 31 52, 38 50 C 43 49, 45 45, 45 42" stroke="url(#spiritGradient)" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" />
+  <path d="M 20 22 C 20 18, 24 14, 29 13 M 35 51 C 40 51, 46 47, 46 39 C 46 33, 39 31, 35 29" stroke="#C5A880" stroke-width="1.6" stroke-linecap="round" stroke-opacity="0.85" />
+  <!-- Compass Star Core -->
+  <g transform="translate(32, 32)">
+    <polygon points="0,-12 2.2,-2 0,0 -2.2,-2" fill="#C5A880" />
+    <polygon points="0,12 2.2,2 0,0 -2.2,2" fill="#C5A880" opacity="0.75" />
+    <polygon points="12,0 2,2.2 0,0 2,-2.2" fill="#C5A880" opacity="0.85" />
+    <polygon points="-12,0 -2,2.2 0,0 -2,-2.2" fill="#C5A880" opacity="0.75" />
+    <circle cx="0" cy="0" r="2" fill="#1A1A1A" />
+  </g>
+</svg>

@@ -1,0 +1,86 @@
+@import "tailwindcss";
+
+:root {
+  --font-serif: var(--font-serif), "Cormorant Garamond", "Playfair Display", Georgia, serif;
+  --font-sans: var(--font-sans), "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --background: #FDFBF7;
+  --foreground: #1A1A1A;
+}
+
+html {
+  scroll-behavior: smooth;
+  background-color: #FDFBF7;
+  color: #1A1A1A;
+}
+
+body {
+  background-color: #FDFBF7;
+  color: #1A1A1A;
+  font-family: var(--font-sans);
+  overflow-x: hidden;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+.font-serif {
+  font-family: var(--font-serif);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+/* Luxury scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F5F2EB;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C5A880;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #9E7E50;
+}
+
+/* Subtle image Ken Burns zoom utility */
+.ken-burns {
+  transition: transform 12s cubic-bezier(0.25, 1, 0.5, 1);
+}
+.ken-burns:hover {
+  transform: scale(1.08);
+}
+
+/* Editorial Drop Cap */
+.drop-cap::first-letter {
+  float: left;
+  font-family: var(--font-serif);
+  font-size: 4.5rem;
+  line-height: 0.8;
+  padding-top: 4px;
+  padding-right: 12px;
+  padding-bottom: 2px;
+  color: #C5A880;
+  font-weight: 400;
+}
+
+/* Subtle glassmorphism */
+.glass-luxury-dark {
+  background: rgba(26, 26, 26, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.glass-luxury-light {
+  background: rgba(253, 251, 247, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(26, 26, 26, 0.06);
+}
