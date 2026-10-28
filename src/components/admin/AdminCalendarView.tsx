@@ -24,10 +24,9 @@ interface AdminCalendarViewProps {
 }
 
 export default function AdminCalendarView({ leads, onOpenDossier }: AdminCalendarViewProps) {
-  // Current view month (defaulting to October 2026 or current)
-  const [currentYear, setCurrentYear] = useState(2026);
-  const [currentMonth, setCurrentMonth] = useState(9); // 0-indexed: 9 = October
-  const [selectedDate, setSelectedDate] = useState<string | null>("2026-10-25");
+  const [currentYear, setCurrentYear] = useState(() => new Date().getFullYear());
+  const [currentMonth, setCurrentMonth] = useState(() => new Date().getMonth());
+  const [selectedDate, setSelectedDate] = useState<string | null>(() => new Date().toISOString().split("T")[0]);
   const [isDrawerOpen, setIsDrawerOpen] = useState(false);
 
   const monthNames = [

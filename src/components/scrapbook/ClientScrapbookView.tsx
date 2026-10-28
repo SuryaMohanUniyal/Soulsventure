@@ -23,10 +23,29 @@ import { CreativeSoulMark } from "@/components/SoulsventureLogo";
 export function ClientScrapbookView({ initialRef }: { initialRef: string }) {
   const refCode = initialRef.toUpperCase();
 
+  const fallbackScrapbook: PostTripScrapbook = {
+    id: "sb-preview",
+    leadReference: refCode || "SV-VIP-PREVIEW",
+    clientName: "Valued Private Client",
+    itineraryTitle: "Bespoke Journey Across India",
+    travelDates: "Season 2026-27",
+    curatorFarewell: "Hosting you across India was an honour for our entire team. We hope these captured moments remain etched in your memories forever.",
+    memories: [
+      {
+        id: "sbm-preview-1",
+        caption: "Sunset Solitude in Rajasthan",
+        imageUrl: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
+        date: "October 2026",
+        location: "Rajasthan",
+        curatorMemory: "The golden hour reflection across the lakes was unforgettable.",
+      },
+    ],
+  };
+
   const scrapbook =
     INITIAL_SCRAPBOOKS.find(
       (s) => s.leadReference.toLowerCase() === refCode.toLowerCase()
-    ) || INITIAL_SCRAPBOOKS[0];
+    ) || fallbackScrapbook;
 
   const [overallRating, setOverallRating] = useState(5);
   const [hotelRating, setHotelRating] = useState(5);

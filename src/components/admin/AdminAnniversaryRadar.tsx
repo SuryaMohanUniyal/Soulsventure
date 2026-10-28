@@ -203,7 +203,16 @@ export function AdminAnniversaryRadar() {
 
       {/* Radar Cards Feed */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {filteredEvents.map((event) => {
+        {filteredEvents.length === 0 ? (
+          <div className="col-span-full py-12 text-center bg-[#181818] border border-[#262626] rounded-xl text-[#71717A] text-xs space-y-2">
+            <Heart className="w-8 h-8 text-[#C5A059]/40 mx-auto" />
+            <p className="font-serif text-sm text-[#FDFBF7]">No Upcoming Client Milestones Recorded</p>
+            <p className="text-[#71717A] max-w-md mx-auto">
+              Track wedding anniversaries, milestone birthdays, and private estate anniversaries to deploy luxury gifts and anticipatory re-booking proposals.
+            </p>
+          </div>
+        ) : (
+          filteredEvents.map((event) => {
           const isUrgent = event.daysRemaining <= 20;
 
           return (
@@ -301,7 +310,7 @@ export function AdminAnniversaryRadar() {
               </div>
             </div>
           );
-        })}
+        }))}
       </div>
 
       {/* Touchpoint Management Modal */}

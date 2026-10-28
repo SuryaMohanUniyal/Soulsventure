@@ -33,13 +33,22 @@ export default function AdminActiveTravelers() {
         </div>
         <div className="flex items-center gap-2 text-xs text-emerald-400 bg-emerald-950/40 px-3 py-1.5 rounded-lg border border-emerald-800/40">
           <ShieldCheck className="w-4 h-4" />
-          <span>All 2 Parties Checked In • Zero Transit Delays</span>
+          <span>{ACTIVE_TRAVELERS.length} Parties Active • 24/7 Concierge Ready</span>
         </div>
       </div>
 
       {/* Active Traveler Cards Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        {ACTIVE_TRAVELERS.map((traveler) => (
+        {ACTIVE_TRAVELERS.length === 0 ? (
+          <div className="col-span-full py-16 text-center bg-[#181818] border border-[#2B2B2B] rounded-xl text-[#71717A] text-xs space-y-2">
+            <Compass className="w-8 h-8 text-[#C5A059]/40 mx-auto" />
+            <p className="font-serif text-sm text-[#FDFBF7]">No Travelers Currently In-Transit</p>
+            <p className="max-w-md mx-auto text-[#71717A]">
+              When confirmed bookings depart or a lead&apos;s status is set to &ldquo;On-Ground Active&rdquo;, real-time guest tracking, high-altitude passes, and luxury concierge alerts will appear here.
+            </p>
+          </div>
+        ) : (
+          ACTIVE_TRAVELERS.map((traveler) => (
           <div
             key={traveler.id}
             className="p-6 bg-[#181818] border border-[#2B2B2B] hover:border-[#C5A059]/60 rounded-xl space-y-5 transition-all shadow-xl relative overflow-hidden"
@@ -109,7 +118,7 @@ export default function AdminActiveTravelers() {
               </span>
             </div>
           </div>
-        ))}
+        )))}
       </div>
     </div>
   );

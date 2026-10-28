@@ -32,7 +32,12 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
 
   const totalPipelineValue = leads.reduce((acc, curr) => acc + curr.estimatedValueINR, 0);
   const confirmedValue = confirmedLeads.reduce((acc, curr) => acc + curr.estimatedValueINR, 0);
-  const avgBookingValue = confirmedLeads.length > 0 ? confirmedValue / confirmedLeads.length : totalPipelineValue / totalLeads;
+  const avgBookingValue =
+    confirmedLeads.length > 0
+      ? confirmedValue / confirmedLeads.length
+      : totalLeads > 0
+      ? totalPipelineValue / totalLeads
+      : 0;
   const conversionRate = totalLeads > 0 ? ((confirmedLeads.length / totalLeads) * 100).toFixed(1) : "0";
 
   // Destination Distribution
@@ -49,7 +54,7 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
     (a, b) => b[1].totalINR - a[1].totalINR
   );
 
-  const topDestination = destinationsSorted[0] ? destinationsSorted[0][0] : "Rajasthan Palaces";
+  const topDestination = destinationsSorted[0] ? destinationsSorted[0][0] : "Awaiting Inquiries";
 
   // Curators Breakdown
   const curatorMap: Record<string, { leads: number; confirmed: number; volumeINR: number }> = {

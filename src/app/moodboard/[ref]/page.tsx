@@ -3,9 +3,10 @@ import { ClientMoodboardView } from "@/components/moodboard/ClientMoodboardView"
 import { INITIAL_MOODBOARDS } from "@/lib/crmStore";
 
 export function generateStaticParams() {
-  return INITIAL_MOODBOARDS.map((m) => ({
+  const list = INITIAL_MOODBOARDS.map((m) => ({
     ref: m.leadReference.toLowerCase(),
   }));
+  return list.length > 0 ? list : [{ ref: "preview" }];
 }
 
 export default async function Page({

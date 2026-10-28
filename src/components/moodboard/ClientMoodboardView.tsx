@@ -23,10 +23,31 @@ import { CreativeSoulMark } from "@/components/SoulsventureLogo";
 export function ClientMoodboardView({ initialRef }: { initialRef: string }) {
   const refCode = initialRef.toUpperCase();
 
+  const fallbackMoodboard: ClientMoodboard = {
+    id: "mb-preview",
+    leadReference: refCode || "SV-VIP-PREVIEW",
+    clientName: "Valued Private Client",
+    passcode: "SOULSVENTURE",
+    title: "The Regal Sanctuaries of India",
+    aestheticTheme: "Royal Heritage & Solitude",
+    curatorName: "Suraj Uniyal & Harsh Sood",
+    curatorNote: "Welcome to your personal inspiration vault. Here you can explore curated visual aesthetics and experiences tailored for your journey.",
+    items: [
+      {
+        id: "mbi-preview-1",
+        title: "Exclusive Heritage Sanctuaries",
+        category: "Architecture & Stays",
+        imageUrl: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
+        description: "Handcrafted suites and secluded courtyard retreats across Rajasthan and the Himalayas.",
+        location: "India",
+      },
+    ],
+  };
+
   const moodboard =
     INITIAL_MOODBOARDS.find(
       (m) => m.leadReference.toLowerCase() === refCode.toLowerCase()
-    ) || INITIAL_MOODBOARDS[0];
+    ) || fallbackMoodboard;
 
   const [enteredPasscode, setEnteredPasscode] = useState("");
   const [isUnlocked, setIsUnlocked] = useState(false);

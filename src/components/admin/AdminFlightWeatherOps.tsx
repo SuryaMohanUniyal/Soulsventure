@@ -123,10 +123,10 @@ export function AdminFlightWeatherOps() {
             Active Mountain Advisories
           </p>
           <div className="text-3xl font-serif text-amber-400 mt-1.5 font-medium">
-            2 Corridors
+            {flights.filter((f) => f.status === "Weather Alert" || f.protocolStatus === "Action Required").length} Corridors
           </div>
           <p className="text-[11px] text-[#A0A0A0] mt-1">
-            Khardung La (Ladakh) & Gulmarg (Kashmir)
+            Khardung La, Rohtang & Pir Panjal
           </p>
         </div>
 
@@ -135,10 +135,10 @@ export function AdminFlightWeatherOps() {
             Alternate Reroutes Active
           </p>
           <div className="text-3xl font-serif text-purple-400 mt-1.5 font-medium">
-            1 En-Route
+            {flights.filter((f) => f.protocolStatus === "Escorted Alternate Active").length} Active
           </div>
           <p className="text-[11px] text-[#A0A0A0] mt-1">
-            Private 4x4 Prado with snow chains
+            Chauffeur contingency protocol
           </p>
         </div>
 
@@ -185,7 +185,16 @@ export function AdminFlightWeatherOps() {
 
       {/* Flights & Weather Feed Cards */}
       <div className="space-y-4">
-        {filteredFlights.map((item) => {
+        {filteredFlights.length === 0 ? (
+          <div className="py-16 text-center bg-[#181818] border border-[#262626] rounded-xl text-[#71717A] text-xs space-y-2">
+            <Plane className="w-8 h-8 text-[#C5A059]/40 mx-auto" />
+            <p className="font-serif text-sm text-[#FDFBF7]">No Flights or Mountain Passes Currently Monitored</p>
+            <p className="text-[#71717A] max-w-md mx-auto">
+              Flight itineraries and mountain weather corridors (Khardung La, Rohtang, Pir Panjal) will automatically display when guest bookings are activated.
+            </p>
+          </div>
+        ) : (
+          filteredFlights.map((item) => {
           const isAction = item.protocolStatus === "Action Required";
           const isDelayed = item.status === "Delayed 2h" || item.status === "Weather Alert";
 
@@ -320,7 +329,7 @@ export function AdminFlightWeatherOps() {
               </div>
             </div>
           );
-        })}
+        }))}
       </div>
     </div>
   );

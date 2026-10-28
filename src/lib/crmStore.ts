@@ -82,289 +82,7 @@ export interface VendorPayout {
   vipContact: string;
 }
 
-export const INITIAL_LEADS: CRMLead[] = [
-  {
-    id: "lead-01",
-    referenceCode: "SV-8241-IND",
-    createdAt: "2026-10-24T09:15:00Z",
-    dateKey: "2026-10-24",
-    clientName: "Vikram Singhania",
-    firstName: "Vikram",
-    lastName: "Singhania",
-    email: "vikram.singhania@apexholding.in",
-    phone: "+91 98201 44521",
-    destinations: ["Ladakh & The Himalayas"],
-    destinationSummary: "Ladakh Solitude & High Passes",
-    travelWindow: "Currently Traveling (Oct 21–28)",
-    departureDate: "2026-10-21",
-    duration: "8 Days",
-    companions: "Family (4 Guests)",
-    familyAges: "Spouse & 2 Children (14, 17)",
-    budgetTier: "₹12,00,000 - ₹25,00,000 pp",
-    estimatedValueINR: 5200000,
-    specialInterests: ["High Altitude Glamping", "Astral Photography", "Senior Rinpoche Blessing"],
-    specialRequests: "Strictly pure vegetarian organic meals. Private high-altitude expedition physician attached.",
-    consultationMethod: "phone",
-    preferredTimeOfDay: "Morning (09:00 - 12:00)",
-    status: "On-Ground Active",
-    assignedCurator: "Suraj Uniyal",
-    internalNotes: "VVIP family. Currently at TUTC Chamba Camp Thiksey. Oxygen concentrators deployed to their suites. Suraj personally called GM at 7:30 AM.",
-    isVIP: true,
-    milestones: {
-      inquiryLogged: true,
-      discoveryCallCompleted: true,
-      proposalSent: true,
-      depositReceived: true,
-      vouchersIssued: true,
-      conciergeActive: true,
-    },
-  },
-  {
-    id: "lead-02",
-    referenceCode: "SV-4912-IND",
-    createdAt: "2026-10-24T14:30:00Z",
-    dateKey: "2026-10-24",
-    clientName: "Dr. Rajiv & Radhika Kapoor",
-    firstName: "Rajiv",
-    lastName: "Kapoor",
-    email: "rajiv.kapoor@medanta.org",
-    phone: "+91 98110 89234",
-    destinations: ["Rajasthan"],
-    destinationSummary: "Mewar Palaces & Jawai Leopards",
-    travelWindow: "Currently Traveling (Oct 23–Nov 01)",
-    departureDate: "2026-10-23",
-    duration: "10 Days",
-    companions: "Couple / Anniversary",
-    budgetTier: "₹6,00,000 - ₹12,00,000 pp",
-    estimatedValueINR: 1950000,
-    specialInterests: ["Heritage Architecture", "Apex Wildlife Tracking", "Lake Cruises"],
-    specialRequests: "Celebrating 25th Silver Wedding Anniversary. Requested private Pichola barge sunset dinner.",
-    consultationMethod: "zoom",
-    preferredTimeOfDay: "Evening (17:00 - 21:00)",
-    status: "On-Ground Active",
-    assignedCurator: "Harsh Sood",
-    internalNotes: "Checked into Taj Lake Palace Grand Royal Suite. Anniversary champagne and personalized flower arrangements delivered. Transfer to SUJÁN JAWAI scheduled tomorrow.",
-    isVIP: true,
-    milestones: {
-      inquiryLogged: true,
-      discoveryCallCompleted: true,
-      proposalSent: true,
-      depositReceived: true,
-      vouchersIssued: true,
-      conciergeActive: true,
-    },
-  },
-  {
-    id: "lead-03",
-    referenceCode: "SV-3189-IND",
-    createdAt: "2026-10-25T11:20:00Z",
-    dateKey: "2026-10-25",
-    clientName: "Ananya Birla & Party",
-    firstName: "Ananya",
-    lastName: "Birla",
-    email: "ab.office@ventureholdings.in",
-    phone: "+91 98203 77112",
-    destinations: ["Kerala Backwaters"],
-    destinationSummary: "Private Royal Kettuvallam & Ayurvedic Sanctuaries",
-    travelWindow: "Within the next 3 weeks (Nov 12 Departure)",
-    departureDate: "2026-11-12",
-    duration: "7 Days",
-    companions: "Private Party (6 Guests)",
-    budgetTier: "₹12,00,000 - ₹25,00,000 pp",
-    estimatedValueINR: 7800000,
-    specialInterests: ["Ayurvedic Lineage Rejuvenation", "Private Yacht Charters", "Organic Cuisine"],
-    specialRequests: "Exclusive buyout of two private Kettuvallam houseboats. Yoga master accompanying.",
-    consultationMethod: "whatsapp",
-    preferredTimeOfDay: "Afternoon (12:00 - 17:00)",
-    status: "Deposit Confirmed",
-    assignedCurator: "Suraj Uniyal",
-    internalNotes: "100% advance deposit paid via RTGS (₹78,00,000). Kumarakom Lake Resort heritage villas blocked. Master Vaidya briefed on dietary parameters.",
-    isVIP: true,
-    milestones: {
-      inquiryLogged: true,
-      discoveryCallCompleted: true,
-      proposalSent: true,
-      depositReceived: true,
-      vouchersIssued: true,
-      conciergeActive: false,
-    },
-  },
-  {
-    id: "lead-04",
-    referenceCode: "SV-6604-IND",
-    createdAt: "2026-10-25T16:45:00Z",
-    dateKey: "2026-10-25",
-    clientName: "Rohit & Meera Varma",
-    firstName: "Rohit",
-    lastName: "Varma",
-    email: "rohit@varma-tech.com",
-    phone: "+91 99002 55678",
-    destinations: ["Central India & Ranthambore"],
-    destinationSummary: "Ranthambore & Bandhavgarh Tiger Trail",
-    travelWindow: "December 2026 (Christmas / New Year)",
-    departureDate: "2026-12-24",
-    duration: "8 Days",
-    companions: "Couple",
-    budgetTier: "₹6,00,000 - ₹12,00,000 pp",
-    estimatedValueINR: 1650000,
-    specialInterests: ["Wildlife Photography", "Core Zone Permits", "Bush Dining"],
-    specialRequests: "Must have Zone 1–3 in Ranthambore. Top-tier telephoto lens mount required on safari 4WD.",
-    consultationMethod: "zoom",
-    preferredTimeOfDay: "Evening (17:00 - 21:00)",
-    status: "Proposal Sent",
-    assignedCurator: "Harsh Sood",
-    internalNotes: "Sent custom moodboard for SUJÁN Sher Bagh + Taj Mahua Kothi. Client reviewing draft. Scheduled WhatsApp follow-up tomorrow at 4 PM.",
-    isVIP: false,
-    milestones: {
-      inquiryLogged: true,
-      discoveryCallCompleted: true,
-      proposalSent: true,
-      depositReceived: false,
-      vouchersIssued: false,
-      conciergeActive: false,
-    },
-  },
-  {
-    id: "lead-05",
-    referenceCode: "SV-9021-IND",
-    createdAt: "2026-10-25T18:10:00Z",
-    dateKey: "2026-10-25",
-    clientName: "Siddharth & Tanya Mehta",
-    firstName: "Siddharth",
-    lastName: "Mehta",
-    email: "smehta@torquecapital.com",
-    phone: "+91 98980 11223",
-    destinations: ["Rajasthan"],
-    destinationSummary: "Exclusive Fort Buyout: Mihir Garh & Umaid Bhawan",
-    travelWindow: "November 2026 (Diwali Peak)",
-    departureDate: "2026-11-08",
-    duration: "9 Days",
-    companions: "Multi-Gen Family (10 Guests)",
-    budgetTier: "₹25,00,000+ pp (Ultra-Luxe)",
-    estimatedValueINR: 18500000,
-    specialInterests: ["Private Fort Buyout", "Marwari Equestrian Safaris", "Pure Vegetarian Jain Banquets"],
-    specialRequests: "Complete private buyout of Mihir Garh (all 9 suites). Private turboprop charter Delhi-Jodhpur-Udaipur.",
-    consultationMethod: "phone",
-    preferredTimeOfDay: "Morning (09:00 - 12:00)",
-    status: "Deposit Confirmed",
-    assignedCurator: "Suraj Uniyal",
-    internalNotes: "50% deposit received (₹92,50,000). Pilatus PC-12 private aviation charter locked with tarmac access. Mihir Garh owners notified for personal greeting.",
-    isVIP: true,
-    milestones: {
-      inquiryLogged: true,
-      discoveryCallCompleted: true,
-      proposalSent: true,
-      depositReceived: true,
-      vouchersIssued: false,
-      conciergeActive: false,
-    },
-  },
-  {
-    id: "lead-06",
-    referenceCode: "SV-1178-IND",
-    createdAt: "2026-10-25T18:40:00Z",
-    dateKey: "2026-10-25",
-    clientName: "Tanya & Arjun Oberoi",
-    firstName: "Tanya",
-    lastName: "Oberoi",
-    email: "tanya.oberoi@thestudio.co.in",
-    phone: "+91 98100 44332",
-    destinations: ["Kashmir & Gulmarg"],
-    destinationSummary: "The Crown of Kashmir & Apharwat Heli-Skiing",
-    travelWindow: "January 2027 (Winter Snow Season)",
-    departureDate: "2027-01-15",
-    duration: "7 Days",
-    companions: "Couple",
-    budgetTier: "₹6,00,000 - ₹12,00,000 pp",
-    estimatedValueINR: 1450000,
-    specialInterests: ["Alpine Powder Skiing", "Private Houseboat Solitude", "Kashmiri Cuisine"],
-    specialRequests: "The Khyber Himalayan Resort Presidential Suite and private ski instructor certification.",
-    consultationMethod: "zoom",
-    preferredTimeOfDay: "Afternoon (12:00 - 17:00)",
-    status: "New Lead",
-    assignedCurator: "Harsh Sood",
-    internalNotes: "Incoming lead from website /enquire. Highly interested in winter Gulmarg gondola Phase 2 passes and Sukoon Houseboat.",
-    isVIP: false,
-    milestones: {
-      inquiryLogged: true,
-      discoveryCallCompleted: false,
-      proposalSent: false,
-      depositReceived: false,
-      vouchersIssued: false,
-      conciergeActive: false,
-    },
-  },
-  {
-    id: "lead-07",
-    referenceCode: "SV-7350-IND",
-    createdAt: "2026-10-23T10:00:00Z",
-    dateKey: "2026-10-23",
-    clientName: "Kavita Chidambaram",
-    firstName: "Kavita",
-    lastName: "Chidambaram",
-    email: "kavita.c@chennai-investments.com",
-    phone: "+91 94440 88991",
-    destinations: ["Andaman Islands"],
-    destinationSummary: "The Andaman Castaway: Catamarans & Island Villas",
-    travelWindow: "December 2026",
-    departureDate: "2026-12-10",
-    duration: "7 Days",
-    companions: "Family (3 Guests)",
-    budgetTier: "₹6,00,000 - ₹12,00,000 pp",
-    estimatedValueINR: 2100000,
-    specialInterests: ["Marine Biology Coral Dives", "Barefoot Luxury", "Night Bioluminescence"],
-    specialRequests: "Taj Exotica Havelock private pool villa. PADI-certified private instructor for 12-year-old son.",
-    consultationMethod: "phone",
-    preferredTimeOfDay: "Morning (09:00 - 12:00)",
-    status: "Discovery Call",
-    assignedCurator: "Suraj Uniyal",
-    internalNotes: "Discovery call conducted by Suraj. Guest loved the private catamaran charter concept. Draft proposal being formulated.",
-    isVIP: false,
-    milestones: {
-      inquiryLogged: true,
-      discoveryCallCompleted: true,
-      proposalSent: false,
-      depositReceived: false,
-      vouchersIssued: false,
-      conciergeActive: false,
-    },
-  },
-  {
-    id: "lead-08",
-    referenceCode: "SV-5510-IND",
-    createdAt: "2026-10-22T15:15:00Z",
-    dateKey: "2026-10-22",
-    clientName: "Aman Singhal",
-    firstName: "Aman",
-    lastName: "Singhal",
-    email: "aman@hyd-pharma.in",
-    phone: "+91 98490 33441",
-    destinations: ["Ladakh & The Himalayas"],
-    destinationSummary: "Pangong Tso Stargazing & Nubra Valley",
-    travelWindow: "May 2027 (Pass Opening Window)",
-    departureDate: "2027-05-18",
-    duration: "8 Days",
-    companions: "Friends Group (4 Guests)",
-    budgetTier: "₹6,00,000 - ₹12,00,000 pp",
-    estimatedValueINR: 2800000,
-    specialInterests: ["High Mountain Passes", "Astronomy", "Monastery Chants"],
-    specialRequests: "Private Land Cruiser convoy with oxygen scrubbers. Professional telescope required.",
-    consultationMethod: "whatsapp",
-    preferredTimeOfDay: "Evening (17:00 - 21:00)",
-    status: "Proposal Sent",
-    assignedCurator: "Suraj Uniyal",
-    internalNotes: "Proposal sent on WhatsApp. Aman confirmed they love the TUTC Chamba Camp glamping route. Awaiting confirmation after internal group review.",
-    isVIP: false,
-    milestones: {
-      inquiryLogged: true,
-      discoveryCallCompleted: true,
-      proposalSent: true,
-      depositReceived: false,
-      vouchersIssued: false,
-      conciergeActive: false,
-    },
-  },
-];
+export const INITIAL_LEADS: CRMLead[] = [];
 
 export const SEASONAL_INTEL: SeasonalIntel[] = [
   {
@@ -409,38 +127,7 @@ export const SEASONAL_INTEL: SeasonalIntel[] = [
   },
 ];
 
-export const ACTIVE_TRAVELERS: ActiveTraveler[] = [
-  {
-    id: "act-1",
-    leadReference: "SV-8241-IND",
-    guestName: "Singhania Family (4 Pax)",
-    partySize: 4,
-    itineraryTitle: "Himalayan Solitude: Monasteries & Luxury Glamping",
-    currentDay: 5,
-    totalDays: 8,
-    currentLocation: "Nubra Valley, Ladakh (10,000 ft)",
-    currentStay: "The Kyagar Luxury Lodge",
-    nextMilestone: "Tomorrow: Crossing Chang La Pass to Pangong Tso Lake",
-    assignedCurator: "Suraj Uniyal",
-    status: "VIP Smooth",
-    lastCheckIn: "Today, 18:30 IST • Direct confirmation with Camp GM",
-  },
-  {
-    id: "act-2",
-    leadReference: "SV-4912-IND",
-    guestName: "Dr. Rajiv & Radhika Kapoor (2 Pax)",
-    partySize: 2,
-    itineraryTitle: "The Royal Maharajah Circuit",
-    currentDay: 3,
-    totalDays: 10,
-    currentLocation: "Udaipur, Lake Pichola",
-    currentStay: "Taj Lake Palace (Grand Royal Suite)",
-    nextMilestone: "Tomorrow morning: Scenic Mercedes convoy drive to SUJÁN JAWAI",
-    assignedCurator: "Harsh Sood",
-    status: "VIP Smooth",
-    lastCheckIn: "Today, 19:15 IST • Anniversary barge dinner underway",
-  },
-];
+export const ACTIVE_TRAVELERS: ActiveTraveler[] = [];
 
 export const VENDOR_PAYOUTS: VendorPayout[] = [
   {
@@ -510,21 +197,23 @@ export const VENDOR_PAYOUTS: VendorPayout[] = [
   },
 ];
 
-const LOCAL_STORAGE_KEY = "soulsventure_crm_leads_v2";
+const LOCAL_STORAGE_KEY = "soulsventure_crm_leads_v3";
 
 export function getStoredLeads(): CRMLead[] {
-  if (typeof window === "undefined") return INITIAL_LEADS;
+  if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!raw) {
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_LEADS));
-      return INITIAL_LEADS;
+      // Clear legacy storage keys if present
+      localStorage.removeItem("soulsventure_crm_leads_v2");
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([]));
+      return [];
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : INITIAL_LEADS;
+    return Array.isArray(parsed) ? parsed : [];
   } catch (e) {
     console.error("Failed to parse CRM leads from localStorage:", e);
-    return INITIAL_LEADS;
+    return [];
   }
 }
 
@@ -626,64 +315,7 @@ export interface LifeEventAlert {
   notes: string;
 }
 
-export const INITIAL_LIFE_EVENTS: LifeEventAlert[] = [
-  {
-    id: "radar-1",
-    clientName: "Dr. Rajiv & Radhika Kapoor",
-    leadReference: "SV-4912-IND",
-    phone: "+91 98110 33412",
-    eventType: "Wedding Anniversary",
-    eventDate: "2026-11-22",
-    daysRemaining: 28,
-    recommendedAction: "Send bespoke silver attar gift box & hand-written calligraphy note. Pitch Lake Pichola private royal barge buyout or Taj Umaid Bhawan palace retreat.",
-    suggestedDestination: "Udaipur & Jodhpur, Rajasthan",
-    assignedCurator: "Harsh Sood",
-    status: "Pending Pitch",
-    notes: "Celebrated their 20th in Nubra last year; Radhika explicitly mentioned wishing for a candlelit palace anniversary dinner.",
-  },
-  {
-    id: "radar-2",
-    clientName: "Vikram Singhania",
-    leadReference: "SV-8241-IND",
-    phone: "+91 98201 44521",
-    eventType: "50th Milestone Birthday",
-    eventDate: "2026-12-05",
-    daysRemaining: 41,
-    recommendedAction: "Dispatch single-estate Kashmiri saffron & ceremonial silk scarf. Propose private chartered Falcon convoy with family to Gulmarg The Khyber.",
-    suggestedDestination: "Gulmarg Alpine Sanctuary, Kashmir",
-    assignedCurator: "Suraj Uniyal",
-    status: "Pending Pitch",
-    notes: "Loves cold weather; keen on private heliskiing session with an elite mountain guide.",
-  },
-  {
-    id: "radar-3",
-    clientName: "Siddharth & Tanya Mehta",
-    leadReference: "SV-6319-IND",
-    phone: "+91 98210 55432",
-    eventType: "Honeymoon Return",
-    eventDate: "2026-11-14",
-    daysRemaining: 20,
-    recommendedAction: "Deliver framed hand-bound trip memory book. Invite them for exclusive winter leopard safari at SUJÁN JAWAI with founder escort.",
-    suggestedDestination: "Jawai Leopard Enclave, Rajasthan",
-    assignedCurator: "Suraj Uniyal",
-    status: "Gift Dispatched",
-    notes: "Gift basket dispatched via BlueDart Apex priority. Tanya messaged expressing warm gratitude.",
-  },
-  {
-    id: "radar-4",
-    clientName: "Ananya Birla",
-    leadReference: "SV-9104-IND",
-    phone: "+91 99302 77810",
-    eventType: "Private Estate Anniversary",
-    eventDate: "2026-11-04",
-    daysRemaining: 10,
-    recommendedAction: "Priority alert: 10 days out! Call private family office chief of staff. Offer private royal heritage houseboat in Alleppey backwaters.",
-    suggestedDestination: "Kerala Backwaters & Vembanad Lake",
-    assignedCurator: "Suraj Uniyal",
-    status: "Proposal Underway",
-    notes: "Drafted custom 4-day private kettuvallam sailing with ayurvedic master and personal sitar maestro.",
-  },
-];
+export const INITIAL_LIFE_EVENTS: LifeEventAlert[] = [];
 
 // ==========================================
 // 2. TEAM ROLES & PERMISSION MATRIX (RBAC)
@@ -846,58 +478,7 @@ export interface FlightWeatherStatus {
   protocolStatus: "Action Required" | "Escorted Alternate Active" | "All Clear";
 }
 
-export const INITIAL_FLIGHT_WEATHER: FlightWeatherStatus[] = [
-  {
-    id: "fw-1",
-    carrier: "Air India",
-    flightNumber: "AI-445",
-    route: "DEL ➔ IXL (Delhi to Leh)",
-    scheduledDeparture: "06:15 IST",
-    status: "Delayed 2h",
-    delayReason: "Early morning crosswinds & runway snow-clearing at Leh Airport.",
-    clientImpacted: "Singhania Family (4 Pax)",
-    leadReference: "SV-8241-IND",
-    assignedConcierge: "Tashi Namgyal (Leh Desk)",
-    weatherCondition: "Light snowfall, -2°C at Leh Kushok Bakula Rimpochee Airport",
-    tempAndWind: "-2°C • Visibility 2800m • Wind 14 knots NW",
-    passStatus: "Khardung La Pass (17,582 ft): Closed temporarily until 11:30 IST for military snowplows.",
-    alternativeRouting: "Hold private luxury convoy at Chamba Camp Thiksey for organic brunch; execute crossing via lower altitude route at 12:00 IST.",
-    protocolStatus: "Escorted Alternate Active",
-  },
-  {
-    id: "fw-2",
-    carrier: "Club One Air (Private Jet)",
-    flightNumber: "COA-PC12-VIP",
-    route: "DEL ➔ UDR (Delhi to Udaipur)",
-    scheduledDeparture: "11:30 IST",
-    status: "Airborne",
-    clientImpacted: "Dr. Rajiv & Radhika Kapoor (2 Pax)",
-    leadReference: "SV-4912-IND",
-    assignedConcierge: "Harsh Sood (Founder)",
-    weatherCondition: "Clear autumn skies, 28°C over Lake Pichola",
-    tempAndWind: "28°C • Visibility 9000m • Wind 4 knots SE",
-    passStatus: "Aravalli Mountain corridors: 100% clear with smooth luxury cruising.",
-    alternativeRouting: "No alternative needed. Private barge greeters stationed at Lake Palace jetty.",
-    protocolStatus: "All Clear",
-  },
-  {
-    id: "fw-3",
-    carrier: "IndiGo",
-    flightNumber: "6E-2081",
-    route: "BOM ➔ SXR (Mumbai to Srinagar)",
-    scheduledDeparture: "08:45 IST",
-    status: "Weather Alert",
-    delayReason: "High-altitude cloud base descending on Pir Panjal Range.",
-    clientImpacted: "Tanya Oberoi (2 Pax)",
-    leadReference: "SV-3829-IND",
-    assignedConcierge: "Suraj Uniyal (Founder)",
-    weatherCondition: "Freezing rain over Srinagar, heavy alpine snow above 8,500 ft in Gulmarg",
-    tempAndWind: "4°C (Srinagar) / -4°C (Apharwat Peak)",
-    passStatus: "Gulmarg Mountain Road: Heavy snowfall past Tangmarg. Chains mandatory.",
-    alternativeRouting: "Dispatched 4x4 Toyota Prado convoy equipped with Nokian studded snow tires to Tangmarg checkpoint.",
-    protocolStatus: "Action Required",
-  },
-];
+export const INITIAL_FLIGHT_WEATHER: FlightWeatherStatus[] = [];
 
 // ==========================================
 // 4. CLIENT MOODBOARD & INSPIRATION VAULT
@@ -925,74 +506,7 @@ export interface ClientMoodboard {
   lastViewedByClient?: string;
 }
 
-export const INITIAL_MOODBOARDS: ClientMoodboard[] = [
-  {
-    id: "mb-1",
-    leadReference: "SV-8241-IND",
-    clientName: "Vikram Singhania",
-    passcode: "LADAKH-SOLITUDE",
-    title: "The Astral Silence of Ladakh",
-    aestheticTheme: "Monastic Gold, Crisp Himalayan Granite & Starlit Glamping",
-    curatorName: "Suraj Uniyal",
-    curatorNote: "Vikram, we envisioned your family's journey not simply as travel, but as a spiritual awakening amid India's highest plateaus. Every image here reflects the exact suite, lighting, and private blessings we have secured for your stay.",
-    lastViewedByClient: "Yesterday at 21:14 IST",
-    items: [
-      {
-        id: "mbi-1",
-        title: "TUTC Chamba Camp Thiksey",
-        category: "Architecture & Stays",
-        imageUrl: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?auto=format&fit=crop&w=1200&q=80",
-        description: "Four-poster featherbeds, private viewing verandas, and personalized butler service beneath the dramatic shadow of Thiksey Gompa.",
-        location: "Thiksey, Indus Valley",
-      },
-      {
-        id: "mbi-2",
-        title: "Private Twilight Aarti & Astral Stargazing",
-        category: "Spiritual Immersion",
-        imageUrl: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
-        description: "Fireside observation through our high-powered celestial telescope with a private astrophysicist at 11,500 feet.",
-        location: "Nubra Valley",
-      },
-      {
-        id: "mbi-3",
-        title: "Pangong Tso Lakeside Champagne Setting",
-        category: "Private Dining",
-        imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80",
-        description: "An isolated table set directly on the turquoise shoreline, surrounded by silence and snowcapped reflections.",
-        location: "Pangong Tso, 14,270 ft",
-      },
-    ],
-  },
-  {
-    id: "mb-2",
-    leadReference: "SV-4912-IND",
-    clientName: "Dr. Rajiv & Radhika Kapoor",
-    passcode: "ROYAL-UDAIPUR",
-    title: "A Symphony of Floating Marble",
-    aestheticTheme: "Mewar Royalty, Rose-Petal Canals & Private Palaces",
-    curatorName: "Harsh Sood",
-    curatorNote: "Dr. Kapoor, for your anniversary, nothing less than complete royal seclusion will do. We have arranged private palace buyouts and vintage ceremonial cruises on Lake Pichola.",
-    lastViewedByClient: "Today at 10:45 IST",
-    items: [
-      {
-        id: "mbi-4",
-        title: "Taj Lake Palace Grand Royal Suite",
-        category: "Architecture & Stays",
-        imageUrl: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
-        description: "Centuries-old royal frescoes, hand-carved jharokhas overlooking the tranquil waters, and 24/7 personal palace retainers.",
-        location: "Lake Pichola, Udaipur",
-      },
-      {
-        id: "mbi-5",
-        title: "Private Royal Barge Dinner on Lake Pichola",
-        category: "Private Dining",
-        imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80",
-        description: "Drifting slowly under torchlight with a private sitar maestro and a 6-course Mewari royal feast prepared by the executive chef.",
-        location: "Udaipur",
-      },
-    ],
-  },
-];
+export const INITIAL_MOODBOARDS: ClientMoodboard[] = [];
 
 // ==========================================
 // 5. POST-TRIP DIGITAL SCRAPBOOK & REVIEWS
@@ -1025,40 +539,5 @@ export interface PostTripScrapbook {
   };
 }
 
-export const INITIAL_SCRAPBOOKS: PostTripScrapbook[] = [
-  {
-    id: "sb-1",
-    leadReference: "SV-6319-IND",
-    clientName: "Siddharth & Tanya Mehta",
-    itineraryTitle: "Royal Maharajah Fortresses & Thar Desert Romance",
-    travelDates: "October 10 – 18, 2026",
-    curatorFarewell: "Siddharth & Tanya, hosting you across Rajasthan was an honour for our entire team. From your private candlelit dinners at Mihir Garh to the dawn leopard sighting in Jawai, we hope these captured moments remain etched in your hearts forever.",
-    memories: [
-      {
-        id: "sbm-1",
-        caption: "Sunset at Mihir Garh Fortress",
-        imageUrl: "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?auto=format&fit=crop&w=1200&q=80",
-        date: "Oct 12, 2026",
-        location: "Mihir Garh, Rohet",
-        curatorMemory: "The golden hour light across the dunes was magnificent as your private Marwari horses arrived.",
-      },
-      {
-        id: "sbm-2",
-        caption: "A Mother Leopard with Cub on the Jawai Monoliths",
-        imageUrl: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1200&q=80",
-        date: "Oct 15, 2026",
-        location: "SUJÁN JAWAI",
-        curatorMemory: "Our lead tracker spotted her at 06:20 AM. An unforgettable privilege.",
-      },
-    ],
-    feedback: {
-      overallRating: 5,
-      hotelRating: 5,
-      conciergeRating: 5,
-      testimonialQuote: "SoulsVenture created the most effortless, life-affirming journey of our lives. Suraj and Harsh handled every detail with such warmth and discretion. We will never travel with anyone else.",
-      isGoogleReviewSubmitted: true,
-      submittedAt: "2026-10-21T14:30:00Z",
-    },
-  },
-];
+export const INITIAL_SCRAPBOOKS: PostTripScrapbook[] = [];
 

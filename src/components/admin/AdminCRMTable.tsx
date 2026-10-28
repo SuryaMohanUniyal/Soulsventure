@@ -238,8 +238,22 @@ export default function AdminCRMTable({
             <tbody className="divide-y divide-[#242424]">
               {filteredLeads.length === 0 ? (
                 <tr>
-                  <td colSpan={7} className="py-12 text-center text-[#71717A] italic">
-                    No client inquiries match the selected filter criteria.
+                  <td colSpan={7} className="py-16 text-center text-[#71717A]">
+                    <div className="max-w-md mx-auto space-y-3">
+                      <Sparkles className="w-8 h-8 text-[#C5A059]/40 mx-auto" />
+                      <p className="font-serif text-base text-[#FDFBF7]">No Client Inquiries Received Yet</p>
+                      <p className="text-xs text-[#71717A]">
+                        Inquiries submitted via the website (/enquire) or direct phone concierge will automatically appear here in real-time.
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setIsAddModalOpen(true)}
+                        className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#C5A059] hover:bg-[#b08e48] text-black text-xs font-serif font-medium rounded-lg transition-colors shadow-md cursor-pointer"
+                      >
+                        <Plus className="w-3.5 h-3.5" />
+                        Record Direct Lead
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ) : (

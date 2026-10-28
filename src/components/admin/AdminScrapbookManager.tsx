@@ -26,7 +26,7 @@ import {
 
 export function AdminScrapbookManager() {
   const [scrapbooks, setScrapbooks] = useState<PostTripScrapbook[]>(INITIAL_SCRAPBOOKS);
-  const [selectedSb, setSelectedSb] = useState<PostTripScrapbook>(scrapbooks[0]);
+  const [selectedSb, setSelectedSb] = useState<PostTripScrapbook | null>(scrapbooks[0] || null);
   const [copiedLink, setCopiedLink] = useState(false);
   const [successToast, setSuccessToast] = useState("");
 
@@ -134,7 +134,7 @@ export function AdminScrapbookManager() {
       </div>
 
       {/* Selected Scrapbook Showcase */}
-      {selectedSb && (
+      {selectedSb ? (
         <div className="bg-[#181818] border border-[#262626] rounded-xl p-6 space-y-6 shadow-2xl">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#2A2A2A] pb-4">
@@ -266,6 +266,14 @@ export function AdminScrapbookManager() {
               </div>
             </div>
           )}
+        </div>
+      ) : (
+        <div className="py-16 text-center bg-[#181818] border border-[#262626] rounded-xl text-[#71717A] text-xs space-y-2">
+          <Camera className="w-8 h-8 text-[#C5A059]/40 mx-auto" />
+          <p className="font-serif text-sm text-[#FDFBF7]">No Completed Journey Keepsakes Yet</p>
+          <p className="text-[#71717A] max-w-md mx-auto">
+            When returning guests conclude their travels, automated post-trip digital scrapbooks and Google Review invitations will appear here for one-click WhatsApp dispatch.
+          </p>
         </div>
       )}
     </div>

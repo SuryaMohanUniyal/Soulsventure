@@ -27,7 +27,7 @@ import {
 
 export function AdminMoodboardVault() {
   const [moodboards, setMoodboards] = useState<ClientMoodboard[]>(INITIAL_MOODBOARDS);
-  const [selectedMb, setSelectedMb] = useState<ClientMoodboard>(moodboards[0]);
+  const [selectedMb, setSelectedMb] = useState<ClientMoodboard | null>(moodboards[0] || null);
   const [copiedLink, setCopiedLink] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [successToast, setSuccessToast] = useState("");
@@ -92,8 +92,17 @@ export function AdminMoodboardVault() {
 
       {/* Moodboard Selector Ribbon */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        {moodboards.map((mb) => {
-          const isSelected = selectedMb.id === mb.id;
+        {moodboards.length === 0 ? (
+          <div className="col-span-full py-12 text-center bg-[#181818] border border-[#262626] rounded-xl text-[#71717A] text-xs space-y-2">
+            <Palette className="w-8 h-8 text-[#C5A059]/40 mx-auto" />
+            <p className="font-serif text-sm text-[#FDFBF7]">No Client Moodboards Created Yet</p>
+            <p className="text-[#71717A] max-w-md mx-auto">
+              Click &ldquo;Create New Moodboard&rdquo; to build password-protected visual inspiration boards for your luxury travelers.
+            </p>
+          </div>
+        ) : (
+          moodboards.map((mb) => {
+            const isSelected = selectedMb?.id === mb.id;
 
           return (
             <div
@@ -147,7 +156,7 @@ export function AdminMoodboardVault() {
               </div>
             </div>
           );
-        })}
+        }))}
       </div>
 
       {/* Selected Moodboard Visual Canvas */}

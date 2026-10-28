@@ -3,9 +3,10 @@ import { ClientScrapbookView } from "@/components/scrapbook/ClientScrapbookView"
 import { INITIAL_SCRAPBOOKS } from "@/lib/crmStore";
 
 export function generateStaticParams() {
-  return INITIAL_SCRAPBOOKS.map((s) => ({
+  const list = INITIAL_SCRAPBOOKS.map((s) => ({
     ref: s.leadReference.toLowerCase(),
   }));
+  return list.length > 0 ? list : [{ ref: "preview" }];
 }
 
 export default async function Page({

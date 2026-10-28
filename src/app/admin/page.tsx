@@ -38,11 +38,24 @@ export default function AdminDashboardPage() {
   const [selectedLead, setSelectedLead] = useState<CRMLead | null>(null);
   const [proposalLead, setProposalLead] = useState<CRMLead | null>(null);
 
-  // Load from localStorage safely on mount
+  // Load from localStorage safely on mount with real-time multi-tab sync
   useEffect(() => {
     setMounted(true);
     const stored = getStoredLeads();
     setLeads(stored);
+
+    const handleSync = () => {
+      const refreshed = getStoredLeads();
+      setLeads([...refreshed]);
+    };
+
+    window.addEventListener("storage", handleSync);
+    const interval = setInterval(handleSync, 2500);
+
+    return () => {
+      window.removeEventListener("storage", handleSync);
+      clearInterval(interval);
+    };
   }, []);
 
   const refreshLeads = () => {

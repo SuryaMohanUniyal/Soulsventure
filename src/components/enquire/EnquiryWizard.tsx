@@ -63,13 +63,14 @@ export default function EnquiryWizard() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submissionSuccess, setSubmissionSuccess] = useState(false);
   const [referenceCode, setReferenceCode] = useState("");
+  const [stepError, setStepError] = useState<string | null>(null);
 
   const {
     control,
     handleSubmit,
     watch,
     setValue,
-    trigger,
+    clearErrors,
     formState: { errors },
   } = useForm<EnquiryFormData>({
     resolver: zodResolver(enquirySchema),
@@ -97,21 +98,33 @@ export default function EnquiryWizard() {
   const selectedMethod = watch("consultationMethod");
 
   // Step advancement with validation
-  const nextStep = async () => {
-    let fieldsToValidate: (keyof EnquiryFormData)[] = [];
-    if (currentStep === 1) fieldsToValidate = ["destinations"];
-    if (currentStep === 2) fieldsToValidate = ["companions"];
-    if (currentStep === 3) fieldsToValidate = ["travelWindow", "duration"];
-    if (currentStep === 4) fieldsToValidate = ["budgetTier"];
-
-    const isValid = await trigger(fieldsToValidate);
-    if (isValid) {
-      setCurrentStep((prev) => Math.min(prev + 1, 5));
+  const nextStep = () => {
+    setStepError(null);
+    if (currentStep === 1) {
+      if (!selectedDests || selectedDests.length === 0) {
+        setStepError("Please select at least one destination (or choose 'Open to Inspiration') to continue.");
+        return;
+      }
+    }
+    if (currentStep === 2) {
+      if (!selectedCompanions) {
+        setStepError("Please select who will be travelling with you.");
+        return;
+      }
+    }
+    // Steps 3 & 4 have valid defaults already selected
+    setCurrentStep((prev) => Math.min(prev + 1, 5));
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 120, behavior: "smooth" });
     }
   };
 
   const prevStep = () => {
+    setStepError(null);
     setCurrentStep((prev) => Math.max(prev - 1, 1));
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 120, behavior: "smooth" });
+    }
   };
 
   const onSubmit = (data: EnquiryFormData) => {
@@ -148,24 +161,33 @@ export default function EnquiryWizard() {
         preferredTimeOfDay: data.preferredTimeOfDay,
       });
 
+      // Dispatch real-time storage event for live admin dashboard sync
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new Event("storage"));
+      }
+
       setSubmissionSuccess(true);
-    }, 1200);
+      if (typeof window !== "undefined") {
+        window.scrollTo({ top: 120, behavior: "smooth" });
+      }
+    }, 600);
   };
 
   const toggleDestination = (destSlug: string) => {
+    setStepError(null);
+    clearErrors("destinations");
     if (destSlug === "open-inspiration") {
-      setValue("destinations", ["open-inspiration"]);
+      setValue("destinations", ["open-inspiration"], { shouldValidate: true, shouldDirty: true });
       return;
     }
     const current = selectedDests.filter((d) => d !== "open-inspiration");
+    let next: string[];
     if (current.includes(destSlug)) {
-      setValue(
-        "destinations",
-        current.filter((d) => d !== destSlug)
-      );
+      next = current.filter((d) => d !== destSlug);
     } else {
-      setValue("destinations", [...current, destSlug]);
+      next = [...current, destSlug];
     }
+    setValue("destinations", next, { shouldValidate: true, shouldDirty: true });
   };
 
   const toggleInterest = (interest: string) => {
@@ -301,13 +323,34 @@ export default function EnquiryWizard() {
               </div>
             </div>
 
-            <div className="pt-6 text-center">
+            <div className="pt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <a
+                href={`https://wa.me/918126357353?text=${encodeURIComponent(
+                  `Hello Suraj, I have submitted a bespoke consultation request on Soulsventure (Ref: ${referenceCode}). Destinations: ${selectedDests.join(", ")}.`
+                )}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white text-xs uppercase tracking-[0.2em] font-semibold transition-all shadow-md"
+              >
+                <MessageCircle className="w-4 h-4" />
+                <span>Instant Founder WhatsApp (+91 8126357353)</span>
+              </a>
+
+              <Link
+                href="/admin"
+                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1A1A1A] hover:bg-[#C5A880] text-white text-xs uppercase tracking-[0.2em] font-semibold transition-colors"
+              >
+                <span>View in Admin CRM</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </Link>
+            </div>
+
+            <div className="text-center pt-2">
               <Link
                 href="/"
-                className="inline-flex items-center gap-2 px-8 py-3.5 bg-[#1A1A1A] hover:bg-[#C5A880] text-white text-xs uppercase tracking-[0.2em] font-semibold transition-colors"
+                className="text-xs text-[#1A1A1A]/60 hover:text-[#1A1A1A] underline transition-colors"
               >
-                <span>Return to Soulsventure Home</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                Return to Soulsventure Homepage
               </Link>
             </div>
           </div>
@@ -335,15 +378,22 @@ export default function EnquiryWizard() {
                   <button
                     type="button"
                     onClick={() => toggleDestination("open-inspiration")}
-                    className={`p-4 text-left border transition-all cursor-pointer ${
+                    className={`p-4 text-left border transition-all cursor-pointer rounded-lg relative ${
                       selectedDests.includes("open-inspiration")
-                        ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                        ? "bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-md ring-2 ring-[#C5A880]"
                         : "bg-[#F5F2EB] text-[#1A1A1A] border-[#1A1A1A]/10 hover:border-[#1A1A1A]"
                     }`}
                   >
-                    <span className="font-serif text-base block font-medium">
-                      Open to Inspiration
-                    </span>
+                    <div className="flex items-center justify-between">
+                      <span className="font-serif text-base block font-medium">
+                        Open to Inspiration
+                      </span>
+                      {selectedDests.includes("open-inspiration") && (
+                        <span className="w-5 h-5 rounded-full bg-[#C5A880] text-white flex items-center justify-center text-xs">
+                          ✓
+                        </span>
+                      )}
+                    </div>
                     <span className="text-[11px] opacity-75 font-light">
                       Let our curators suggest
                     </span>
@@ -356,15 +406,22 @@ export default function EnquiryWizard() {
                         key={dest.id}
                         type="button"
                         onClick={() => toggleDestination(dest.slug)}
-                        className={`p-4 text-left border transition-all cursor-pointer ${
+                        className={`p-4 text-left border transition-all cursor-pointer rounded-lg relative ${
                           isSelected
-                            ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"
+                            ? "bg-[#1A1A1A] text-white border-[#1A1A1A] shadow-md ring-2 ring-[#C5A880]"
                             : "bg-[#F5F2EB] text-[#1A1A1A] border-[#1A1A1A]/10 hover:border-[#1A1A1A]"
                         }`}
                       >
-                        <span className="font-serif text-base block font-medium">
-                          {dest.name}
-                        </span>
+                        <div className="flex items-center justify-between">
+                          <span className="font-serif text-base block font-medium">
+                            {dest.name}
+                          </span>
+                          {isSelected && (
+                            <span className="w-5 h-5 rounded-full bg-[#C5A880] text-white flex items-center justify-center text-xs">
+                              ✓
+                            </span>
+                          )}
+                        </div>
                         <span className="text-[11px] opacity-75 font-light">
                           {dest.continent}
                         </span>
@@ -373,6 +430,11 @@ export default function EnquiryWizard() {
                   })}
                 </div>
 
+                {stepError && currentStep === 1 && (
+                  <div className="p-3 bg-red-950/10 border border-red-500/30 text-red-600 text-xs rounded-lg animate-in fade-in">
+                    {stepError}
+                  </div>
+                )}
                 {errors.destinations && (
                   <p className="text-xs text-red-600">{errors.destinations.message}</p>
                 )}
@@ -393,6 +455,12 @@ export default function EnquiryWizard() {
                     Party dynamics allow us to curate the right private villa configurations and privacy levels.
                   </p>
                 </div>
+
+                {stepError && currentStep === 2 && (
+                  <div className="p-3 bg-red-950/10 border border-red-500/30 text-red-600 text-xs rounded-lg animate-in fade-in">
+                    {stepError}
+                  </div>
+                )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {[
