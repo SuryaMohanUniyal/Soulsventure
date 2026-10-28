@@ -61,7 +61,7 @@ export function AdminAnniversaryRadar() {
       `Our calendar reminded us that your *${event.eventType}* is approaching on *${new Date(event.eventDate).toLocaleDateString("en-IN", { day: "numeric", month: "long" })}*.\n\n` +
       `To celebrate this special milestone, we would be delighted to orchestrate a private, secluded celebration for you—such as a candlelit royal palace buyout in ${event.suggestedDestination}.\n\n` +
       `We have reserved a confidential idea outline for your review whenever you wish.\n\n` +
-      `With warm regards,\nSuraj Uniyal & Harsh Sood\nFounders, SoulsVenture Private Office\nDirect: +91 8126357353`
+      `With warm regards,\nSuraj Uniyal & Harsh Sood\nFounders, SoulsVenture Private Office\nDirect: +91 98XXXXXXXX`
     );
     window.open(`https://wa.me/${cleanPhone}?text=${msg}`, "_blank");
   };

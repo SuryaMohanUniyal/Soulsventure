@@ -53,6 +53,7 @@ export function AdminPermissionsMatrix({
   const [copiedMemberId, setCopiedMemberId] = useState<string | null>(null);
   const [editingPassMemberId, setEditingPassMemberId] = useState<string | null>(null);
   const [tempPass, setTempPass] = useState<string>("");
+  const [revealedPassMemberIds, setRevealedPassMemberIds] = useState<Record<string, boolean>>({});
 
   useEffect(() => {
     setTeam(getStoredTeam());
@@ -173,7 +174,7 @@ export function AdminPermissionsMatrix({
       'Soulsventure Luxury Concierge OS Credentials:',
       'Admin Portal: https://soulsventure.com/admin',
       'Login ID: ' + member.email,
-      'Password: ' + (member.password || '812635'),
+      'Password: ' + (member.isFounder ? '•••••• (Founder Protected)' : (member.password || '******')),
       'Assigned Role: ' + member.role,
       'Curator: ' + member.name,
     ].join('\n');
@@ -515,9 +516,17 @@ export function AdminPermissionsMatrix({
                     ) : (
                       <div className="flex items-center gap-1.5">
                         <span className="text-amber-400 font-bold tracking-wider select-all">
-                          {member.password || member.phone.replace(/[^0-9]/g, "").slice(-6)}
+                          {member.isFounder ? (revealedPassMemberIds[member.id] ? member.password : '•••••• (Founder PIN)') : (revealedPassMemberIds[member.id] ? (member.password || member.phone.replace(/[^0-9]/g, '').slice(-6)) : '••••••')}
                         </span>
                         <button
+                          type="button"
+                          onClick={() => setRevealedPassMemberIds(prev => ({ ...prev, [member.id]: !prev[member.id] }))}
+                          className="text-[#71717A] hover:text-[#C5A059] p-0.5 cursor-pointer"
+                          title={revealedPassMemberIds[member.id] ? "Hide PIN" : "Reveal PIN"}
+                        >
+                          {revealedPassMemberIds[member.id] ? <EyeOff className="w-3 h-3" /> : <Eye className="w-3 h-3" />}
+                        </button>
+                                                <button
                           type="button"
                           onClick={() => {
                             setEditingPassMemberId(member.id);

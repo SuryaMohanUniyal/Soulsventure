@@ -132,12 +132,12 @@ export default function AdminCRMTable({
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-300">
       {/* Top Controls & Filter Bar */}
-      <div className="bg-[#181818] border border-[#2A2A2A] rounded-xl p-5 space-y-4 shadow-lg">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+      <div className="bg-[#181818] border border-[#2A2A2A] rounded-xl p-4 sm:p-5 space-y-4 shadow-lg">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-4">
           <div>
-            <h2 className="font-serif text-2xl font-light text-[#FDFBF7]">
+            <h2 className="font-serif text-xl sm:text-2xl font-light text-[#FDFBF7]">
               Master Enquiry & Booking CRM
             </h2>
             <span className="text-[10px] uppercase tracking-[0.22em] text-[#A1A1AA]">
@@ -146,38 +146,38 @@ export default function AdminCRMTable({
           </div>
 
           {/* Action Buttons */}
-          <div className="flex items-center gap-2.5 flex-wrap">
+          <div className="flex items-center gap-2 sm:gap-2.5 flex-wrap">
             <button
               onClick={() => setIsAddModalOpen(true)}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#C5A059] hover:bg-[#D4AF37] text-[#111111] text-xs font-semibold shadow-md transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-lg bg-[#C5A059] hover:bg-[#D4AF37] text-[#111111] text-xs font-semibold shadow-md transition-colors cursor-pointer"
             >
-              <Plus className="w-4 h-4" />
+              <Plus className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
               <span>Record Offline Lead</span>
             </button>
 
             <button
               onClick={exportToCSV}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#FDFBF7] text-xs font-medium border border-[#333333] transition-colors cursor-pointer"
+              className="inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-3.5 py-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#FDFBF7] text-xs font-medium border border-[#333333] transition-colors cursor-pointer"
             >
-              <Download className="w-4 h-4 text-[#A1A1AA]" />
+              <Download className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-[#A1A1AA]" />
               <span>Export CSV</span>
             </button>
 
             {leads.length > 0 && onClearAllLeads && (
               <button
                 onClick={onClearAllLeads}
-                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-red-950/40 hover:bg-red-900/60 text-red-300 text-xs font-medium border border-red-800/40 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-red-950/40 hover:bg-red-900/60 text-red-300 text-xs font-medium border border-red-800/40 transition-colors cursor-pointer"
                 title="Clear all enquiries from CRM & Cloud"
               >
                 <Trash2 className="w-3.5 h-3.5 text-red-400" />
-                <span>Clear All</span>
+                <span className="hidden sm:inline">Clear All</span>
               </button>
             )}
           </div>
         </div>
 
         {/* Filter Controls Row */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 pt-3 border-t border-[#262626]">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3 pt-3 border-t border-[#262626]">
           {/* Search Input */}
           <div className="relative">
             <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-[#71717A]" />
@@ -244,8 +244,173 @@ export default function AdminCRMTable({
         </div>
       </div>
 
-      {/* CRM Master Table Container */}
-      <div className="bg-[#181818] border border-[#2A2A2A] rounded-xl overflow-hidden shadow-2xl">
+      {/* 1. MOBILE RESPONSIVE CARDS (block md:hidden) */}
+      <div className="block md:hidden space-y-3">
+        {filteredLeads.length === 0 ? (
+          <div className="bg-[#181818] border border-[#2A2A2A] rounded-xl p-8 text-center space-y-3">
+            <Sparkles className="w-8 h-8 text-[#C5A059]/40 mx-auto" />
+            <p className="font-serif text-base text-[#FDFBF7]">No Inquiries Found</p>
+            <p className="text-xs text-[#71717A]">
+              Inquiries submitted via the website or direct phone will appear here in real-time.
+            </p>
+            <button
+              type="button"
+              onClick={() => setIsAddModalOpen(true)}
+              className="inline-flex items-center gap-1.5 px-4 py-2 bg-[#C5A059] text-black text-xs font-serif font-medium rounded-lg"
+            >
+              <Plus className="w-3.5 h-3.5" />
+              Record Lead
+            </button>
+          </div>
+        ) : (
+          filteredLeads.map((lead) => (
+            <div
+              key={lead.id}
+              className="bg-[#181818] border border-[#2A2A2A] rounded-xl p-4 space-y-3 shadow-lg"
+            >
+              {/* Header: Avatar, Name, Reference, Status */}
+              <div className="flex items-start justify-between gap-2">
+                <div className="flex items-center gap-2.5">
+                  <div className="w-9 h-9 rounded-full bg-[#C5A059]/15 border border-[#C5A059]/30 text-[#C5A059] font-serif flex items-center justify-center font-medium text-xs flex-shrink-0">
+                    {lead.firstName?.[0] || "G"}
+                    {lead.lastName?.[0] || "C"}
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-1.5">
+                      <span className="font-serif text-sm font-medium text-[#FDFBF7]">
+                        {lead.clientName}
+                      </span>
+                      {lead.isVIP && (
+                        <span className="px-1.5 py-0.2 rounded text-[8px] bg-[#C5A059] text-[#111111] font-bold uppercase tracking-wider">
+                          VIP
+                        </span>
+                      )}
+                    </div>
+                    <span className="text-[10px] font-mono text-[#71717A] block">
+                      {lead.referenceCode} • {lead.assignedCurator}
+                    </span>
+                  </div>
+                </div>
+
+                {/* Status Dropdown */}
+                <select
+                  value={lead.status}
+                  onChange={(e) => onUpdateStatus(lead.id, e.target.value as LeadStatus)}
+                  className={`text-[10px] font-semibold uppercase tracking-wider rounded-md px-2 py-1 border appearance-none cursor-pointer focus:outline-none transition-colors ${
+                    lead.status === "Deposit Confirmed"
+                      ? "bg-emerald-950/80 text-emerald-400 border-emerald-800/50"
+                      : lead.status === "Proposal Sent"
+                      ? "bg-amber-950/80 text-amber-400 border-amber-800/50"
+                      : lead.status === "On-Ground Active"
+                      ? "bg-purple-950/80 text-purple-300 border-purple-800/50"
+                      : lead.status === "Discovery Call"
+                      ? "bg-sky-950/80 text-sky-400 border-sky-800/50"
+                      : "bg-[#C5A059]/15 text-[#C5A059] border-[#C5A059]/30"
+                  }`}
+                >
+                  <option value="New Lead" className="bg-[#1A1A1A] text-[#FDFBF7]">New Lead</option>
+                  <option value="Discovery Call" className="bg-[#1A1A1A] text-[#FDFBF7]">Discovery Call</option>
+                  <option value="Proposal Sent" className="bg-[#1A1A1A] text-[#FDFBF7]">Proposal Sent</option>
+                  <option value="Deposit Confirmed" className="bg-[#1A1A1A] text-[#FDFBF7]">Deposit Confirmed</option>
+                  <option value="On-Ground Active" className="bg-[#1A1A1A] text-[#FDFBF7]">On-Ground Active</option>
+                  <option value="Completed" className="bg-[#1A1A1A] text-[#FDFBF7]">Completed</option>
+                </select>
+              </div>
+
+              {/* Destination, Duration & Budget Details */}
+              <div className="grid grid-cols-2 gap-2 text-xs py-2.5 px-3 bg-[#141414] rounded-lg border border-[#242424]">
+                <div>
+                  <span className="text-[9px] uppercase tracking-wider text-[#71717A] block font-medium">
+                    Destination & Route
+                  </span>
+                  <span className="text-[#FDFBF7] font-medium block truncate">
+                    {lead.destinationSummary}
+                  </span>
+                  <span className="text-[10px] text-[#A1A1AA]">
+                    {lead.duration} • {lead.companions}
+                  </span>
+                </div>
+                <div>
+                  <span className="text-[9px] uppercase tracking-wider text-[#71717A] block font-medium">
+                    Budget & Window
+                  </span>
+                  {ROLE_PERMISSIONS[activeRole].canViewFinancialMargins ? (
+                    <span className="text-[#C5A059] font-serif font-medium block truncate">
+                      {lead.budgetTier}
+                    </span>
+                  ) : (
+                    <span className="font-mono text-[11px] text-amber-400/80 flex items-center gap-1">
+                      <LockIcon className="w-2.5 h-2.5" />
+                      ₹*** (Masked)
+                    </span>
+                  )}
+                  <span className="text-[10px] text-[#A1A1AA] block truncate">
+                    {lead.travelWindow}
+                  </span>
+                </div>
+              </div>
+
+              {/* Quick Actions Footer */}
+              <div className="flex items-center justify-between gap-2 pt-1">
+                <div className="flex items-center gap-2">
+                  {/* WhatsApp */}
+                  <a
+                    href={`https://wa.me/${lead.phone.replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                      `Greetings ${lead.firstName}, this is ${lead.assignedCurator} from Soulsventure Bespoke Journeys (Dehradun). Following your inquiry for ${lead.destinationSummary}, we have prepared a tailored concept for your review.`
+                    )}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-emerald-950/60 hover:bg-emerald-900 text-emerald-400 border border-emerald-800/50 text-[11px] font-medium transition-colors"
+                  >
+                    <MessageCircle className="w-3.5 h-3.5" />
+                    <span>WhatsApp</span>
+                  </a>
+
+                  {/* Phone Call */}
+                  <a
+                    href={`tel:${lead.phone.replace(/[^0-9+]/g, "")}`}
+                    className="inline-flex items-center gap-1 px-2.5 py-1.5 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#A1A1AA] hover:text-[#FDFBF7] border border-[#333333] text-[11px] font-medium transition-colors"
+                  >
+                    <Phone className="w-3.5 h-3.5" />
+                    <span>Call</span>
+                  </a>
+                </div>
+
+                <div className="flex items-center gap-1.5">
+                  {/* Open Dossier */}
+                  <button
+                    type="button"
+                    onClick={() => onOpenDossier(lead)}
+                    className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-[#C5A059] hover:bg-[#D4AF37] text-black text-xs font-serif font-medium shadow-sm transition-colors cursor-pointer"
+                  >
+                    <Eye className="w-3.5 h-3.5" />
+                    <span>Dossier</span>
+                  </button>
+
+                  {/* Delete */}
+                  {onDeleteLead && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (confirm(`Remove enquiry ${lead.referenceCode} for ${lead.clientName}?`)) {
+                          onDeleteLead(lead.id);
+                        }
+                      }}
+                      className="p-1.5 rounded-lg bg-[#222222] text-[#71717A] hover:text-red-400 border border-[#333333] transition-colors cursor-pointer"
+                      title="Delete Enquiry"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+
+      {/* 2. DESKTOP CRM MASTER TABLE (hidden md:block) */}
+      <div className="hidden md:block bg-[#181818] border border-[#2A2A2A] rounded-xl overflow-hidden shadow-2xl">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs border-collapse">
             <thead>
@@ -291,8 +456,8 @@ export default function AdminCRMTable({
                       <td className="py-4 px-4">
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full bg-[#C5A059]/15 border border-[#C5A059]/30 text-[#C5A059] font-serif flex items-center justify-center font-medium text-sm flex-shrink-0">
-                            {lead.firstName[0]}
-                            {lead.lastName[0]}
+                            {lead.firstName?.[0] || "G"}
+                            {lead.lastName?.[0] || "C"}
                           </div>
                           <div>
                             <div className="flex items-center gap-2">
@@ -398,16 +563,16 @@ export default function AdminCRMTable({
                             target="_blank"
                             rel="noopener noreferrer"
                             className="p-1.5 rounded bg-[#242424] hover:bg-emerald-600 text-[#A1A1AA] hover:text-white transition-colors"
-                            title="Direct WhatsApp"
+                            title="Chat via WhatsApp"
                           >
                             <MessageCircle className="w-4 h-4" />
                           </a>
 
-                          {/* Direct Phone */}
+                          {/* Phone Direct */}
                           <a
                             href={`tel:${lead.phone}`}
                             className="p-1.5 rounded bg-[#242424] hover:bg-[#333333] text-[#A1A1AA] hover:text-[#FDFBF7] transition-colors"
-                            title="Call Traveler"
+                            title="Call Guest Directly"
                           >
                             <Phone className="w-4 h-4" />
                           </a>
@@ -439,14 +604,14 @@ export default function AdminCRMTable({
 
       {/* Record Offline / Phone Lead Modal */}
       {isAddModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-xs animate-in fade-in">
-          <div className="w-full max-w-lg bg-[#181818] border border-[#2E2E2E] rounded-2xl shadow-2xl overflow-hidden p-6 space-y-5">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-black/80 backdrop-blur-sm animate-in fade-in">
+          <div className="w-full max-w-lg max-h-[90dvh] overflow-y-auto bg-[#181818] border border-[#2E2E2E] rounded-2xl shadow-2xl p-4 sm:p-6 space-y-4 sm:space-y-5">
             <div className="flex items-center justify-between pb-3 border-b border-[#262626]">
               <div>
                 <span className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold">
                   Concierge Intake Desk
                 </span>
-                <h3 className="font-serif text-xl text-[#FDFBF7]">Record Direct / Offline Lead</h3>
+                <h3 className="font-serif text-lg sm:text-xl text-[#FDFBF7]">Record Direct / Offline Lead</h3>
               </div>
               <button
                 onClick={() => setIsAddModalOpen(false)}
@@ -456,7 +621,7 @@ export default function AdminCRMTable({
               </button>
             </div>
 
-            <form onSubmit={handleManualSubmit} className="space-y-4 text-xs">
+            <form onSubmit={handleManualSubmit} className="space-y-3 sm:space-y-4 text-xs">
               <div>
                 <label className="block text-[#A1A1AA] mb-1 font-medium">Guest Full Name *</label>
                 <input
@@ -465,11 +630,11 @@ export default function AdminCRMTable({
                   value={newGuestName}
                   onChange={(e) => setNewGuestName(e.target.value)}
                   placeholder="e.g. Yashvardhan Singhania"
-                  className="w-full bg-[#202020] text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                  className="w-full bg-[#202020] text-base sm:text-xs text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                 />
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[#A1A1AA] mb-1 font-medium">Telephone / WhatsApp *</label>
                   <input
@@ -478,7 +643,7 @@ export default function AdminCRMTable({
                     value={newPhone}
                     onChange={(e) => setNewPhone(e.target.value)}
                     placeholder="+91 98..."
-                    className="w-full bg-[#202020] text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#202020] text-base sm:text-xs text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   />
                 </div>
                 <div>
@@ -488,18 +653,18 @@ export default function AdminCRMTable({
                     value={newEmail}
                     onChange={(e) => setNewEmail(e.target.value)}
                     placeholder="guest@domain.com"
-                    className="w-full bg-[#202020] text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#202020] text-base sm:text-xs text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   />
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[#A1A1AA] mb-1 font-medium">Target Destination</label>
                   <select
                     value={newDestination}
                     onChange={(e) => setNewDestination(e.target.value)}
-                    className="w-full bg-[#202020] text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#202020] text-xs text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   >
                     <option value="Rajasthan">Rajasthan (Palaces & Jawai)</option>
                     <option value="Ladakh & The Himalayas">Ladakh & The Himalayas</option>
@@ -514,7 +679,7 @@ export default function AdminCRMTable({
                   <select
                     value={newBudget}
                     onChange={(e) => setNewBudget(e.target.value)}
-                    className="w-full bg-[#202020] text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#202020] text-xs text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   >
                     <option value="₹3,50,000 - ₹6,00,000 pp">₹3,50,000 - ₹6,00,000 pp</option>
                     <option value="₹6,00,000 - ₹12,00,000 pp">₹6,00,000 - ₹12,00,000 pp</option>
@@ -524,7 +689,7 @@ export default function AdminCRMTable({
                 </div>
               </div>
 
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
                   <label className="block text-[#A1A1AA] mb-1 font-medium">Companions</label>
                   <input
@@ -532,7 +697,7 @@ export default function AdminCRMTable({
                     value={newCompanions}
                     onChange={(e) => setNewCompanions(e.target.value)}
                     placeholder="e.g. Couple / Family"
-                    className="w-full bg-[#202020] text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#202020] text-base sm:text-xs text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   />
                 </div>
                 <div>
@@ -540,7 +705,7 @@ export default function AdminCRMTable({
                   <select
                     value={newCurator}
                     onChange={(e) => setNewCurator(e.target.value as "Suraj Uniyal" | "Harsh Sood")}
-                    className="w-full bg-[#202020] text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#202020] text-xs text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   >
                     <option value="Suraj Uniyal">Suraj Uniyal (Founder)</option>
                     <option value="Harsh Sood">Harsh Sood (Founder)</option>
@@ -555,7 +720,7 @@ export default function AdminCRMTable({
                   value={newNotes}
                   onChange={(e) => setNewNotes(e.target.value)}
                   placeholder="e.g. Inquired about private fort buyout for 20th anniversary..."
-                  className="w-full bg-[#202020] text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                  className="w-full bg-[#202020] text-base sm:text-xs text-[#FDFBF7] px-3 py-2 rounded border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                 />
               </div>
 

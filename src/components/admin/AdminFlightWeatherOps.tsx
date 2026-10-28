@@ -44,7 +44,7 @@ export function AdminFlightWeatherOps() {
       `Mountain Corridor: ${flight.passStatus}\n\n` +
       `*MANDATORY CONTINGENCY ACTION:*\n${flight.alternativeRouting}\n\n` +
       `Concierge in charge: ${flight.assignedConcierge}\n` +
-      `Founder Hot-Line: +91 8126357353 (Suraj Uniyal)`
+      `Founder Hot-Line: +91 98XXXXXXXX (Suraj Uniyal)`
     );
     window.open(`https://wa.me/919820144521?text=${msg}`, "_blank");
     setAlertSuccessMsg(`Advisory broadcasted to chauffeur convoy & local station manager.`);

@@ -3,7 +3,19 @@
 import React, { useState, useEffect } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
 import AdminSidebar, { AdminTab, isTabLockedForRole } from "@/components/admin/AdminSidebar";
-import { Lock } from "lucide-react";
+import {
+  Lock,
+  Users,
+  Calendar,
+  Layers,
+  Compass,
+  Building2,
+  KeyRound,
+  Heart,
+  Sparkles,
+  BarChart3,
+  Plane,
+} from "lucide-react";
 import AdminCRMTable from "@/components/admin/AdminCRMTable";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
 import AdminPipelineKanban from "@/components/admin/AdminPipelineKanban";
@@ -46,6 +58,7 @@ export default function AdminDashboardPage() {
   const [mounted, setMounted] = useState(false);
   const [authSession, setAuthSession] = useState<AdminAuthSession | null>(null);
   const [isCheckingAuth, setIsCheckingAuth] = useState(true);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [currentTab, setCurrentTab] = useState<AdminTab>("crm");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFounder, setActiveFounder] = useState<"Suraj Uniyal" | "Harsh Sood">("Suraj Uniyal");
@@ -126,81 +139,75 @@ export default function AdminDashboardPage() {
 
   const handleLogout = () => {
     clearAdminAuthSession();
-    if (typeof window !== "undefined") {
-      localStorage.removeItem("soulsventure_admin_auth_session_v1");
-      sessionStorage.removeItem("soulsventure_admin_auth_session_v1");
-    }
     setAuthSession(null);
   };
 
-  const refreshLeads = async () => {
-    // Sync with cloud on manual refresh click
-    try {
-      const synced = await syncLeadsWithCloud();
-      setLeads([...synced]);
-      if (selectedLead) {
-        const refreshedSelected = synced.find((l) => l.id === selectedLead.id) || null;
-        setSelectedLead(refreshedSelected);
-      }
-    } catch {
-      const stored = getStoredLeads();
-      setLeads([...stored]);
+  const refreshLeads = () => {
+    syncLeadsWithCloud()
+      .then((synced) => {
+        setLeads([...synced]);
+      })
+      .catch(() => {
+        setLeads([...getStoredLeads()]);
+      });
+  };
+
+  const handleUpdateStatus = (leadId: string, newStatus: LeadStatus) => {
+    const updated = updateLeadStatus(leadId, newStatus);
+    setLeads(updated);
+    pushCloudLeads(updated).catch(console.error);
+
+    // Update selected lead if drawer is open
+    if (selectedLead && selectedLead.id === leadId) {
+      const refreshed = updated.find((l) => l.id === leadId) || null;
+      setSelectedLead(refreshed);
+    }
+  };
+
+  const handleUpdateNotes = (leadId: string, newNotes: string) => {
+    const updated = updateLeadNotes(leadId, newNotes);
+    setLeads(updated);
+    pushCloudLeads(updated).catch(console.error);
+    if (selectedLead && selectedLead.id === leadId) {
+      const refreshed = updated.find((l) => l.id === leadId) || null;
+      setSelectedLead(refreshed);
+    }
+  };
+
+  const handleUpdateCurator = (leadId: string, newCurator: "Suraj Uniyal" | "Harsh Sood") => {
+    const updated = updateLeadCurator(leadId, newCurator);
+    setLeads(updated);
+    pushCloudLeads(updated).catch(console.error);
+    if (selectedLead && selectedLead.id === leadId) {
+      const refreshed = updated.find((l) => l.id === leadId) || null;
+      setSelectedLead(refreshed);
+    }
+  };
+
+  const handleToggleMilestone = (leadId: string, milestoneKey: keyof CRMLead["milestones"]) => {
+    const updated = updateLeadMilestone(leadId, milestoneKey);
+    setLeads(updated);
+    pushCloudLeads(updated).catch(console.error);
+    if (selectedLead && selectedLead.id === leadId) {
+      const refreshed = updated.find((l) => l.id === leadId) || null;
+      setSelectedLead(refreshed);
     }
   };
 
   const handleDeleteLead = (leadId: string) => {
     const updated = deleteLead(leadId);
-    setLeads([...updated]);
-    if (selectedLead && (selectedLead.id === leadId || selectedLead.referenceCode === leadId)) {
+    setLeads(updated);
+    pushCloudLeads(updated).catch(console.error);
+    if (selectedLead && selectedLead.id === leadId) {
       setSelectedLead(null);
     }
   };
 
   const handleClearAllLeads = () => {
-    if (confirm("Are you sure you want to clear all enquiries? This will clear local cache and update cloud storage.")) {
-      const updated = clearAllLeads();
-      setLeads([...updated]);
-      setSelectedLead(null);
-    }
-  };
-
-  const handleUpdateStatus = (leadId: string, newStatus: LeadStatus) => {
-    const updated = updateLeadStatus(leadId, newStatus);
-    setLeads([...updated]);
-    if (selectedLead && selectedLead.id === leadId) {
-      setSelectedLead({ ...selectedLead, status: newStatus });
-    }
-  };
-
-  const handleUpdateNotes = (leadId: string, notes: string) => {
-    const updated = updateLeadNotes(leadId, notes);
-    setLeads([...updated]);
-    if (selectedLead && selectedLead.id === leadId) {
-      setSelectedLead({ ...selectedLead, internalNotes: notes });
-    }
-  };
-
-  const handleUpdateCurator = (
-    leadId: string,
-    curator: "Suraj Uniyal" | "Harsh Sood"
-  ) => {
-    const updated = updateLeadCurator(leadId, curator);
-    setLeads([...updated]);
-    if (selectedLead && selectedLead.id === leadId) {
-      setSelectedLead({ ...selectedLead, assignedCurator: curator });
-    }
-  };
-
-  const handleToggleMilestone = (
-    leadId: string,
-    milestoneKey: keyof CRMLead["milestones"]
-  ) => {
-    const updated = updateLeadMilestone(leadId, milestoneKey);
-    setLeads([...updated]);
-    if (selectedLead && selectedLead.id === leadId) {
-      const refreshed = updated.find((l) => l.id === leadId) || null;
-      setSelectedLead(refreshed);
-    }
+    const updated = clearAllLeads();
+    setLeads(updated);
+    pushCloudLeads(updated).catch(console.error);
+    setSelectedLead(null);
   };
 
   const handleAddManualLead = (newLeadData: Partial<CRMLead>) => {
@@ -270,6 +277,17 @@ export default function AdminDashboardPage() {
   const newLeadsCount = (leads || []).filter((l) => l?.status === "New Lead").length;
   const activeTravelersCount = (leads || []).filter((l) => l?.status === "On-Ground Active").length + (ACTIVE_TRAVELERS || []).length;
 
+  const quickTabs: { id: AdminTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
+    { id: "crm", label: "Leads", icon: Users },
+    { id: "pipeline", label: "Pipeline", icon: Layers },
+    { id: "calendar", label: "Calendar", icon: Calendar },
+    { id: "live", label: "On-Ground", icon: Compass },
+    { id: "radar", label: "Radar", icon: Heart },
+    { id: "vendors", label: "Vendors", icon: Building2 },
+    { id: "analytics", label: "Analytics", icon: BarChart3 },
+    { id: "permissions", label: "Matrix", icon: KeyRound },
+  ];
+
   if (!mounted || isCheckingAuth) {
     return (
       <div className="min-h-screen bg-[#111111] flex items-center justify-center">
@@ -303,11 +321,51 @@ export default function AdminDashboardPage() {
         totalLeadsCount={leads.length}
         totalPipelineValueINR={totalPipelineValueINR}
         activeTravelersCount={activeTravelersCount}
+        isMobileMenuOpen={isMobileMenuOpen}
+        onToggleMobileMenu={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
       />
+
+      {/* Mobile Horizontal Quick-Tab Strip for One-Tap Navigation */}
+      <div className="md:hidden bg-[#161616] border-b border-[#262626] px-3 py-2 flex items-center gap-1.5 overflow-x-auto scrollbar-none flex-shrink-0">
+        {quickTabs.map((tab) => {
+          const isSelected = currentTab === tab.id;
+          const isLocked = isTabLockedForRole(
+            tab.id,
+            rolePermissions?.[activeRole] || ROLE_PERMISSIONS[activeRole] || ROLE_PERMISSIONS["Founder (Unrestricted)"]
+          );
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => {
+                if (isLocked) {
+                  setLockedToast(`Access Restricted: '${tab.label}' is locked for '${activeRole}' in the Permissions Matrix.`);
+                  setTimeout(() => setLockedToast(null), 4500);
+                  return;
+                }
+                setCurrentTab(tab.id);
+              }}
+              className={`px-3 py-1.5 rounded-full text-xs font-medium whitespace-nowrap flex items-center gap-1.5 transition-all flex-shrink-0 cursor-pointer ${
+                isSelected
+                  ? "bg-[#C5A059] text-[#111111] font-semibold shadow-sm"
+                  : isLocked
+                  ? "bg-[#181818] text-[#555555] opacity-50 cursor-not-allowed border border-transparent"
+                  : "bg-[#202020] text-[#A1A1AA] hover:text-[#FDFBF7] border border-[#2E2E2E]"
+              }`}
+            >
+              <tab.icon className="w-3.5 h-3.5" />
+              <span>{tab.label}</span>
+              {tab.id === "crm" && newLeadsCount > 0 && (
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
+              )}
+            </button>
+          );
+        })}
+      </div>
 
       {/* Main Workspace Body */}
       <div className="flex flex-1 overflow-hidden">
-        {/* Fixed Left Navigation Sidebar */}
+        {/* Navigation Sidebar (Desktop persistent + Mobile slide-over drawer) */}
         <AdminSidebar
           currentTab={currentTab}
           setCurrentTab={setCurrentTab}
@@ -319,22 +377,24 @@ export default function AdminDashboardPage() {
             setLockedToast(`Access Denied: '${tabLabel}' is locked for '${activeRole}' by the Founder in the Permissions Matrix.`);
             setTimeout(() => setLockedToast(null), 4500);
           }}
+          isMobileOpen={isMobileMenuOpen}
+          onCloseMobile={() => setIsMobileMenuOpen(false)}
         />
 
         {/* Tab Content Display */}
-        <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#111111]">
+        <main className="flex-1 overflow-y-auto p-3 sm:p-6 lg:p-8 bg-[#111111]">
           <div className="max-w-7xl mx-auto space-y-6">
             {/* Locked Tab Gate */}
             {isTabLockedForRole(currentTab, rolePermissions?.[activeRole] || ROLE_PERMISSIONS[activeRole] || ROLE_PERMISSIONS["Founder (Unrestricted)"]) ? (
-              <div className="bg-[#181818] border border-amber-500/40 rounded-2xl p-8 max-w-lg mx-auto text-center space-y-4 my-16 shadow-2xl animate-in fade-in">
-                <div className="w-16 h-16 rounded-full bg-amber-950/60 border border-amber-500/50 text-amber-400 mx-auto flex items-center justify-center shadow-lg">
-                  <Lock className="w-7 h-7" />
+              <div className="bg-[#181818] border border-amber-500/40 rounded-2xl p-6 sm:p-8 max-w-lg mx-auto text-center space-y-4 my-10 sm:my-16 shadow-2xl animate-in fade-in">
+                <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-amber-950/60 border border-amber-500/50 text-amber-400 mx-auto flex items-center justify-center shadow-lg">
+                  <Lock className="w-6 h-6 sm:w-7 sm:h-7" />
                 </div>
                 <div className="space-y-1.5">
                   <span className="text-[10px] uppercase tracking-[0.25em] text-amber-400 font-semibold block">
                     Section Access Restricted
                   </span>
-                  <h3 className="font-serif text-2xl text-[#FDFBF7]">
+                  <h3 className="font-serif text-xl sm:text-2xl text-[#FDFBF7]">
                     Locked by Founder in Permissions Matrix
                   </h3>
                   <p className="text-xs text-[#A1A1AA] font-light max-w-md mx-auto pt-1 leading-relaxed">
@@ -354,54 +414,54 @@ export default function AdminDashboardPage() {
               </div>
             ) : (
               <>
-            {currentTab === "crm" && (
-              <AdminCRMTable
-                leads={filteredLeads}
-                onOpenDossier={(lead) => setSelectedLead(lead)}
-                onUpdateStatus={handleUpdateStatus}
-                onAddManualLead={handleAddManualLead}
-                onDeleteLead={handleDeleteLead}
-                onClearAllLeads={handleClearAllLeads}
-                activeRole={activeRole}
-              />
-            )}
+                {currentTab === "crm" && (
+                  <AdminCRMTable
+                    leads={filteredLeads}
+                    onOpenDossier={(lead) => setSelectedLead(lead)}
+                    onUpdateStatus={handleUpdateStatus}
+                    onAddManualLead={handleAddManualLead}
+                    onDeleteLead={handleDeleteLead}
+                    onClearAllLeads={handleClearAllLeads}
+                    activeRole={activeRole}
+                  />
+                )}
 
-            {currentTab === "calendar" && (
-              <AdminCalendarView
-                leads={leads}
-                onOpenDossier={(lead) => setSelectedLead(lead)}
-              />
-            )}
+                {currentTab === "calendar" && (
+                  <AdminCalendarView
+                    leads={leads}
+                    onOpenDossier={(lead) => setSelectedLead(lead)}
+                  />
+                )}
 
-            {currentTab === "pipeline" && (
-              <AdminPipelineKanban
-                leads={leads}
-                onOpenDossier={(lead) => setSelectedLead(lead)}
-                onUpdateStatus={handleUpdateStatus}
-              />
-            )}
+                {currentTab === "pipeline" && (
+                  <AdminPipelineKanban
+                    leads={leads}
+                    onOpenDossier={(lead) => setSelectedLead(lead)}
+                    onUpdateStatus={handleUpdateStatus}
+                  />
+                )}
 
-            {currentTab === "live" && <AdminActiveTravelers leads={leads} />}
+                {currentTab === "live" && <AdminActiveTravelers leads={leads} />}
 
-            {currentTab === "radar" && <AdminAnniversaryRadar />}
+                {currentTab === "radar" && <AdminAnniversaryRadar />}
 
-            {currentTab === "flight-weather" && <AdminFlightWeatherOps />}
+                {currentTab === "flight-weather" && <AdminFlightWeatherOps />}
 
-            {currentTab === "moodboards" && <AdminMoodboardVault />}
+                {currentTab === "moodboards" && <AdminMoodboardVault />}
 
-            {currentTab === "scrapbooks" && <AdminScrapbookManager />}
+                {currentTab === "scrapbooks" && <AdminScrapbookManager />}
 
-            {currentTab === "vendors" && <AdminVendorLedger />}
+                {currentTab === "vendors" && <AdminVendorLedger />}
 
-            {currentTab === "analytics" && <AdminAnalytics leads={leads} />}
+                {currentTab === "analytics" && <AdminAnalytics leads={leads} />}
 
-            {currentTab === "permissions" && (
-              <AdminPermissionsMatrix
-                activeRole={activeRole}
-                setActiveRole={setActiveRole}
-                onPermissionsChange={(newPerms) => setRolePermissions({ ...newPerms })}
-              />
-            )}
+                {currentTab === "permissions" && (
+                  <AdminPermissionsMatrix
+                    activeRole={activeRole}
+                    setActiveRole={setActiveRole}
+                    onPermissionsChange={(newPerms) => setRolePermissions({ ...newPerms })}
+                  />
+                )}
               </>
             )}
           </div>
@@ -410,9 +470,11 @@ export default function AdminDashboardPage() {
 
       {/* Floating Access Denied Toast */}
       {lockedToast && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 bg-[#1C1414] border border-amber-500/60 text-amber-200 rounded-xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5">
-          <Lock className="w-5 h-5 text-amber-400 flex-shrink-0" />
-          <div className="text-xs font-medium pr-2">{lockedToast}</div>
+        <div className="fixed bottom-4 sm:bottom-6 right-4 sm:right-6 left-4 sm:left-auto z-50 p-3 sm:p-4 bg-[#1C1414] border border-amber-500/60 text-amber-200 rounded-xl shadow-2xl flex items-center justify-between gap-3 animate-in slide-in-from-bottom-5">
+          <div className="flex items-center gap-2.5">
+            <Lock className="w-4 h-4 text-amber-400 flex-shrink-0" />
+            <div className="text-xs font-medium">{lockedToast}</div>
+          </div>
           <button
             onClick={() => setLockedToast(null)}
             className="text-amber-400/70 hover:text-white text-xs p-1 cursor-pointer"

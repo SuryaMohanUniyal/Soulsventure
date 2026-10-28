@@ -53,7 +53,7 @@ export function AdminScrapbookManager() {
       `Our team and private escorts have curated a private, complimentary Digital Scrapbook capturing the most intimate moments and wildlife sightings of your travels:\n\n` +
       `Your Digital Keepsake: ${url}\n\n` +
       `We have also included a discreet space for your reflections. It was our true honour hosting you.\n\n` +
-      `Warmest personal regards,\nSuraj Uniyal & Harsh Sood\nFounders, SoulsVenture Concierge\nDirect: +91 8126357353`
+      `Warmest personal regards,\nSuraj Uniyal & Harsh Sood\nFounders, SoulsVenture Concierge\nDirect: +91 98XXXXXXXX`
     );
     window.open(`https://wa.me/?text=${msg}`, "_blank");
     setSuccessToast(`Keepsake scrapbook deployed via WhatsApp to ${sb.clientName}.`);

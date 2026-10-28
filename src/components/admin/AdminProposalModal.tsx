@@ -105,7 +105,7 @@ export function AdminProposalModal({
       `Dates: *${lead.travelWindow}*\n` +
       `Estimated Investment: *₹${lead.estimatedValueINR.toLocaleString("en-IN")}*\n\n` +
       `Your bespoke digital dossier and day-by-day itinerary is ready for your private review.\n\n` +
-      `Warm regards,\nSuraj Uniyal & Harsh Sood\nFounders, SoulsVenture Concierge\nDirect: +91 8126357353`
+      `Warm regards,\nSuraj Uniyal & Harsh Sood\nFounders, SoulsVenture Concierge\nDirect: +91 98XXXXXXXX`
     );
     window.open(`https://wa.me/${cleanPhone}?text=${msg}`, "_blank");
   };
@@ -236,7 +236,7 @@ export function AdminProposalModal({
               </div>
               <div>
                 <span className="text-[#666]">Direct Desk: </span>
-                <span className="text-[#C5A059]">+91 8126357353</span>
+                <span className="text-[#C5A059]">+91 98XXXXXXXX</span>
               </div>
             </div>
           </div>

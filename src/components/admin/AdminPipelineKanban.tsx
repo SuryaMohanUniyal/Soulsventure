@@ -60,24 +60,24 @@ export default function AdminPipelineKanban({
   ];
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-4 sm:space-y-6 animate-in fade-in duration-300">
       {/* Header */}
-      <div className="p-5 bg-[#181818] border border-[#2A2A2A] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
+      <div className="p-4 sm:p-5 bg-[#181818] border border-[#2A2A2A] rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg">
         <div>
-          <h2 className="font-serif text-2xl font-light text-[#FDFBF7]">
+          <h2 className="font-serif text-xl sm:text-2xl font-light text-[#FDFBF7]">
             Trip Stage Pipeline & Guest Lifecycle
           </h2>
           <span className="text-[10px] uppercase tracking-[0.22em] text-[#A1A1AA]">
             End-to-End High-Net-Worth Touchpoint Workflow
           </span>
         </div>
-        <span className="text-xs text-[#C5A059] bg-[#222222] px-3 py-1.5 rounded-lg border border-[#333333] font-mono">
+        <span className="text-xs text-[#C5A059] bg-[#222222] px-3 py-1.5 rounded-lg border border-[#333333] font-mono self-start sm:self-auto">
           Total Inquiries in Pipeline: {leads.length}
         </span>
       </div>
 
-      {/* Kanban Columns Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4 overflow-x-auto pb-4">
+      {/* Kanban Columns Grid (Horizontal Swipe on Mobile, 5-col Grid on Desktop) */}
+      <div className="flex lg:grid lg:grid-cols-5 gap-4 overflow-x-auto pb-4 snap-x snap-mandatory">
         {stages.map((stage) => {
           const stageLeads = leads.filter((l) => l.status === stage.status);
           const stageTotalINR = stageLeads.reduce((acc, l) => acc + (l.estimatedValueINR || 0), 0);
@@ -85,7 +85,7 @@ export default function AdminPipelineKanban({
           return (
             <div
               key={stage.status}
-              className="bg-[#161616] border border-[#262626] rounded-xl flex flex-col h-full min-w-[240px]"
+              className="bg-[#161616] border border-[#262626] rounded-xl flex flex-col h-full w-[82vw] sm:w-72 lg:w-auto flex-shrink-0 snap-start"
             >
               {/* Column Header */}
               <div className={`p-3.5 border-b border-[#242424] border-t-2 ${stage.accent}`}>
@@ -148,7 +148,7 @@ export default function AdminPipelineKanban({
                       <div className="pt-2 border-t border-[#262626] flex items-center justify-between text-[11px] gap-2">
                         <div className="flex items-center gap-1.5 truncate">
                           <span className="text-[#71717A] text-[10px] truncate">
-                            {lead.assignedCurator.split(" ")[0]}
+                            {lead.assignedCurator?.split(" ")[0] || "Curator"}
                           </span>
                         </div>
 

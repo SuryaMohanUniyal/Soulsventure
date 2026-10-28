@@ -64,46 +64,45 @@ Would you be available for a brief 15-minute discovery consultation at your pref
 Warm regards,
 ${lead.assignedCurator}
 Founder | Soulsventure Bespoke Journeys
-+91 8126357353 / +91 9319843524
++91 98XXXXXXXX / concierge@soulsventure.com
 Dehradun, Uttarakhand`;
 
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(whatsappGreeting)}`;
 
   return (
-    <div className="fixed inset-0 z-50 flex justify-end bg-black/75 backdrop-blur-xs animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex justify-end bg-black/80 backdrop-blur-xs animate-in fade-in duration-200">
       <div className="w-full max-w-2xl bg-[#141414] border-l border-[#2B2B2B] h-full shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-right duration-300">
         {/* Drawer Header */}
-        <div className="p-6 border-b border-[#242424] bg-[#191919] flex items-start justify-between">
+        <div className="p-4 sm:p-6 border-b border-[#242424] bg-[#191919] flex items-start justify-between">
           <div className="space-y-1">
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2 sm:gap-2.5">
               <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-semibold">
                 Client Dossier & Itinerary Brief
               </span>
-              <span className="font-mono text-xs text-[#71717A]">• {lead.referenceCode}</span>
+              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#242424] text-[#A1A1AA] border border-[#333333]">
+                {lead.referenceCode}
+              </span>
+            </div>
+            <h3 className="font-serif text-xl sm:text-2xl text-[#FDFBF7] flex items-center gap-2">
+              <span>{lead.clientName}</span>
               {lead.isVIP && (
-                <span className="px-2 py-0.5 rounded text-[8px] bg-[#C5A059] text-[#111111] font-bold uppercase tracking-wider">
-                  VVIP Account
+                <span className="px-2 py-0.5 rounded text-[9px] bg-[#C5A059] text-black font-bold uppercase tracking-wider">
+                  VIP
                 </span>
               )}
-            </div>
-            <h2 className="font-serif text-2xl sm:text-3xl font-light text-[#FDFBF7]">
-              {lead.clientName}
-            </h2>
-            <p className="text-xs text-[#A1A1AA] font-light">
-              Registered on {new Date(lead.createdAt).toLocaleDateString("en-IN", { dateStyle: "long" })}
-            </p>
+            </h3>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#A1A1AA] hover:text-[#FDFBF7] transition-colors cursor-pointer"
+            className="p-2 text-[#A1A1AA] hover:text-[#FDFBF7] hover:bg-[#252525] rounded-lg transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Drawer Content */}
-        <div className="p-6 overflow-y-auto space-y-6 flex-1 text-xs">
+        <div className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6 flex-1 text-xs">
           {/* Quick Action Strip */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <a
@@ -134,7 +133,7 @@ Dehradun, Uttarakhand`;
           </div>
 
           {/* Status & Curator Controls */}
-          <div className="p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div className="p-3.5 sm:p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
             <div>
               <label className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold block mb-1.5">
                 Trip Pipeline Stage
@@ -177,7 +176,7 @@ Dehradun, Uttarakhand`;
           </div>
 
           {/* Contact & Traveler Information */}
-          <div className="p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-3">
+          <div className="p-3.5 sm:p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-3">
             <h4 className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold flex items-center gap-1.5">
               <UserCheck className="w-3.5 h-3.5" /> Direct Contact Channels
             </h4>
@@ -222,12 +221,12 @@ Dehradun, Uttarakhand`;
           </div>
 
           {/* Journey Specifications */}
-          <div className="p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-3">
+          <div className="p-3.5 sm:p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-3">
             <h4 className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold flex items-center gap-1.5">
               <MapPin className="w-3.5 h-3.5" /> Handcrafted Journey Parameters
             </h4>
 
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            <div className="grid grid-cols-1 xs:grid-cols-2 sm:grid-cols-3 gap-2.5 sm:gap-3">
               <div className="p-2.5 bg-[#171717] rounded-lg border border-[#262626]">
                 <span className="text-[10px] text-[#71717A] block">Destination</span>
                 <span className="font-serif text-sm font-medium text-[#FDFBF7]">
@@ -277,7 +276,7 @@ Dehradun, Uttarakhand`;
           </div>
 
           {/* 5-Step Luxury Milestones Progress */}
-          <div className="p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-3">
+          <div className="p-3.5 sm:p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold">
                 Bespoke Touchpoint Milestones
@@ -316,7 +315,7 @@ Dehradun, Uttarakhand`;
           </div>
 
           {/* Internal Confidential Notes */}
-          <div className="p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-2.5">
+          <div className="p-3.5 sm:p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-2.5">
             <div className="flex items-center justify-between">
               <h4 className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold">
                 Internal Confidential Notes (Private to Founders)
@@ -349,7 +348,7 @@ Dehradun, Uttarakhand`;
         </div>
 
         {/* Drawer Footer */}
-        <div className="p-4 border-t border-[#242424] bg-[#191919] flex justify-between items-center text-xs">
+        <div className="p-3.5 sm:p-4 border-t border-[#242424] bg-[#191919] flex justify-between items-center text-xs">
           <span className="text-[#71717A]">
             Lead ID: <strong className="font-mono text-[#FDFBF7]">{lead.referenceCode}</strong>
           </span>

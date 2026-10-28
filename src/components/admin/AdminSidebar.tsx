@@ -16,6 +16,7 @@ import {
   Camera,
   KeyRound,
   Lock,
+  X,
 } from "lucide-react";
 
 import { TeamRole, RolePermissions } from "@/lib/crmStore";
@@ -64,6 +65,8 @@ interface AdminSidebarProps {
   activeRole?: TeamRole;
   rolePermissions?: RolePermissions;
   onLockedClick?: (tabLabel: string) => void;
+  isMobileOpen?: boolean;
+  onCloseMobile?: () => void;
 }
 
 export default function AdminSidebar({
@@ -74,6 +77,8 @@ export default function AdminSidebar({
   activeRole = "Founder (Unrestricted)",
   rolePermissions,
   onLockedClick,
+  isMobileOpen = false,
+  onCloseMobile,
 }: AdminSidebarProps) {
   const operationsItems = [
     {
@@ -172,6 +177,9 @@ export default function AdminSidebar({
         return;
       }
       setCurrentTab(item.id);
+      if (onCloseMobile) {
+        onCloseMobile();
+      }
     };
 
     if (isLocked) {
@@ -221,8 +229,8 @@ export default function AdminSidebar({
     );
   };
 
-  return (
-    <aside className="w-64 bg-[#141414] border-r border-[#262626] flex flex-col justify-between p-4 flex-shrink-0 min-h-[calc(100vh-61px)] overflow-y-auto">
+  const navContent = (
+    <div className="flex flex-col justify-between h-full space-y-6">
       {/* Top Nav Items */}
       <div className="space-y-6">
         {/* Core Operations */}
@@ -262,9 +270,9 @@ export default function AdminSidebar({
             <span>Founders Direct Line</span>
           </div>
           <p className="text-[11px] text-[#A1A1AA] font-light leading-relaxed">
-            Suraj Uniyal: <a href="tel:+918126357353" className="text-[#FDFBF7] hover:underline font-mono">+91 8126357353</a>
+            Suraj Uniyal & Harsh Sood
             <br />
-            Harsh Sood: <a href="tel:+919319843524" className="text-[#FDFBF7] hover:underline font-mono">+91 9319843524</a>
+            HQ Private Desk: <span className="text-[#FDFBF7] font-mono">+91 98XXXXXXXX</span>
           </p>
         </div>
       </div>
@@ -281,6 +289,54 @@ export default function AdminSidebar({
           Rajpur Road, Dehradun, Uttarakhand
         </p>
       </div>
-    </aside>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Desktop Persistent Sidebar */}
+      <aside className="hidden md:flex md:w-64 bg-[#141414] border-r border-[#262626] flex-col justify-between p-4 flex-shrink-0 min-h-[calc(100vh-61px)] overflow-y-auto">
+        {navContent}
+      </aside>
+
+      {/* Mobile Slide-Over Drawer with Animated Backdrop */}
+      {isMobileOpen && (
+        <div className="fixed inset-0 z-50 md:hidden">
+          {/* Backdrop */}
+          <div
+            className="fixed inset-0 bg-black/80 backdrop-blur-sm transition-opacity animate-in fade-in duration-200"
+            onClick={onCloseMobile}
+            aria-hidden="true"
+          />
+
+          {/* Drawer Panel */}
+          <aside className="fixed inset-y-0 left-0 w-72 max-w-[85vw] bg-[#141414] border-r border-[#2A2A2A] shadow-2xl z-50 flex flex-col justify-between p-4 overflow-y-auto animate-in slide-in-from-left duration-250">
+            <div>
+              {/* Drawer Top Header with Close Button */}
+              <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#242424]">
+                <div className="flex items-center gap-2">
+                  <span className="font-serif tracking-[0.2em] text-xs text-[#FDFBF7] uppercase font-light">
+                    Concierge Menu
+                  </span>
+                  <span className="text-[8px] uppercase px-1.5 py-0.5 rounded bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 font-mono">
+                    {activeRole.replace(" (Unrestricted)", "")}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={onCloseMobile}
+                  aria-label="Close navigation menu"
+                  className="p-1.5 text-[#A1A1AA] hover:text-[#FDFBF7] hover:bg-[#222222] rounded-lg transition-colors cursor-pointer"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {navContent}
+            </div>
+          </aside>
+        </div>
+      )}
+    </>
   );
 }
