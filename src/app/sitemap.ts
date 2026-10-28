@@ -1,6 +1,8 @@
 import { MetadataRoute } from "next";
 import { DESTINATIONS, ITINERARIES, JOURNAL_ARTICLES } from "@/data/mockData";
 
+export const dynamic = "force-static";
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://soulsventure.com";
   const now = new Date();
