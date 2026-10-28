@@ -191,12 +191,6 @@ export default function Footer() {
                   Bespoke Trip Inquiry
                 </Link>
               </li>
-              <li>
-                <Link href="/admin" className="hover:text-[#C5A059] transition-colors text-[#C5A059]/90 flex items-center gap-1.5 pt-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#C5A059]" />
-                  Concierge OS (Admin CRM)
-                </Link>
-              </li>
             </ul>
           </div>
         </div>

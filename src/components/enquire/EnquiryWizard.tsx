@@ -350,13 +350,7 @@ export default function EnquiryWizard() {
                 <span>Instant Founder WhatsApp (+91 8126357353)</span>
               </a>
 
-              <Link
-                href="/admin"
-                className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-[#1A1A1A] hover:bg-[#C5A880] text-white text-xs uppercase tracking-[0.2em] font-semibold transition-colors"
-              >
-                <span>View in Admin CRM</span>
-                <ArrowRight className="w-3.5 h-3.5" />
-              </Link>
+              
             </div>
 
             <div className="text-center pt-2">

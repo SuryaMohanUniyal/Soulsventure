@@ -435,6 +435,9 @@ export function AdminPermissionsMatrix({
                   <div>Email: {member.email}</div>
                   <div>Direct: {member.phone}</div>
                   <div>Station: {member.location}</div>
+                  <div className="text-amber-400/90 font-mono">
+                    Login Key: {member.password || member.phone.replace(/[^0-9]/g, "").slice(-6)}
+                  </div>
                   <div className="pt-1.5 border-t border-[#262626] flex items-center justify-between">
                     <span className="text-[#777]">Assigned Scope:</span>
                     <select
@@ -487,6 +490,7 @@ export function AdminPermissionsMatrix({
                 const role = (form.elements.namedItem("role") as HTMLSelectElement).value as TeamRole;
                 const phone = (form.elements.namedItem("phone") as HTMLInputElement).value;
                 const location = (form.elements.namedItem("location") as HTMLInputElement).value;
+                const password = (form.elements.namedItem("password") as HTMLInputElement).value;
 
                 const newMember: TeamMember = {
                   id: `tm-${Date.now()}`,
@@ -494,6 +498,7 @@ export function AdminPermissionsMatrix({
                   email,
                   role,
                   phone,
+                  password: password || phone.replace(/[^0-9]/g, "").slice(-6),
                   activeClients: 0,
                   location,
                   status: "Active",
@@ -561,6 +566,16 @@ export function AdminPermissionsMatrix({
                   name="location"
                   defaultValue="New Delhi Office"
                   className="w-full bg-[#111111] border border-[#333333] rounded-lg px-3 py-2 text-[#FDFBF7] focus:outline-none focus:border-[#C5A059]"
+                />
+              </div>
+
+              <div>
+                <label className="text-[#888888] block mb-1">Login Password / Security PIN *</label>
+                <input
+                  name="password"
+                  required
+                  defaultValue={"sv" + Math.floor(100000 + Math.random() * 900000)}
+                  className="w-full bg-[#111111] border border-[#333333] rounded-lg px-3 py-2 text-[#C5A059] font-mono focus:outline-none focus:border-[#C5A059]"
                 />
               </div>
 

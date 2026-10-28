@@ -16,10 +16,14 @@ import { AdminMoodboardVault } from "@/components/admin/AdminMoodboardVault";
 import { AdminScrapbookManager } from "@/components/admin/AdminScrapbookManager";
 import AdminClientDossierDrawer from "@/components/admin/AdminClientDossierDrawer";
 import { AdminProposalModal } from "@/components/admin/AdminProposalModal";
+import AdminAuthGate from "@/components/admin/AdminAuthGate";
 import {
   CRMLead,
   LeadStatus,
   TeamRole,
+  AdminAuthSession,
+  getAdminAuthSession,
+  clearAdminAuthSession,
   getStoredLeads,
   syncLeadsWithCloud,
   updateLeadStatus,
@@ -35,6 +39,8 @@ import {
 
 export default function AdminDashboardPage() {
   const [mounted, setMounted] = useState(false);
+  const [authSession, setAuthSession] = useState<AdminAuthSession | null>(null);
+  const [isCheckingAuth, setIsCheckingAuth] = useState(true);
   const [currentTab, setCurrentTab] = useState<AdminTab>("crm");
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFounder, setActiveFounder] = useState<"Suraj Uniyal" | "Harsh Sood">("Suraj Uniyal");
@@ -80,6 +86,23 @@ export default function AdminDashboardPage() {
       clearInterval(cloudInterval);
     };
   }, []);
+
+  const handleLoginSuccess = (session: AdminAuthSession) => {
+    setAuthSession(session);
+    if (session.user.name === "Harsh Sood") {
+      setActiveFounder("Harsh Sood");
+    } else {
+      setActiveFounder("Suraj Uniyal");
+    }
+    if (session.user.role) {
+      setActiveRole(session.user.role);
+    }
+  };
+
+  const handleLogout = () => {
+    clearAdminAuthSession();
+    setAuthSession(null);
+  };
 
   const refreshLeads = async () => {
     // Sync with cloud on manual refresh click
@@ -241,6 +264,7 @@ export default function AdminDashboardPage() {
         activeRole={activeRole}
         setActiveRole={setActiveRole}
         onRefresh={refreshLeads}
+        onLogout={handleLogout}
         totalLeadsCount={leads.length}
         totalPipelineValueINR={totalPipelineValueINR}
         activeTravelersCount={activeTravelersCount}

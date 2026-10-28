@@ -14,6 +14,7 @@ import {
   User,
   ChevronDown,
   RefreshCw,
+  LogOut,
 } from "lucide-react";
 import { CreativeSoulMark } from "@/components/SoulsventureLogo";
 import { TeamRole } from "@/lib/crmStore";
@@ -26,6 +27,7 @@ interface AdminHeaderProps {
   activeRole?: TeamRole;
   setActiveRole?: (r: TeamRole) => void;
   onRefresh: () => void;
+  onLogout?: () => void;
   totalLeadsCount: number;
   totalPipelineValueINR: number;
   activeTravelersCount: number;
@@ -39,6 +41,7 @@ export default function AdminHeader({
   activeRole = "Founder (Unrestricted)",
   setActiveRole,
   onRefresh,
+  onLogout,
   totalLeadsCount,
   totalPipelineValueINR,
   activeTravelersCount,
@@ -285,6 +288,18 @@ export default function AdminHeader({
             <span>Live Site</span>
             <ExternalLink className="w-3.5 h-3.5 text-[#A1A1AA]" />
           </Link>
+
+          {/* Secure Lock / Sign Out */}
+          {onLogout && (
+            <button
+              onClick={onLogout}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-rose-300 hover:text-white bg-rose-950/40 hover:bg-rose-900/60 border border-rose-800/40 transition-colors cursor-pointer"
+              title="Lock Console & Sign Out"
+            >
+              <LogOut className="w-3.5 h-3.5 text-rose-400" />
+              <span className="hidden md:inline">Lock System</span>
+            </button>
+          )}
         </div>
       </div>
     </header>

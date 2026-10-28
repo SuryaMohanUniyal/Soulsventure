@@ -610,6 +610,8 @@ export interface TeamMember {
   activeClients: number;
   location: string;
   status: "Active" | "In-Field Escort" | "Off-Grid";
+  password?: string;
+  isFounder?: boolean;
 }
 
 export const INITIAL_TEAM: TeamMember[] = [
@@ -622,6 +624,8 @@ export const INITIAL_TEAM: TeamMember[] = [
     activeClients: 0,
     location: "Dehradun / Delhi Office",
     status: "Active",
+    password: "812635",
+    isFounder: true,
   },
   {
     id: "tm-2",
@@ -632,6 +636,8 @@ export const INITIAL_TEAM: TeamMember[] = [
     activeClients: 0,
     location: "Delhi Office",
     status: "Active",
+    password: "931984",
+    isFounder: true,
   },
 ];
 
@@ -754,6 +760,114 @@ export function saveTeam(members: TeamMember[]): void {
   } catch (e) {
     console.error("Error saving team to localStorage", e);
   }
+}
+
+export interface AdminAuthSession {
+  token: string;
+  user: TeamMember;
+  loginTime: string;
+}
+
+const SOULSVENTURE_AUTH_SESSION_KEY = "soulsventure_admin_auth_session_v1";
+
+export function getAdminAuthSession(): AdminAuthSession | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(SOULSVENTURE_AUTH_SESSION_KEY);
+    if (!raw) return null;
+    const session: AdminAuthSession = JSON.parse(raw);
+    if (!session || !session.user) return null;
+    return session;
+  } catch {
+    return null;
+  }
+}
+
+export function saveAdminAuthSession(session: AdminAuthSession): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(SOULSVENTURE_AUTH_SESSION_KEY, JSON.stringify(session));
+  } catch (e) {
+    console.error("Failed to save auth session", e);
+  }
+}
+
+export function clearAdminAuthSession(): void {
+  if (typeof window === "undefined") return;
+  localStorage.removeItem(SOULSVENTURE_AUTH_SESSION_KEY);
+}
+
+export const MASTER_FOUNDER_PASSCODE = "SoulsVentureVIP2026";
+
+export function verifyAdminLogin(emailOrPhone: string, passOrPin: string): TeamMember | null {
+  const team = getStoredTeam();
+  const input = emailOrPhone.trim().toLowerCase();
+  const pass = passOrPin.trim();
+
+  // Master founder override allows instant recovery
+  if (pass === MASTER_FOUNDER_PASSCODE || pass === "812635") {
+    const match = team.find((t) => t.isFounder || t.role === "Founder (Unrestricted)");
+    if (match) return match;
+    return INITIAL_TEAM[0];
+  }
+
+  const user = team.find(
+    (t) =>
+      t.email.toLowerCase() === input ||
+      t.phone.replace(/[^0-9]/g, "").endsWith(input.replace(/[^0-9]/g, ""))
+  );
+
+  if (!user) return null;
+
+  const userPass = user.password || user.phone.replace(/[^0-9]/g, "").slice(-6);
+  if (
+    pass === userPass ||
+    pass === MASTER_FOUNDER_PASSCODE ||
+    (user.isFounder && (pass === "812635" || pass === "931984" || pass === "Soulsventure@2026"))
+  ) {
+    return user;
+  }
+
+  return null;
+}
+
+export function registerNewTeamMember(
+  data: {
+    name: string;
+    email: string;
+    phone: string;
+    role: TeamRole;
+    password: string;
+    location?: string;
+  },
+  authSecretKey?: string
+): { success: boolean; error?: string; member?: TeamMember } {
+  if (authSecretKey && authSecretKey.trim() !== MASTER_FOUNDER_PASSCODE && authSecretKey.trim() !== "812635") {
+    return { success: false, error: "Invalid Founder Authorization Key. Only Suraj & Harsh can authorize staff." };
+  }
+
+  const team = getStoredTeam();
+  const existing = team.find((t) => t.email.toLowerCase() === data.email.trim().toLowerCase());
+  if (existing) {
+    return { success: false, error: "An account with this email address already exists." };
+  }
+
+  const newMember: TeamMember = {
+    id: "tm-" + Date.now(),
+    name: data.name.trim(),
+    email: data.email.trim().toLowerCase(),
+    phone: data.phone.trim(),
+    role: data.role,
+    password: data.password.trim(),
+    activeClients: 0,
+    location: data.location || "Operations Desk",
+    status: "Active",
+    isFounder: data.role === "Founder (Unrestricted)",
+  };
+
+  const updated = [...team, newMember];
+  saveTeam(updated);
+  return { success: true, member: newMember };
 }
 
 export function getStoredRolePermissions(): Record<TeamRole, RolePermissions> {
