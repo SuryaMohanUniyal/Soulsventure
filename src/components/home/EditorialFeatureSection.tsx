@@ -43,7 +43,7 @@ export default function EditorialFeatureSection() {
                 &ldquo;You do not visit Rajasthan simply to see history. You visit to become part of a living royal tapestry where every stone holds a memory.&rdquo;
               </p>
               <cite className="text-[11px] uppercase tracking-wider text-[#C5A880] not-italic block font-sans font-semibold">
-                — Kabir Malhotra, Senior Royal Circuit & Desert Curator
+                — Harsh Sood, Co-Founder & Head of Curation
               </cite>
             </blockquote>
 

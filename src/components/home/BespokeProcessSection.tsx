@@ -20,7 +20,7 @@ const STEPS = [
       "Confidentiality guaranteed through our private client charter",
     ],
     curatorQuote: "We don't sell predefined packages; we decipher what an unrepeatable Indian royal or wilderness experience looks like for your family.",
-    quoteAuthor: "Devika Rao, Senior Himalayan & Palace Curator",
+    quoteAuthor: "Harsh Sood, Co-Founder & Head of Curation",
   },
   {
     step: "02",
@@ -36,7 +36,7 @@ const STEPS = [
       "Unlimited itinerary revisions until the journey matches your vision to the millimeter",
     ],
     curatorQuote: "Soulsventure's true currency is our rolodex: the palace royal steward who opens the private terrace, the master tracker who spots the tiger.",
-    quoteAuthor: "Kabir Malhotra, Senior Royal Circuit & Desert Curator",
+    quoteAuthor: "Suraj Uniyal, Co-Founder & Operations Director",
   },
   {
     step: "03",
@@ -52,7 +52,7 @@ const STEPS = [
       "Complimentary medical evacuation coverage and full financial bonding",
     ],
     curatorQuote: "True luxury is invisible. You never see the gears turning; you only feel the effortless magic of every moment.",
-    quoteAuthor: "Meera Nambiar, Director of South India & Malabar Curations",
+    quoteAuthor: "Suraj Uniyal & Harsh Sood, Founders of Soulsventure",
   },
 ];
 

@@ -56,15 +56,14 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
 
   const topDestination = destinationsSorted[0] ? destinationsSorted[0][0] : "Awaiting Inquiries";
 
-  // Curators Breakdown
+  // Curators Breakdown - Founders Only: Suraj Uniyal & Harsh Sood
   const curatorMap: Record<string, { leads: number; confirmed: number; volumeINR: number }> = {
     "Suraj Uniyal": { leads: 0, confirmed: 0, volumeINR: 0 },
     "Harsh Sood": { leads: 0, confirmed: 0, volumeINR: 0 },
-    "Kabir Malhotra": { leads: 0, confirmed: 0, volumeINR: 0 },
   };
 
   leads.forEach((l) => {
-    const curator = l.assignedCurator || "Suraj Uniyal";
+    const curator = l.assignedCurator === "Harsh Sood" ? "Harsh Sood" : "Suraj Uniyal";
     if (!curatorMap[curator]) {
       curatorMap[curator] = { leads: 0, confirmed: 0, volumeINR: 0 };
     }
@@ -216,10 +215,13 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
                   <span className="w-5 h-5 rounded-full bg-[#222222] border border-[#444] text-[#C5A059] flex items-center justify-center text-[10px] font-mono">1</span>
                   Stage 1: Inquiries Received
                 </span>
-                <span className="font-mono text-[#FDFBF7]">{totalLeads} leads (100%)</span>
+                <span className="font-mono text-[#FDFBF7]">{totalLeads} leads ({totalLeads > 0 ? "100%" : "0%"})</span>
               </div>
               <div className="h-3 w-full bg-[#111111] rounded-full overflow-hidden border border-[#2A2A2A]">
-                <div className="h-full bg-gradient-to-r from-amber-600 to-[#C5A059] rounded-full" style={{ width: "100%" }} />
+                <div
+                  className="h-full bg-gradient-to-r from-amber-600 to-[#C5A059] rounded-full"
+                  style={{ width: totalLeads > 0 ? "100%" : "0%" }}
+                />
               </div>
             </div>
 
@@ -232,18 +234,24 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
                 </span>
                 <span className="font-mono text-[#FDFBF7]">
                   {leads.filter((l) => l.milestones.discoveryCallCompleted).length} leads (
-                  {Math.round(
-                    (leads.filter((l) => l.milestones.discoveryCallCompleted).length / totalLeads) * 100
-                  )}%)
+                  {totalLeads > 0
+                    ? Math.round(
+                        (leads.filter((l) => l.milestones.discoveryCallCompleted).length / totalLeads) * 100
+                      )
+                    : 0}%)
                 </span>
               </div>
               <div className="h-3 w-full bg-[#111111] rounded-full overflow-hidden border border-[#2A2A2A]">
                 <div
                   className="h-full bg-gradient-to-r from-[#C5A059] to-amber-400 rounded-full"
                   style={{
-                    width: `${Math.round(
-                      (leads.filter((l) => l.milestones.discoveryCallCompleted).length / totalLeads) * 100
-                    )}%`,
+                    width: `${
+                      totalLeads > 0
+                        ? Math.round(
+                            (leads.filter((l) => l.milestones.discoveryCallCompleted).length / totalLeads) * 100
+                          )
+                        : 0
+                    }%`,
                   }}
                 />
               </div>
@@ -258,18 +266,24 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
                 </span>
                 <span className="font-mono text-[#FDFBF7]">
                   {leads.filter((l) => l.milestones.proposalSent).length} leads (
-                  {Math.round(
-                    (leads.filter((l) => l.milestones.proposalSent).length / totalLeads) * 100
-                  )}%)
+                  {totalLeads > 0
+                    ? Math.round(
+                        (leads.filter((l) => l.milestones.proposalSent).length / totalLeads) * 100
+                      )
+                    : 0}%)
                 </span>
               </div>
               <div className="h-3 w-full bg-[#111111] rounded-full overflow-hidden border border-[#2A2A2A]">
                 <div
                   className="h-full bg-gradient-to-r from-amber-400 to-emerald-400 rounded-full"
                   style={{
-                    width: `${Math.round(
-                      (leads.filter((l) => l.milestones.proposalSent).length / totalLeads) * 100
-                    )}%`,
+                    width: `${
+                      totalLeads > 0
+                        ? Math.round(
+                            (leads.filter((l) => l.milestones.proposalSent).length / totalLeads) * 100
+                          )
+                        : 0
+                    }%`,
                   }}
                 />
               </div>
@@ -284,18 +298,24 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
                 </span>
                 <span className="font-mono text-emerald-400 font-semibold">
                   {leads.filter((l) => l.milestones.depositReceived).length} leads (
-                  {Math.round(
-                    (leads.filter((l) => l.milestones.depositReceived).length / totalLeads) * 100
-                  )}%)
+                  {totalLeads > 0
+                    ? Math.round(
+                        (leads.filter((l) => l.milestones.depositReceived).length / totalLeads) * 100
+                      )
+                    : 0}%)
                 </span>
               </div>
               <div className="h-3 w-full bg-[#111111] rounded-full overflow-hidden border border-[#2A2A2A]">
                 <div
                   className="h-full bg-emerald-500 rounded-full"
                   style={{
-                    width: `${Math.round(
-                      (leads.filter((l) => l.milestones.depositReceived).length / totalLeads) * 100
-                    )}%`,
+                    width: `${
+                      totalLeads > 0
+                        ? Math.round(
+                            (leads.filter((l) => l.milestones.depositReceived).length / totalLeads) * 100
+                          )
+                        : 0
+                    }%`,
                   }}
                 />
               </div>
@@ -309,16 +329,24 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
                   Stage 5: On-Ground Private Concierge Active
                 </span>
                 <span className="font-mono text-emerald-300 font-semibold">
-                  {leads.filter((l) => l.status === "On-Ground Active").length} traveling now
+                  {leads.filter((l) => l.status === "On-Ground Active").length} traveling now ({totalLeads > 0
+                    ? Math.round(
+                        (leads.filter((l) => l.status === "On-Ground Active").length / totalLeads) * 100
+                      )
+                    : 0}%)
                 </span>
               </div>
               <div className="h-3 w-full bg-[#111111] rounded-full overflow-hidden border border-[#2A2A2A]">
                 <div
                   className="h-full bg-emerald-400 rounded-full"
                   style={{
-                    width: `${Math.round(
-                      (leads.filter((l) => l.status === "On-Ground Active").length / totalLeads) * 100
-                    )}%`,
+                    width: `${
+                      totalLeads > 0
+                        ? Math.round(
+                            (leads.filter((l) => l.status === "On-Ground Active").length / totalLeads) * 100
+                          )
+                        : 0
+                    }%`,
                   }}
                 />
               </div>
@@ -342,7 +370,7 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
 
           <div className="space-y-4 pt-1">
             {destinationsSorted.slice(0, 5).map(([dest, data], idx) => {
-              const share = ((data.totalINR / totalPipelineValue) * 100).toFixed(0);
+              const share = totalPipelineValue > 0 ? ((data.totalINR / totalPipelineValue) * 100).toFixed(0) : "0";
               return (
                 <div key={dest} className="space-y-1">
                   <div className="flex justify-between items-center text-xs">
@@ -379,15 +407,15 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
         </div>
       </div>
 
-      {/* Curator Performance Table */}
+      {/* Founders Performance Table */}
       <div className="bg-[#181818] border border-[#262626] rounded-xl p-6 space-y-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#262626] pb-3">
           <div>
             <h3 className="font-serif text-[#FDFBF7] text-lg">
-              Founder & Curator Performance Scoreboard
+              Founders Performance Scoreboard
             </h3>
             <p className="text-xs text-[#888888]">
-              High-touch client conversion, assigned portfolios, and secured volume
+              Suraj Uniyal & Harsh Sood — High-touch client conversion, assigned portfolios, and secured volume
             </p>
           </div>
           <div className="flex items-center gap-1.5 text-xs text-[#C5A059] font-serif">
@@ -396,9 +424,9 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2">
           {Object.entries(curatorMap).map(([curatorName, data]) => {
-            const isFounder = curatorName === "Suraj Uniyal" || curatorName === "Harsh Sood";
+            const isFounder = true;
             const curatorRate = data.leads > 0 ? ((data.confirmed / data.leads) * 100).toFixed(0) : "0";
 
             return (
@@ -413,15 +441,13 @@ export function AdminAnalytics({ leads }: AdminAnalyticsProps) {
                     </h4>
                     <span className="text-[10px] font-mono uppercase tracking-wider text-[#C5A059]">
                       {curatorName === "Suraj Uniyal"
-                        ? "Founder & Operations Director"
-                        : curatorName === "Harsh Sood"
-                        ? "Founder & Curation Director"
-                        : "Senior Luxury Associate"}
+                        ? "Co-Founder & Operations Director"
+                        : "Co-Founder & Head of Curation"}
                     </span>
                   </div>
                   {isFounder && (
                     <span className="px-2 py-0.5 rounded text-[10px] font-serif bg-[#C5A059]/10 text-[#C5A059] border border-[#C5A059]/30">
-                      Founder
+                      Co-Founder
                     </span>
                   )}
                 </div>

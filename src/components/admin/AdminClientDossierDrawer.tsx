@@ -27,7 +27,7 @@ interface AdminClientDossierDrawerProps {
   onClose: () => void;
   onUpdateStatus: (leadId: string, status: LeadStatus) => void;
   onUpdateNotes: (leadId: string, notes: string) => void;
-  onUpdateCurator: (leadId: string, curator: "Suraj Uniyal" | "Harsh Sood" | "Kabir Malhotra") => void;
+  onUpdateCurator: (leadId: string, curator: "Suraj Uniyal" | "Harsh Sood") => void;
   onGenerateProposal: (lead: CRMLead) => void;
 }
 

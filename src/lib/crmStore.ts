@@ -30,7 +30,7 @@ export interface CRMLead {
   consultationMethod: "zoom" | "phone" | "whatsapp";
   preferredTimeOfDay: string;
   status: LeadStatus;
-  assignedCurator: "Suraj Uniyal" | "Harsh Sood" | "Kabir Malhotra";
+  assignedCurator: "Suraj Uniyal" | "Harsh Sood";
   internalNotes: string;
   isVIP?: boolean;
   milestones: {
@@ -305,7 +305,7 @@ export function updateLeadNotes(leadId: string, notes: string): CRMLead[] {
   return updated;
 }
 
-export function updateLeadCurator(leadId: string, curator: "Suraj Uniyal" | "Harsh Sood" | "Kabir Malhotra"): CRMLead[] {
+export function updateLeadCurator(leadId: string, curator: "Suraj Uniyal" | "Harsh Sood"): CRMLead[] {
   const existing = getStoredLeads();
   const updated = existing.map((lead) => (lead.id === leadId ? { ...lead, assignedCurator: curator } : lead));
   saveLeads(updated);
@@ -426,7 +426,7 @@ export const INITIAL_TEAM: TeamMember[] = [
     email: "suraj@soulsventure.com",
     role: "Founder (Unrestricted)",
     phone: "+91 8126357353",
-    activeClients: 5,
+    activeClients: 0,
     location: "Dehradun / Delhi Office",
     status: "Active",
   },
@@ -436,38 +436,8 @@ export const INITIAL_TEAM: TeamMember[] = [
     email: "harsh@soulsventure.com",
     role: "Founder (Unrestricted)",
     phone: "+91 9319843524",
-    activeClients: 4,
-    location: "Delhi / Jodhpur",
-    status: "Active",
-  },
-  {
-    id: "tm-3",
-    name: "Kabir Malhotra",
-    email: "kabir@soulsventure.com",
-    role: "Senior Curator",
-    phone: "+91 98111 88201",
-    activeClients: 3,
-    location: "Jaipur Studio",
-    status: "Active",
-  },
-  {
-    id: "tm-4",
-    name: "Tashi Namgyal",
-    email: "tashi.ops@soulsventure.com",
-    role: "On-Ground Concierge",
-    phone: "+91 94191 76543",
-    activeClients: 2,
-    location: "Leh, Ladakh (On-Field)",
-    status: "In-Field Escort",
-  },
-  {
-    id: "tm-5",
-    name: "Roshni Sen",
-    email: "roshni.finance@soulsventure.com",
-    role: "Finance & Accounts",
-    phone: "+91 98200 11984",
     activeClients: 0,
-    location: "Mumbai",
+    location: "Delhi Office",
     status: "Active",
   },
 ];

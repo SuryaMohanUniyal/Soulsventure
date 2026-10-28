@@ -85,7 +85,7 @@ export default function AdminDashboardPage() {
 
   const handleUpdateCurator = (
     leadId: string,
-    curator: "Suraj Uniyal" | "Harsh Sood" | "Kabir Malhotra"
+    curator: "Suraj Uniyal" | "Harsh Sood"
   ) => {
     const updated = updateLeadCurator(leadId, curator);
     setLeads([...updated]);
