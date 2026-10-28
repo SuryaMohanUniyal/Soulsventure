@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   INITIAL_MOODBOARDS,
   ClientMoodboard,
+  getStoredMoodboards,
 } from "@/lib/crmStore";
 import {
   Lock,
@@ -44,10 +45,18 @@ export function ClientMoodboardView({ initialRef }: { initialRef: string }) {
     ],
   };
 
-  const moodboard =
-    INITIAL_MOODBOARDS.find(
-      (m) => m.leadReference.toLowerCase() === refCode.toLowerCase()
-    ) || fallbackMoodboard;
+  const [moodboard, setMoodboard] = useState<ClientMoodboard>(fallbackMoodboard);
+
+  useEffect(() => {
+    const list = getStoredMoodboards();
+    const match = list.find((m) => m.leadReference.toLowerCase() === refCode.toLowerCase());
+    if (match) {
+      setMoodboard(match);
+    } else {
+      const initMatch = INITIAL_MOODBOARDS.find((m) => m.leadReference.toLowerCase() === refCode.toLowerCase());
+      if (initMatch) setMoodboard(initMatch);
+    }
+  }, [refCode]);
 
   const [enteredPasscode, setEnteredPasscode] = useState("");
   const [isUnlocked, setIsUnlocked] = useState(false);

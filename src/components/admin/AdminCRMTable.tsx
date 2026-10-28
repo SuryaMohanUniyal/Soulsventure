@@ -17,13 +17,15 @@ import {
   ChevronDown,
   X,
 } from "lucide-react";
-import { CRMLead, LeadStatus } from "@/lib/crmStore";
+import { CRMLead, LeadStatus, TeamRole, ROLE_PERMISSIONS } from "@/lib/crmStore";
+import { Lock as LockIcon } from "lucide-react";
 
 interface AdminCRMTableProps {
   leads: CRMLead[];
   onOpenDossier: (lead: CRMLead) => void;
   onUpdateStatus: (leadId: string, newStatus: LeadStatus) => void;
   onAddManualLead: (newLead: Partial<CRMLead>) => void;
+  activeRole?: TeamRole;
 }
 
 export default function AdminCRMTable({
@@ -31,6 +33,7 @@ export default function AdminCRMTable({
   onOpenDossier,
   onUpdateStatus,
   onAddManualLead,
+  activeRole = "Founder (Unrestricted)",
 }: AdminCRMTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("All");
@@ -55,6 +58,11 @@ export default function AdminCRMTable({
 
   // Export CSV handler
   const exportToCSV = () => {
+    if (!ROLE_PERMISSIONS[activeRole].canExportData) {
+      alert(`Exporting master client data is restricted for '${activeRole}' credentials to prevent data leaks.`);
+      return;
+    }
+
     const headers = ["Reference", "Client Name", "Phone", "Email", "Destination", "Budget Tier", "Status", "Curator"];
     const rows = filteredLeads.map((l) => [
       l.referenceCode,
@@ -305,9 +313,16 @@ export default function AdminCRMTable({
 
                       {/* Budget Tier */}
                       <td className="py-4 px-4">
-                        <span className="font-serif text-xs font-medium text-[#C5A059]">
-                          {lead.budgetTier}
-                        </span>
+                        {ROLE_PERMISSIONS[activeRole].canViewFinancialMargins ? (
+                          <span className="font-serif text-xs font-medium text-[#C5A059]">
+                            {lead.budgetTier}
+                          </span>
+                        ) : (
+                          <span className="font-mono text-xs text-amber-400/80 flex items-center gap-1">
+                            <LockIcon className="w-3 h-3 text-amber-400" />
+                            ₹*** (Masked)
+                          </span>
+                        )}
                       </td>
 
                       {/* Assigned Curator */}

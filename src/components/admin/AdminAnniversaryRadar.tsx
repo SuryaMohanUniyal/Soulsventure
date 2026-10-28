@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   LifeEventAlert,
   INITIAL_LIFE_EVENTS,
+  getStoredLifeEvents,
+  saveLifeEvents,
 } from "@/lib/crmStore";
 import {
   Calendar,
@@ -32,6 +34,10 @@ export function AdminAnniversaryRadar() {
   const [showAddModal, setShowAddModal] = useState(false);
   const [successToast, setSuccessToast] = useState("");
 
+  useEffect(() => {
+    setEvents(getStoredLifeEvents());
+  }, []);
+
   const filteredEvents = events.filter((e) => {
     if (filterType === "all") return true;
     if (filterType === "urgent") return e.daysRemaining <= 20;
@@ -39,9 +45,9 @@ export function AdminAnniversaryRadar() {
   });
 
   const handleUpdateStatus = (id: string, newStatus: LifeEventAlert["status"]) => {
-    setEvents((prev) =>
-      prev.map((e) => (e.id === id ? { ...e, status: newStatus } : e))
-    );
+    const updated = events.map((e) => (e.id === id ? { ...e, status: newStatus } : e));
+    setEvents(updated);
+    saveLifeEvents(updated);
     setSuccessToast(`Milestone updated: Marked as '${newStatus}'`);
     setShowPitchModal(false);
     setTimeout(() => setSuccessToast(""), 4000);
@@ -412,7 +418,9 @@ export function AdminAnniversaryRadar() {
                   notes: "Captured directly by concierge team.",
                 };
 
-                setEvents([newAlert, ...events]);
+                const updated = [newAlert, ...events];
+                setEvents(updated);
+                saveLifeEvents(updated);
                 setShowAddModal(false);
                 setSuccessToast("New client milestone successfully pinned to radar!");
                 setTimeout(() => setSuccessToast(""), 4000);

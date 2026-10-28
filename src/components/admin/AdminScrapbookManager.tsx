@@ -1,10 +1,12 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   PostTripScrapbook,
   INITIAL_SCRAPBOOKS,
+  getStoredScrapbooks,
+  saveScrapbooks,
 } from "@/lib/crmStore";
 import {
   Sparkles,
@@ -25,10 +27,16 @@ import {
 } from "lucide-react";
 
 export function AdminScrapbookManager() {
-  const [scrapbooks, setScrapbooks] = useState<PostTripScrapbook[]>(INITIAL_SCRAPBOOKS);
-  const [selectedSb, setSelectedSb] = useState<PostTripScrapbook | null>(scrapbooks[0] || null);
+  const [scrapbooks, setScrapbooks] = useState<PostTripScrapbook[]>([]);
+  const [selectedSb, setSelectedSb] = useState<PostTripScrapbook | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
   const [successToast, setSuccessToast] = useState("");
+
+  useEffect(() => {
+    const list = getStoredScrapbooks();
+    setScrapbooks(list);
+    if (list.length > 0) setSelectedSb(list[0]);
+  }, []);
 
   const handleCopyLink = (sb: PostTripScrapbook) => {
     const url = `${window.location.origin}/scrapbook/${sb.leadReference.toLowerCase()}`;

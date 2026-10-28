@@ -1,11 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   ClientMoodboard,
   INITIAL_MOODBOARDS,
   MoodboardItem,
+  getStoredMoodboards,
+  saveMoodboards,
 } from "@/lib/crmStore";
 import {
   Sparkles,
@@ -26,11 +28,17 @@ import {
 } from "lucide-react";
 
 export function AdminMoodboardVault() {
-  const [moodboards, setMoodboards] = useState<ClientMoodboard[]>(INITIAL_MOODBOARDS);
-  const [selectedMb, setSelectedMb] = useState<ClientMoodboard | null>(moodboards[0] || null);
+  const [moodboards, setMoodboards] = useState<ClientMoodboard[]>([]);
+  const [selectedMb, setSelectedMb] = useState<ClientMoodboard | null>(null);
   const [copiedLink, setCopiedLink] = useState(false);
   const [showAddModal, setShowAddModal] = useState(false);
   const [successToast, setSuccessToast] = useState("");
+
+  useEffect(() => {
+    const list = getStoredMoodboards();
+    setMoodboards(list);
+    if (list.length > 0) setSelectedMb(list[0]);
+  }, []);
 
   const handleCopyLink = (mb: ClientMoodboard) => {
     const url = `${window.location.origin}/moodboard/${mb.leadReference.toLowerCase()}`;
@@ -318,7 +326,9 @@ export function AdminMoodboardVault() {
                   ],
                 };
 
-                setMoodboards([newMb, ...moodboards]);
+                const updated = [newMb, ...moodboards];
+                setMoodboards(updated);
+                saveMoodboards(updated);
                 setSelectedMb(newMb);
                 setShowAddModal(false);
                 setSuccessToast("New client inspiration moodboard generated!");

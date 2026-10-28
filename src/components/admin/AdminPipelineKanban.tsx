@@ -145,17 +145,35 @@ export default function AdminPipelineKanban({
                       </div>
 
                       {/* Footer Info & Stage Advance */}
-                      <div className="pt-2 border-t border-[#262626] flex items-center justify-between text-[11px]">
-                        <span className="text-[#71717A] text-[10px]">
-                          {lead.assignedCurator.split(" ")[0]}
-                        </span>
+                      <div className="pt-2 border-t border-[#262626] flex items-center justify-between text-[11px] gap-2">
+                        <div className="flex items-center gap-1.5 truncate">
+                          <span className="text-[#71717A] text-[10px] truncate">
+                            {lead.assignedCurator.split(" ")[0]}
+                          </span>
+                        </div>
 
-                        <button
-                          onClick={() => onOpenDossier(lead)}
-                          className="text-[#C5A059] hover:underline text-[11px] cursor-pointer"
-                        >
-                          Dossier →
-                        </button>
+                        <div className="flex items-center gap-2">
+                          <select
+                            value={lead.status}
+                            onChange={(e) => onUpdateStatus(lead.id, e.target.value as LeadStatus)}
+                            className="bg-[#141414] text-[#C5A059] border border-[#333] rounded px-1.5 py-0.5 text-[10px] cursor-pointer focus:outline-none"
+                            title="Move to another stage"
+                          >
+                            <option value="New Lead">1. Inquiry</option>
+                            <option value="Discovery Call">2. Discovery</option>
+                            <option value="Proposal Sent">3. Proposal</option>
+                            <option value="Deposit Confirmed">4. Deposit</option>
+                            <option value="On-Ground Active">5. On-Ground</option>
+                            <option value="Completed">6. Completed</option>
+                          </select>
+
+                          <button
+                            onClick={() => onOpenDossier(lead)}
+                            className="text-[#FDFBF7] hover:text-[#C5A059] text-[11px] cursor-pointer whitespace-nowrap"
+                          >
+                            Dossier →
+                          </button>
+                        </div>
                       </div>
                     </div>
                   ))

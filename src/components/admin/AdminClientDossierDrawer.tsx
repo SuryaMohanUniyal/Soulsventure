@@ -28,6 +28,7 @@ interface AdminClientDossierDrawerProps {
   onUpdateStatus: (leadId: string, status: LeadStatus) => void;
   onUpdateNotes: (leadId: string, notes: string) => void;
   onUpdateCurator: (leadId: string, curator: "Suraj Uniyal" | "Harsh Sood") => void;
+  onToggleMilestone?: (leadId: string, milestoneKey: keyof CRMLead["milestones"]) => void;
   onGenerateProposal: (lead: CRMLead) => void;
 }
 
@@ -37,6 +38,7 @@ export default function AdminClientDossierDrawer({
   onUpdateStatus,
   onUpdateNotes,
   onUpdateCurator,
+  onToggleMilestone,
   onGenerateProposal,
 }: AdminClientDossierDrawerProps) {
   if (!lead) return null;
@@ -276,34 +278,39 @@ Dehradun, Uttarakhand`;
 
           {/* 5-Step Luxury Milestones Progress */}
           <div className="p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-3">
-            <h4 className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold">
-              Bespoke Touchpoint Milestones
-            </h4>
+            <div className="flex items-center justify-between">
+              <h4 className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold">
+                Bespoke Touchpoint Milestones
+              </h4>
+              <span className="text-[10px] text-[#71717A]">Click to toggle completion</span>
+            </div>
             <div className="space-y-2">
               {[
-                { label: "Step 1: Initial Inquiry Logged & Registered", done: lead.milestones.inquiryLogged },
-                { label: "Step 2: 1-on-1 Discovery Call Completed", done: lead.milestones.discoveryCallCompleted },
-                { label: "Step 3: Bespoke Moodboard & Itinerary Delivered", done: lead.milestones.proposalSent },
-                { label: "Step 4: Luxury Advance Deposit Secured (RTGS)", done: lead.milestones.depositReceived },
-                { label: "Step 5: On-Ground 24/7 Concierge Tracking Active", done: lead.milestones.conciergeActive },
+                { key: "inquiryLogged" as const, label: "Step 1: Initial Inquiry Logged & Registered", done: lead.milestones.inquiryLogged },
+                { key: "discoveryCallCompleted" as const, label: "Step 2: 1-on-1 Discovery Call Completed", done: lead.milestones.discoveryCallCompleted },
+                { key: "proposalSent" as const, label: "Step 3: Bespoke Moodboard & Itinerary Delivered", done: lead.milestones.proposalSent },
+                { key: "depositReceived" as const, label: "Step 4: Luxury Advance Deposit Secured (RTGS)", done: lead.milestones.depositReceived },
+                { key: "conciergeActive" as const, label: "Step 5: On-Ground 24/7 Concierge Tracking Active", done: lead.milestones.conciergeActive },
               ].map((m, idx) => (
-                <div
+                <button
                   key={idx}
-                  className="flex items-center gap-2.5 text-xs text-[#FDFBF7]"
+                  type="button"
+                  onClick={() => onToggleMilestone && onToggleMilestone(lead.id, m.key)}
+                  className="w-full flex items-center gap-2.5 text-xs text-[#FDFBF7] p-2 rounded-lg hover:bg-[#242424] transition-colors text-left cursor-pointer group"
                 >
                   <div
-                    className={`w-4 h-4 rounded-full flex items-center justify-center text-[10px] ${
+                    className={`w-5 h-5 rounded-full flex items-center justify-center text-[10px] flex-shrink-0 transition-transform group-hover:scale-110 ${
                       m.done
-                        ? "bg-emerald-500 text-black font-bold"
-                        : "bg-[#2A2A2A] text-[#71717A]"
+                        ? "bg-emerald-500 text-black font-bold shadow-sm"
+                        : "bg-[#2A2A2A] text-[#71717A] border border-[#3A3A3A]"
                     }`}
                   >
                     {m.done ? "✓" : idx + 1}
                   </div>
-                  <span className={m.done ? "text-[#FDFBF7] font-medium" : "text-[#71717A]"}>
+                  <span className={m.done ? "text-[#FDFBF7] font-medium" : "text-[#71717A] group-hover:text-[#A1A1AA]"}>
                     {m.label}
                   </span>
-                </div>
+                </button>
               ))}
             </div>
           </div>

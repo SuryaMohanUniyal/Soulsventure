@@ -17,6 +17,8 @@ import {
   KeyRound,
 } from "lucide-react";
 
+import { TeamRole } from "@/lib/crmStore";
+
 export type AdminTab =
   | "crm"
   | "calendar"
@@ -35,6 +37,7 @@ interface AdminSidebarProps {
   setCurrentTab: (tab: AdminTab) => void;
   newLeadsCount: number;
   activeTravelersCount: number;
+  activeRole?: TeamRole;
 }
 
 export default function AdminSidebar({
@@ -42,6 +45,7 @@ export default function AdminSidebar({
   setCurrentTab,
   newLeadsCount,
   activeTravelersCount,
+  activeRole = "Founder (Unrestricted)",
 }: AdminSidebarProps) {
   const operationsItems = [
     {

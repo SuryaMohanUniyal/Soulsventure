@@ -1,11 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   TeamRole,
   ROLE_PERMISSIONS,
+  RolePermissions,
   INITIAL_TEAM,
   TeamMember,
+  getStoredTeam,
+  saveTeam,
+  getStoredRolePermissions,
+  saveRolePermissions,
 } from "@/lib/crmStore";
 import {
   ShieldCheck,
@@ -23,6 +28,8 @@ import {
   AlertTriangle,
   Building,
   Plus,
+  Trash2,
+  RotateCcw,
 } from "lucide-react";
 
 interface AdminPermissionsMatrixProps {
@@ -34,9 +41,15 @@ export function AdminPermissionsMatrix({
   activeRole,
   setActiveRole,
 }: AdminPermissionsMatrixProps) {
-  const [team, setTeam] = useState<TeamMember[]>(INITIAL_TEAM);
+  const [team, setTeam] = useState<TeamMember[]>([]);
+  const [permissions, setPermissions] = useState<Record<TeamRole, RolePermissions>>(ROLE_PERMISSIONS);
   const [showAddMember, setShowAddMember] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+
+  useEffect(() => {
+    setTeam(getStoredTeam());
+    setPermissions(getStoredRolePermissions());
+  }, []);
 
   const permissionsList = [
     {
@@ -89,6 +102,66 @@ export function AdminPermissionsMatrix({
     "Finance & Accounts",
   ];
 
+  const handleTogglePermission = (role: TeamRole, permKey: keyof RolePermissions) => {
+    if (role === "Founder (Unrestricted)" && permKey === "canManageTeam") {
+      setSuccessMsg("Founders always retain master administrative security permissions.");
+      setTimeout(() => setSuccessMsg(""), 3500);
+      return;
+    }
+
+    const currentVal = permissions[role][permKey];
+    const updated = {
+      ...permissions,
+      [role]: {
+        ...permissions[role],
+        [permKey]: !currentVal,
+      },
+    };
+
+    setPermissions(updated);
+    saveRolePermissions(updated);
+
+    const statusWord = !currentVal ? "GRANTED" : "RESTRICTED";
+    setSuccessMsg(`Permission '${permKey}' is now ${statusWord} for '${role}'.`);
+    setTimeout(() => setSuccessMsg(""), 3500);
+  };
+
+  const handleResetPermissions = () => {
+    setPermissions(ROLE_PERMISSIONS);
+    saveRolePermissions(ROLE_PERMISSIONS);
+    setSuccessMsg("All role permissions reset to default enterprise baseline.");
+    setTimeout(() => setSuccessMsg(""), 3500);
+  };
+
+  const handleUpdateMemberRole = (memberId: string, newRole: TeamRole) => {
+    const updated = team.map((m) => (m.id === memberId ? { ...m, role: newRole } : m));
+    setTeam(updated);
+    saveTeam(updated);
+    setSuccessMsg("Team member role updated successfully.");
+    setTimeout(() => setSuccessMsg(""), 3500);
+  };
+
+  const handleUpdateMemberStatus = (memberId: string, newStatus: TeamMember["status"]) => {
+    const updated = team.map((m) => (m.id === memberId ? { ...m, status: newStatus } : m));
+    setTeam(updated);
+    saveTeam(updated);
+  };
+
+  const handleRemoveMember = (memberId: string, name: string) => {
+    if (memberId === "tm-1" || memberId === "tm-2") {
+      setSuccessMsg("Co-Founders Suraj Uniyal and Harsh Sood cannot be removed.");
+      setTimeout(() => setSuccessMsg(""), 3500);
+      return;
+    }
+    const updated = team.filter((m) => m.id !== memberId);
+    setTeam(updated);
+    saveTeam(updated);
+    setSuccessMsg(`Team member '${name}' removed from operating system.`);
+    setTimeout(() => setSuccessMsg(""), 3500);
+  };
+
+  const currentRolePerms = permissions[activeRole] || ROLE_PERMISSIONS[activeRole];
+
   return (
     <div className="space-y-6">
       {/* Top Banner */}
@@ -107,23 +180,37 @@ export function AdminPermissionsMatrix({
             Multi-Curator & Team Permission Matrix
           </h2>
           <p className="text-sm text-[#A0A0A0] mt-1">
-            Safeguard high-net-worth client confidentiality, shield sensitive agency margin yields, and assign role-specific operational scopes.
+            Safeguard client confidentiality, control margin visibility, and click any grid icon below to toggle active system permissions.
           </p>
         </div>
 
-        <button
-          onClick={() => setShowAddMember(true)}
-          className="flex items-center gap-2 px-3.5 py-2 bg-[#1A1A1A] hover:bg-[#252525] text-[#FDFBF7] text-xs font-serif uppercase tracking-wider rounded-lg border border-[#333333] transition-colors"
-        >
-          <Plus className="w-3.5 h-3.5 text-[#C5A059]" />
-          Invite Team Member
-        </button>
+        <div className="flex items-center gap-2.5">
+          <button
+            onClick={handleResetPermissions}
+            title="Reset Permissions Matrix to Factory Baseline"
+            className="flex items-center gap-1.5 px-3 py-2 bg-[#181818] hover:bg-[#222222] text-[#888888] hover:text-[#FDFBF7] text-xs font-serif rounded-lg border border-[#333333] transition-colors cursor-pointer"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            Reset Defaults
+          </button>
+
+          <button
+            onClick={() => setShowAddMember(true)}
+            className="flex items-center gap-2 px-3.5 py-2 bg-[#C5A059] hover:bg-[#b08e48] text-black text-xs font-serif font-medium uppercase tracking-wider rounded-lg transition-colors cursor-pointer shadow-md"
+          >
+            <Plus className="w-3.5 h-3.5" />
+            Invite Team Member
+          </button>
+        </div>
       </div>
 
       {successMsg && (
-        <div className="p-3 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 rounded-lg text-xs flex items-center gap-2">
-          <CheckCircle2 className="w-4 h-4 text-emerald-400" />
-          <span>{successMsg}</span>
+        <div className="p-3 bg-emerald-950/60 border border-emerald-500/40 text-emerald-300 rounded-lg text-xs flex items-center justify-between gap-2 animate-in fade-in">
+          <div className="flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-400 flex-shrink-0" />
+            <span>{successMsg}</span>
+          </div>
+          <button onClick={() => setSuccessMsg("")} className="text-emerald-400 hover:text-white text-xs">✕</button>
         </div>
       )}
 
@@ -153,10 +240,10 @@ export function AdminPermissionsMatrix({
                 key={role}
                 onClick={() => {
                   setActiveRole(role);
-                  setSuccessMsg(`Simulated view switched to '${role}'. Screen permissions updated.`);
-                  setTimeout(() => setSuccessMsg(""), 4000);
+                  setSuccessMsg(`Simulated view switched to '${role}'. Screen permissions updated in real-time.`);
+                  setTimeout(() => setSuccessMsg(""), 3500);
                 }}
-                className={`p-3 rounded-lg text-xs font-serif text-left border transition-all ${
+                className={`p-3 rounded-lg text-xs font-serif text-left border transition-all cursor-pointer ${
                   isSelected
                     ? "bg-[#C5A059]/15 border-[#C5A059] text-[#C5A059] shadow-md ring-1 ring-[#C5A059]/30"
                     : "bg-[#141414] border-[#2A2A2A] text-[#888888] hover:text-[#FDFBF7] hover:border-[#444]"
@@ -182,14 +269,14 @@ export function AdminPermissionsMatrix({
         {/* Live Simulation Banner */}
         <div className="p-3.5 bg-[#121212] rounded-lg border border-[#222222] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 text-xs">
           <div className="flex items-center gap-2.5">
-            {ROLE_PERMISSIONS[activeRole].canViewFinancialMargins ? (
+            {currentRolePerms.canViewFinancialMargins ? (
               <Unlock className="w-4 h-4 text-emerald-400" />
             ) : (
               <Lock className="w-4 h-4 text-amber-400" />
             )}
             <div>
               <span className="text-[#888888]">Sensitive Profit Margin Visibility: </span>
-              {ROLE_PERMISSIONS[activeRole].canViewFinancialMargins ? (
+              {currentRolePerms.canViewFinancialMargins ? (
                 <span className="text-emerald-400 font-mono font-bold">
                   UNMASKED — ₹5,17,500 (15% Net Yield Visible)
                 </span>
@@ -202,20 +289,29 @@ export function AdminPermissionsMatrix({
           </div>
 
           <div className="text-[11px] font-mono text-[#777]">
-            Global Database Export: {ROLE_PERMISSIONS[activeRole].canExportData ? "Allowed" : "Blocked"}
+            Global Database Export: {currentRolePerms.canExportData ? (
+              <span className="text-emerald-400 font-medium">Allowed</span>
+            ) : (
+              <span className="text-amber-400 font-medium">Blocked</span>
+            )}
           </div>
         </div>
       </div>
 
-      {/* Permissions Matrix Table */}
+      {/* Permissions Matrix Table with Live Click-to-Toggle */}
       <div className="bg-[#181818] border border-[#262626] rounded-xl overflow-hidden shadow-2xl space-y-4 p-6">
-        <div>
-          <h3 className="font-serif text-[#FDFBF7] text-lg">
-            Master Role-Based Permissions Grid
-          </h3>
-          <p className="text-xs text-[#888888] mt-0.5">
-            Granular privilege hierarchy across SoulsVenture concierge departments
-          </p>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#262626] pb-3">
+          <div>
+            <h3 className="font-serif text-[#FDFBF7] text-lg">
+              Master Role-Based Permissions Grid
+            </h3>
+            <p className="text-xs text-[#888888] mt-0.5">
+              Click any icon in the grid below to instantly grant or revoke that privilege for any role.
+            </p>
+          </div>
+          <span className="text-[11px] font-mono text-[#C5A059] bg-[#C5A059]/10 px-2.5 py-1 rounded-full border border-[#C5A059]/30">
+            Interactive Privilege Controls
+          </span>
         </div>
 
         <div className="overflow-x-auto">
@@ -227,7 +323,7 @@ export function AdminPermissionsMatrix({
                   <th
                     key={r}
                     className={`py-3 px-2 text-center font-normal text-[11px] ${
-                      activeRole === r ? "text-[#C5A059] bg-[#C5A059]/5" : ""
+                      activeRole === r ? "text-[#C5A059] bg-[#C5A059]/5 font-semibold" : ""
                     }`}
                   >
                     {r.replace(" (Unrestricted)", "")}
@@ -244,7 +340,7 @@ export function AdminPermissionsMatrix({
                   </td>
 
                   {allRoles.map((role) => {
-                    const isGranted = ROLE_PERMISSIONS[role][perm.key];
+                    const isGranted = (permissions[role] || ROLE_PERMISSIONS[role])[perm.key];
                     const isCurrent = activeRole === role;
 
                     return (
@@ -254,15 +350,22 @@ export function AdminPermissionsMatrix({
                           isCurrent ? "bg-[#C5A059]/5" : ""
                         }`}
                       >
-                        {isGranted ? (
-                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-emerald-950/60 text-emerald-400 border border-emerald-700/40">
-                            <CheckCircle2 className="w-3.5 h-3.5" />
-                          </span>
-                        ) : (
-                          <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-neutral-900 text-[#555] border border-neutral-800">
-                            <Lock className="w-3 h-3" />
-                          </span>
-                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleTogglePermission(role, perm.key)}
+                          title={`Click to ${isGranted ? "Revoke" : "Grant"} '${perm.label}' for '${role}'`}
+                          className="group relative inline-flex items-center justify-center cursor-pointer transition-transform hover:scale-110 focus:outline-none"
+                        >
+                          {isGranted ? (
+                            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-emerald-950/80 text-emerald-400 border border-emerald-600/50 shadow-sm group-hover:bg-emerald-900 group-hover:border-emerald-400 transition-colors">
+                              <CheckCircle2 className="w-4 h-4" />
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center justify-center w-7 h-7 rounded-full bg-neutral-900 text-[#666] border border-neutral-700 shadow-sm group-hover:bg-neutral-800 group-hover:text-amber-300 group-hover:border-amber-500/50 transition-colors">
+                              <Lock className="w-3.5 h-3.5" />
+                            </span>
+                          )}
+                        </button>
                       </td>
                     );
                   })}
@@ -278,45 +381,79 @@ export function AdminPermissionsMatrix({
         <div className="flex items-center justify-between border-b border-[#262626] pb-3">
           <div>
             <h3 className="font-serif text-[#FDFBF7] text-lg">
-              Authorized Team Directory & On-Ground Escorts
+              Authorized Team Directory & Founders
             </h3>
             <p className="text-xs text-[#888888]">
-              Active personnel credentials across New Delhi, Dehradun, Leh, and Rajasthan
+              Active personnel credentials across Dehradun HQ, New Delhi, and field circuits
             </p>
           </div>
           <Users className="w-4 h-4 text-[#C5A059]" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 pt-1">
-          {team.map((member) => (
-            <div
-              key={member.id}
-              className="bg-[#141414] border border-[#2A2A2A] rounded-xl p-4 space-y-3 hover:border-[#C5A059]/40 transition-colors"
-            >
-              <div className="flex items-start justify-between">
-                <div>
-                  <h4 className="font-serif text-[#FDFBF7] text-base">{member.name}</h4>
-                  <div className="text-[11px] text-[#C5A059] font-mono mt-0.5">{member.role}</div>
-                </div>
-                <span
-                  className={`px-2 py-0.5 rounded text-[10px] font-mono uppercase tracking-wider ${
-                    member.status === "Active"
-                      ? "bg-emerald-950/60 text-emerald-400 border border-emerald-800/40"
-                      : "bg-purple-950/60 text-purple-300 border border-purple-800/40"
-                  }`}
-                >
-                  {member.status}
-                </span>
-              </div>
+          {team.map((member) => {
+            const isFounder = member.id === "tm-1" || member.id === "tm-2";
 
-              <div className="space-y-1 bg-[#181818] p-3 rounded-lg border border-[#222222] text-xs font-mono text-[#A0A0A0]">
-                <div>Email: {member.email}</div>
-                <div>Direct: {member.phone}</div>
-                <div>Station: {member.location}</div>
-                <div className="text-[#C5A059]">Active Clients: {member.activeClients} Pax</div>
+            return (
+              <div
+                key={member.id}
+                className="bg-[#141414] border border-[#2A2A2A] rounded-xl p-4 space-y-3 hover:border-[#C5A059]/40 transition-colors"
+              >
+                <div className="flex items-start justify-between">
+                  <div>
+                    <h4 className="font-serif text-[#FDFBF7] text-base">{member.name}</h4>
+                    <div className="text-[11px] text-[#C5A059] font-mono mt-0.5">{member.role}</div>
+                  </div>
+                  <div className="flex items-center gap-1.5">
+                    <select
+                      value={member.status}
+                      onChange={(e) => handleUpdateMemberStatus(member.id, e.target.value as TeamMember["status"])}
+                      className={`text-[10px] font-mono uppercase tracking-wider rounded px-2 py-0.5 border cursor-pointer bg-[#181818] focus:outline-none ${
+                        member.status === "Active"
+                          ? "text-emerald-400 border-emerald-800/40"
+                          : "text-purple-300 border-purple-800/40"
+                      }`}
+                    >
+                      <option value="Active">Active</option>
+                      <option value="In-Field Escort">In-Field Escort</option>
+                      <option value="Off-Grid">Off-Grid</option>
+                    </select>
+
+                    {!isFounder && (
+                      <button
+                        onClick={() => handleRemoveMember(member.id, member.name)}
+                        title="Remove member"
+                        className="text-[#666] hover:text-red-400 p-1 cursor-pointer transition-colors"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="space-y-1.5 bg-[#181818] p-3 rounded-lg border border-[#222222] text-xs font-mono text-[#A0A0A0]">
+                  <div>Email: {member.email}</div>
+                  <div>Direct: {member.phone}</div>
+                  <div>Station: {member.location}</div>
+                  <div className="pt-1.5 border-t border-[#262626] flex items-center justify-between">
+                    <span className="text-[#777]">Assigned Scope:</span>
+                    <select
+                      value={member.role}
+                      disabled={isFounder}
+                      onChange={(e) => handleUpdateMemberRole(member.id, e.target.value as TeamRole)}
+                      className="bg-[#141414] text-[#C5A059] border border-[#333] rounded px-2 py-0.5 text-[11px] cursor-pointer disabled:opacity-75 disabled:cursor-default"
+                    >
+                      {allRoles.map((r) => (
+                        <option key={r} value={r}>
+                          {r}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
@@ -335,7 +472,7 @@ export function AdminPermissionsMatrix({
               </div>
               <button
                 onClick={() => setShowAddMember(false)}
-                className="text-[#888888] hover:text-[#FDFBF7] p-1 font-mono text-sm"
+                className="text-[#888888] hover:text-[#FDFBF7] p-1 font-mono text-sm cursor-pointer"
               >
                 ✕
               </button>
@@ -362,9 +499,11 @@ export function AdminPermissionsMatrix({
                   status: "Active",
                 };
 
-                setTeam([...team, newMember]);
+                const updated = [...team, newMember];
+                setTeam(updated);
+                saveTeam(updated);
                 setShowAddMember(false);
-                setSuccessMsg(`Team member '${name}' invited with '${role}' credentials.`);
+                setSuccessMsg(`Team member '${name}' invited with '${role}' credentials and saved.`);
                 setTimeout(() => setSuccessMsg(""), 4000);
               }}
               className="space-y-3 text-xs"
@@ -429,13 +568,13 @@ export function AdminPermissionsMatrix({
                 <button
                   type="button"
                   onClick={() => setShowAddMember(false)}
-                  className="px-3 py-1.5 text-[#888] hover:text-white rounded-lg text-xs font-serif"
+                  className="px-3 py-1.5 text-[#888] hover:text-white rounded-lg text-xs font-serif cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  className="px-4 py-2 bg-[#C5A059] text-black font-serif font-medium rounded-lg text-xs uppercase tracking-wider"
+                  className="px-4 py-2 bg-[#C5A059] text-black font-serif font-medium rounded-lg text-xs uppercase tracking-wider cursor-pointer hover:bg-[#b08e48]"
                 >
                   Generate Credentials
                 </button>

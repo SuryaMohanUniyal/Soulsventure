@@ -312,6 +312,30 @@ export function updateLeadCurator(leadId: string, curator: "Suraj Uniyal" | "Har
   return updated;
 }
 
+export function updateLeadMilestone(
+  leadId: string,
+  milestoneKey: keyof CRMLead["milestones"],
+  value?: boolean
+): CRMLead[] {
+  const existing = getStoredLeads();
+  const updated = existing.map((lead) => {
+    if (lead.id === leadId) {
+      const currentVal = lead.milestones[milestoneKey];
+      const nextVal = value !== undefined ? value : !currentVal;
+      return {
+        ...lead,
+        milestones: {
+          ...lead.milestones,
+          [milestoneKey]: nextVal,
+        },
+      };
+    }
+    return lead;
+  });
+  saveLeads(updated);
+  return updated;
+}
+
 // ==========================================
 // 1. VIP LIFE-EVENT & ANNIVERSARY RADAR
 // ==========================================
@@ -526,4 +550,144 @@ export interface PostTripScrapbook {
 }
 
 export const INITIAL_SCRAPBOOKS: PostTripScrapbook[] = [];
+
+// ==========================================
+// PERSISTENT STORAGE HELPERS ACROSS CONCIERGE OS
+// ==========================================
+
+const SOULSVENTURE_TEAM_KEY = "soulsventure_team_members";
+const SOULSVENTURE_PERMS_KEY = "soulsventure_role_permissions";
+const SOULSVENTURE_EVENTS_KEY = "soulsventure_life_events";
+const SOULSVENTURE_MOODBOARDS_KEY = "soulsventure_moodboards";
+const SOULSVENTURE_SCRAPBOOKS_KEY = "soulsventure_scrapbooks";
+
+export function getStoredTeam(): TeamMember[] {
+  if (typeof window === "undefined") return INITIAL_TEAM;
+  try {
+    const raw = localStorage.getItem(SOULSVENTURE_TEAM_KEY);
+    if (!raw) {
+      localStorage.setItem(SOULSVENTURE_TEAM_KEY, JSON.stringify(INITIAL_TEAM));
+      return INITIAL_TEAM;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : INITIAL_TEAM;
+  } catch (e) {
+    console.error("Error reading team from localStorage", e);
+    return INITIAL_TEAM;
+  }
+}
+
+export function saveTeam(members: TeamMember[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(SOULSVENTURE_TEAM_KEY, JSON.stringify(members));
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {
+    console.error("Error saving team to localStorage", e);
+  }
+}
+
+export function getStoredRolePermissions(): Record<TeamRole, RolePermissions> {
+  if (typeof window === "undefined") return ROLE_PERMISSIONS;
+  try {
+    const raw = localStorage.getItem(SOULSVENTURE_PERMS_KEY);
+    if (!raw) {
+      localStorage.setItem(SOULSVENTURE_PERMS_KEY, JSON.stringify(ROLE_PERMISSIONS));
+      return ROLE_PERMISSIONS;
+    }
+    const parsed = JSON.parse(raw);
+    return parsed && typeof parsed === "object" ? { ...ROLE_PERMISSIONS, ...parsed } : ROLE_PERMISSIONS;
+  } catch (e) {
+    console.error("Error reading permissions from localStorage", e);
+    return ROLE_PERMISSIONS;
+  }
+}
+
+export function saveRolePermissions(perms: Record<TeamRole, RolePermissions>): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(SOULSVENTURE_PERMS_KEY, JSON.stringify(perms));
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {
+    console.error("Error saving permissions to localStorage", e);
+  }
+}
+
+export function getStoredLifeEvents(): LifeEventAlert[] {
+  if (typeof window === "undefined") return INITIAL_LIFE_EVENTS;
+  try {
+    const raw = localStorage.getItem(SOULSVENTURE_EVENTS_KEY);
+    if (!raw) {
+      localStorage.setItem(SOULSVENTURE_EVENTS_KEY, JSON.stringify(INITIAL_LIFE_EVENTS));
+      return INITIAL_LIFE_EVENTS;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : INITIAL_LIFE_EVENTS;
+  } catch (e) {
+    console.error("Error reading life events from localStorage", e);
+    return INITIAL_LIFE_EVENTS;
+  }
+}
+
+export function saveLifeEvents(events: LifeEventAlert[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(SOULSVENTURE_EVENTS_KEY, JSON.stringify(events));
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {
+    console.error("Error saving life events to localStorage", e);
+  }
+}
+
+export function getStoredMoodboards(): ClientMoodboard[] {
+  if (typeof window === "undefined") return INITIAL_MOODBOARDS;
+  try {
+    const raw = localStorage.getItem(SOULSVENTURE_MOODBOARDS_KEY);
+    if (!raw) {
+      localStorage.setItem(SOULSVENTURE_MOODBOARDS_KEY, JSON.stringify(INITIAL_MOODBOARDS));
+      return INITIAL_MOODBOARDS;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : INITIAL_MOODBOARDS;
+  } catch (e) {
+    console.error("Error reading moodboards from localStorage", e);
+    return INITIAL_MOODBOARDS;
+  }
+}
+
+export function saveMoodboards(mbs: ClientMoodboard[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(SOULSVENTURE_MOODBOARDS_KEY, JSON.stringify(mbs));
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {
+    console.error("Error saving moodboards to localStorage", e);
+  }
+}
+
+export function getStoredScrapbooks(): PostTripScrapbook[] {
+  if (typeof window === "undefined") return INITIAL_SCRAPBOOKS;
+  try {
+    const raw = localStorage.getItem(SOULSVENTURE_SCRAPBOOKS_KEY);
+    if (!raw) {
+      localStorage.setItem(SOULSVENTURE_SCRAPBOOKS_KEY, JSON.stringify(INITIAL_SCRAPBOOKS));
+      return INITIAL_SCRAPBOOKS;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : INITIAL_SCRAPBOOKS;
+  } catch (e) {
+    console.error("Error reading scrapbooks from localStorage", e);
+    return INITIAL_SCRAPBOOKS;
+  }
+}
+
+export function saveScrapbooks(sbs: PostTripScrapbook[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(SOULSVENTURE_SCRAPBOOKS_KEY, JSON.stringify(sbs));
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {
+    console.error("Error saving scrapbooks to localStorage", e);
+  }
+}
 

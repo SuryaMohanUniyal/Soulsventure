@@ -24,6 +24,7 @@ import {
   updateLeadStatus,
   updateLeadNotes,
   updateLeadCurator,
+  updateLeadMilestone,
   saveLeads,
   ACTIVE_TRAVELERS,
 } from "@/lib/crmStore";
@@ -94,6 +95,18 @@ export default function AdminDashboardPage() {
     }
   };
 
+  const handleToggleMilestone = (
+    leadId: string,
+    milestoneKey: keyof CRMLead["milestones"]
+  ) => {
+    const updated = updateLeadMilestone(leadId, milestoneKey);
+    setLeads([...updated]);
+    if (selectedLead && selectedLead.id === leadId) {
+      const refreshed = updated.find((l) => l.id === leadId) || null;
+      setSelectedLead(refreshed);
+    }
+  };
+
   const handleAddManualLead = (newLeadData: Partial<CRMLead>) => {
     const now = new Date();
     const dateKey = now.toISOString().split("T")[0];
@@ -157,7 +170,7 @@ export default function AdminDashboardPage() {
 
   const totalPipelineValueINR = leads.reduce((acc, curr) => acc + curr.estimatedValueINR, 0);
   const newLeadsCount = leads.filter((l) => l.status === "New Lead").length;
-  const activeTravelersCount = ACTIVE_TRAVELERS.length;
+  const activeTravelersCount = leads.filter((l) => l.status === "On-Ground Active").length + ACTIVE_TRAVELERS.length;
 
   if (!mounted) {
     return (
@@ -196,6 +209,7 @@ export default function AdminDashboardPage() {
           setCurrentTab={setCurrentTab}
           newLeadsCount={newLeadsCount}
           activeTravelersCount={activeTravelersCount}
+          activeRole={activeRole}
         />
 
         {/* Tab Content Display */}
@@ -207,6 +221,7 @@ export default function AdminDashboardPage() {
                 onOpenDossier={(lead) => setSelectedLead(lead)}
                 onUpdateStatus={handleUpdateStatus}
                 onAddManualLead={handleAddManualLead}
+                activeRole={activeRole}
               />
             )}
 
@@ -225,7 +240,7 @@ export default function AdminDashboardPage() {
               />
             )}
 
-            {currentTab === "live" && <AdminActiveTravelers />}
+            {currentTab === "live" && <AdminActiveTravelers leads={leads} />}
 
             {currentTab === "radar" && <AdminAnniversaryRadar />}
 
@@ -256,6 +271,7 @@ export default function AdminDashboardPage() {
         onUpdateStatus={handleUpdateStatus}
         onUpdateNotes={handleUpdateNotes}
         onUpdateCurator={handleUpdateCurator}
+        onToggleMilestone={handleToggleMilestone}
         onGenerateProposal={handleGenerateProposal}
       />
 

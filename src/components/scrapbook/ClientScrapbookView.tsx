@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   INITIAL_SCRAPBOOKS,
   PostTripScrapbook,
+  getStoredScrapbooks,
 } from "@/lib/crmStore";
 import {
   Sparkles,
@@ -42,10 +43,18 @@ export function ClientScrapbookView({ initialRef }: { initialRef: string }) {
     ],
   };
 
-  const scrapbook =
-    INITIAL_SCRAPBOOKS.find(
-      (s) => s.leadReference.toLowerCase() === refCode.toLowerCase()
-    ) || fallbackScrapbook;
+  const [scrapbook, setScrapbook] = useState<PostTripScrapbook>(fallbackScrapbook);
+
+  useEffect(() => {
+    const list = getStoredScrapbooks();
+    const match = list.find((s) => s.leadReference.toLowerCase() === refCode.toLowerCase());
+    if (match) {
+      setScrapbook(match);
+    } else {
+      const initMatch = INITIAL_SCRAPBOOKS.find((s) => s.leadReference.toLowerCase() === refCode.toLowerCase());
+      if (initMatch) setScrapbook(initMatch);
+    }
+  }, [refCode]);
 
   const [overallRating, setOverallRating] = useState(5);
   const [hotelRating, setHotelRating] = useState(5);
