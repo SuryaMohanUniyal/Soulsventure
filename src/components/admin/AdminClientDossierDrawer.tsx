@@ -19,8 +19,23 @@ import {
   Send,
   Printer,
   ChevronDown,
+  Mic,
+  Volume2,
+  ExternalLink,
+  Car,
+  Hotel,
+  Utensils,
+  Heart,
 } from "lucide-react";
-import { CRMLead, LeadStatus } from "@/lib/crmStore";
+import {
+  CRMLead,
+  LeadStatus,
+  simulateVoiceCallTranscription,
+  ClientNuanceProfile,
+  VoiceCallTranscript,
+  getStoredLeads,
+  saveLeads,
+} from "@/lib/crmStore";
 
 interface AdminClientDossierDrawerProps {
   lead: CRMLead | null;
@@ -45,6 +60,19 @@ export default function AdminClientDossierDrawer({
 
   const [notes, setNotes] = useState(lead.internalNotes || "");
   const [isSavedAlert, setIsSavedAlert] = useState(false);
+  const [isTranscribing, setIsTranscribing] = useState(false);
+  const [voiceCallAlert, setVoiceCallAlert] = useState("");
+  const [localNuances, setLocalNuances] = useState<ClientNuanceProfile>(
+    lead.clientNuances || {
+      dietaryRestrictions: ["Pure Vegetarian Preferred", "Organic Farm-to-Table"],
+      roomPreferences: ["Highest Floor Palace Lake Suite"],
+      beveragePreferences: ["Dom Pérignon Champagne & Darjeeling First Flush"],
+      vehiclePreference: "Land Rover Defender 110 4WD Luxury Spec",
+      milestoneEvents: [{ title: "Silver 25th Wedding Anniversary", date: "2026-11-14", relation: "Self & Spouse" }],
+      voiceCalls: [],
+      specialProtocol: "Titular royal greetings requested upon arrival.",
+    }
+  );
 
   const handleSaveNotes = () => {
     onUpdateNotes(lead.id, notes);
@@ -52,20 +80,63 @@ export default function AdminClientDossierDrawer({
     setTimeout(() => setIsSavedAlert(false), 2000);
   };
 
+  // Simulate AI Voice Call & Transcription Sync
+  const handleSimulateVoiceCall = () => {
+    setIsTranscribing(true);
+    setTimeout(() => {
+      const transcript = simulateVoiceCallTranscription(lead.clientName);
+      const updatedNuances: ClientNuanceProfile = {
+        dietaryRestrictions: transcript.extractedNuances.dietary || localNuances.dietaryRestrictions,
+        roomPreferences: transcript.extractedNuances.roomViews || localNuances.roomPreferences,
+        beveragePreferences: transcript.extractedNuances.champagneOrBeverage || localNuances.beveragePreferences,
+        vehiclePreference: transcript.extractedNuances.vehicle || localNuances.vehiclePreference,
+        milestoneEvents: transcript.extractedNuances.milestone
+          ? [{ title: transcript.extractedNuances.milestone, date: "2026-11-14", relation: "Self & Spouse" }]
+          : localNuances.milestoneEvents,
+        voiceCalls: [transcript, ...(localNuances.voiceCalls || [])],
+        specialProtocol: "Exclusive ground floor allocation & chilled champagne confirmed by AI transcript.",
+      };
+
+      setLocalNuances(updatedNuances);
+
+      // Save to CRM store
+      const allLeads = getStoredLeads();
+      const updated = allLeads.map((l) =>
+        l.id === lead.id
+          ? {
+              ...l,
+              clientNuances: updatedNuances,
+              assignedVehicle: updatedNuances.vehiclePreference,
+              internalNotes: `${l.internalNotes}\n[AI Call Sync]: Stated pure veg dining, lake view suite, and 25th anniversary on Nov 14th.`,
+            }
+          : l
+      );
+      saveLeads(updated);
+
+      setIsTranscribing(false);
+      setVoiceCallAlert(
+        `AI Call transcribed! Nuance Vault updated for ${lead.clientName} (Vegetarian, Lake Suite, Dom Pérignon & Defender 4x4).`
+      );
+      setTimeout(() => setVoiceCallAlert(""), 5000);
+    }, 1200);
+  };
+
   const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
   const whatsappGreeting = `Greetings ${lead.firstName},
 
-This is ${lead.assignedCurator} from Soulsventure Bespoke Journeys (Dehradun). 
+This is ${lead.assignedCurator} from Soulsventure Bespoke Journeys. 
 
 Regarding your confidential inquiry (${lead.referenceCode}) for ${lead.destinationSummary}: we have choreographed a tailored route outline with private aviation and verified palace/camp allocations matching your ${lead.budgetTier} tier.
+
+👑 You can access your private client portal & day-by-day itinerary here:
+https://soulsventure.com/client/trip/${lead.referenceCode.toLowerCase()}
 
 Would you be available for a brief 15-minute discovery consultation at your preferred time (${lead.preferredTimeOfDay})?
 
 Warm regards,
 ${lead.assignedCurator}
 Founder | Soulsventure Bespoke Journeys
-+91 98XXXXXXXX / concierge@soulsventure.com
-Dehradun, Uttarakhand`;
+concierge@soulsventure.com • Dehradun, Uttarakhand`;
 
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(whatsappGreeting)}`;
 
@@ -103,6 +174,13 @@ Dehradun, Uttarakhand`;
 
         {/* Drawer Content */}
         <div className="p-4 sm:p-6 overflow-y-auto space-y-5 sm:space-y-6 flex-1 text-xs">
+          {voiceCallAlert && (
+            <div className="p-3 bg-emerald-950/70 border border-emerald-800 text-emerald-300 rounded-xl text-xs flex items-center gap-2 animate-in fade-in">
+              <Sparkles className="w-4 h-4 flex-shrink-0 text-[#C5A059]" />
+              <span>{voiceCallAlert}</span>
+            </div>
+          )}
+
           {/* Quick Action Strip */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
             <a
@@ -120,16 +198,99 @@ Dehradun, Uttarakhand`;
               className="flex items-center justify-center gap-2 p-3 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] border border-[#333333] text-[#FDFBF7] font-semibold transition-colors cursor-pointer text-center"
             >
               <Printer className="w-4 h-4 text-[#C5A059]" />
-              <span>Generate PDF Proposal</span>
+              <span>Magazine Brochure</span>
             </button>
 
             <a
-              href={`tel:${lead.phone}`}
+              href={`/client/trip/${lead.referenceCode.toLowerCase()}`}
+              target="_blank"
+              rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 p-3 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] border border-[#333333] text-[#FDFBF7] font-semibold transition-colors cursor-pointer text-center"
             >
-              <Phone className="w-4 h-4 text-[#C5A059]" />
-              <span>Direct Call</span>
+              <ExternalLink className="w-4 h-4 text-[#C5A059]" />
+              <span>Client Portal Link</span>
             </a>
+          </div>
+
+          {/* VIP Nuance Vault & AI Voice Note Sync */}
+          <div className="p-4 bg-gradient-to-br from-[#1C1C1C] to-[#171717] rounded-xl border border-[#C5A059]/30 space-y-3.5 shadow-lg">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-[#C5A059] animate-pulse" />
+                <h4 className="text-[11px] uppercase tracking-wider text-[#C5A059] font-semibold">
+                  VIP Nuance Vault & Voice Note Sync
+                </h4>
+              </div>
+
+              <button
+                type="button"
+                onClick={handleSimulateVoiceCall}
+                disabled={isTranscribing}
+                className="flex items-center gap-1.5 px-3 py-1.5 bg-[#C5A059] hover:bg-[#D4AF37] text-black rounded-lg text-xs font-semibold cursor-pointer transition-all disabled:opacity-50"
+              >
+                <Mic className="w-3.5 h-3.5" />
+                <span>{isTranscribing ? "Transcribing Call..." : "Simulate Call & AI Sync"}</span>
+              </button>
+            </div>
+
+            <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
+              AI listens to WhatsApp calls / voice notes and automatically extracts dietary restrictions, room views, champagne, and anniversary dates directly into client profile.
+            </p>
+
+            {/* Extracted Nuances Badges */}
+            <div className="space-y-2.5 pt-1">
+              <div className="flex items-start gap-2">
+                <Utensils className="w-3.5 h-3.5 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-[10px] text-[#71717A] uppercase block">Dietary Nuance:</span>
+                  <div className="flex flex-wrap gap-1.5 mt-0.5">
+                    {localNuances.dietaryRestrictions.map((d, i) => (
+                      <span key={i} className="px-2 py-0.5 rounded text-[10px] bg-[#222222] text-[#FDFBF7] border border-[#333333]">
+                        {d}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <Hotel className="w-3.5 h-3.5 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-[10px] text-[#71717A] uppercase block">Room View & Suite:</span>
+                  <div className="flex flex-wrap gap-1.5 mt-0.5">
+                    {localNuances.roomPreferences.map((r, i) => (
+                      <span key={i} className="px-2 py-0.5 rounded text-[10px] bg-[#222222] text-[#FDFBF7] border border-[#333333]">
+                        {r}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <Car className="w-3.5 h-3.5 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-[10px] text-[#71717A] uppercase block">Assigned Luxury Fleet:</span>
+                  <span className="text-xs text-[#FDFBF7] font-medium block mt-0.5">
+                    {localNuances.vehiclePreference}
+                  </span>
+                </div>
+              </div>
+
+              <div className="flex items-start gap-2">
+                <Heart className="w-3.5 h-3.5 text-rose-400 flex-shrink-0 mt-0.5" />
+                <div>
+                  <span className="text-[10px] text-[#71717A] uppercase block">Anniversary & Milestones:</span>
+                  <div className="flex flex-wrap gap-1.5 mt-0.5">
+                    {localNuances.milestoneEvents.map((m, i) => (
+                      <span key={i} className="px-2 py-0.5 rounded text-[10px] bg-rose-950/60 text-rose-300 border border-rose-800/40">
+                        {m.title} ({m.date})
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
 
           {/* Status & Curator Controls */}
@@ -244,38 +405,9 @@ Dehradun, Uttarakhand`;
                 </span>
               </div>
             </div>
-
-            {/* Special Interests */}
-            <div>
-              <span className="text-[10px] text-[#71717A] uppercase tracking-wider block mb-1.5">
-                Special Interests & Curation Focus:
-              </span>
-              <div className="flex flex-wrap gap-1.5">
-                {lead.specialInterests.map((interest, idx) => (
-                  <span
-                    key={idx}
-                    className="px-2 py-0.5 rounded text-[10px] bg-[#222222] text-[#FDFBF7] border border-[#333333]"
-                  >
-                    {interest}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            {/* Special Requests */}
-            {lead.specialRequests && (
-              <div className="pt-2 border-t border-[#262626]">
-                <span className="text-[10px] text-[#71717A] uppercase tracking-wider block mb-1">
-                  Traveler Special Requests / Notes:
-                </span>
-                <p className="text-xs text-[#FDFBF7] font-light italic bg-[#171717] p-3 rounded-lg border border-[#262626]">
-                  "{lead.specialRequests}"
-                </p>
-              </div>
-            )}
           </div>
 
-          {/* 5-Step Luxury Milestones Progress */}
+          {/* 5-Step Touchpoint Milestones */}
           <div className="p-3.5 sm:p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-3">
             <div className="flex items-center justify-between">
               <h4 className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold">
@@ -314,7 +446,7 @@ Dehradun, Uttarakhand`;
             </div>
           </div>
 
-          {/* Internal Confidential Notes */}
+          {/* Confidential Internal Notes */}
           <div className="p-3.5 sm:p-4 bg-[#1C1C1C] rounded-xl border border-[#2A2A2A] space-y-2.5">
             <div className="flex items-center justify-between">
               <h4 className="text-[10px] uppercase tracking-wider text-[#C5A059] font-semibold">

@@ -15,7 +15,11 @@ import {
   Sparkles,
   BarChart3,
   Plane,
+  Receipt,
 } from "lucide-react";
+import AdminItineraryBuilder from "@/components/admin/AdminItineraryBuilder";
+import AdminGSTInvoicingSuite from "@/components/admin/AdminGSTInvoicingSuite";
+import AdminCharterBookingModule from "@/components/admin/AdminCharterBookingModule";
 import AdminCRMTable from "@/components/admin/AdminCRMTable";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
 import AdminPipelineKanban from "@/components/admin/AdminPipelineKanban";
@@ -291,6 +295,9 @@ export default function AdminDashboardPage() {
 
   const quickTabs: { id: AdminTab; label: string; icon: React.ComponentType<{ className?: string }> }[] = [
     { id: "crm", label: "Leads", icon: Users },
+    { id: "itinerary-builder", label: "AI Studio", icon: Sparkles },
+    { id: "invoicing", label: "GST Bills", icon: Receipt },
+    { id: "charters", label: "Charters", icon: Plane },
     { id: "pipeline", label: "Pipeline", icon: Layers },
     { id: "calendar", label: "Calendar", icon: Calendar },
     { id: "live", label: "On-Ground", icon: Compass },
@@ -466,6 +473,17 @@ export default function AdminDashboardPage() {
                 {currentTab === "vendors" && <AdminVendorLedger />}
 
                 {currentTab === "analytics" && <AdminAnalytics leads={leads} />}
+                {currentTab === "itinerary-builder" && (
+                  <AdminItineraryBuilder
+                    initialLead={proposalLead || selectedLead || leads[0]}
+                    onSelectLead={(l) => setSelectedLead(l)}
+                  />
+                )}
+
+                {currentTab === "invoicing" && <AdminGSTInvoicingSuite />}
+
+                {currentTab === "charters" && <AdminCharterBookingModule />}
+
 
                 {currentTab === "permissions" && (
                   <AdminPermissionsMatrix

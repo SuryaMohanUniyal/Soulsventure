@@ -47,7 +47,8 @@ export default function Navbar() {
   if (
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/moodboard") ||
-    pathname?.startsWith("/scrapbook")
+    pathname?.startsWith("/scrapbook") ||
+    pathname?.startsWith("/client")
   ) {
     return null;
   }
