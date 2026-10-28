@@ -247,7 +247,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                     required
                     value={loginEmailOrPhone}
                     onChange={(e) => setLoginEmailOrPhone(e.target.value)}
-                    placeholder="e.g. curator@soulsventure.com or 9876543210"
+                    placeholder="e.g. curator@soulsventure.com or 98XXXXXXXX"
                     className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-10 pr-3 py-3 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] transition-colors"
                   />
                 </div>
@@ -307,7 +307,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                     required
                     value={regName}
                     onChange={(e) => setRegName(e.target.value)}
-                    placeholder="e.g. Vikramaditya Rawat"
+                    placeholder="e.g. Ananya Deshmukh"
                     className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-9 pr-3 py-2.5 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   />
                 </div>
@@ -356,7 +356,6 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                   <option value="On-Ground Concierge">On-Ground Concierge (Field Ops & Stays)</option>
                   <option value="Finance & Accounts">Finance & Accounts (B2B Rates & Payouts)</option>
                   <option value="Junior Assistant">Junior Assistant (Restricted / Read-Only)</option>
-                  <option value="Founder (Unrestricted)">Founder (Unrestricted Master Admin)</option>
                 </select>
               </div>
 
@@ -410,7 +409,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
               <ShieldCheck className="w-3 h-3 text-[#C5A059]" />
               <span>Soulsventure Luxury Travel Concierge OS v3.8</span>
             </p>
-            <p>Bespoke Luxury Travel Management Terminal • Authorized Access Only</p>
+            <p>Confidential Internal System • Authorized Personnel Only</p>
           </div>
         </div>
       </div>

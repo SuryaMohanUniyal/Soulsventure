@@ -109,6 +109,12 @@ export function AdminPermissionsMatrix({
     "On-Ground Concierge",
     "Finance & Accounts",
   ];
+  const staffRoles: TeamRole[] = [
+    "Senior Curator",
+    "Junior Assistant",
+    "On-Ground Concierge",
+    "Finance & Accounts",
+  ];
 
   const handleTogglePermission = (role: TeamRole, permKey: keyof RolePermissions) => {
     if (role === "Founder (Unrestricted)" && permKey === "canManageTeam") {
@@ -544,7 +550,7 @@ export function AdminPermissionsMatrix({
                       onChange={(e) => handleUpdateMemberRole(member.id, e.target.value as TeamRole)}
                       className="bg-[#141414] text-[#C5A059] border border-[#333] rounded px-2 py-0.5 text-[11px] cursor-pointer disabled:opacity-75 disabled:cursor-default"
                     >
-                      {allRoles.map((r) => (
+                      {(isFounder ? ["Founder (Unrestricted)"] : staffRoles).map((r) => (
                         <option key={r} value={r}>
                           {r}
                         </option>
@@ -664,7 +670,6 @@ export function AdminPermissionsMatrix({
                     <option value="Junior Assistant">Junior Assistant</option>
                     <option value="On-Ground Concierge">On-Ground Concierge</option>
                     <option value="Finance & Accounts">Finance & Accounts</option>
-                    <option value="Founder (Unrestricted)">Founder (Unrestricted)</option>
                   </select>
                 </div>
 
