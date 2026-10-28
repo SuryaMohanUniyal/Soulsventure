@@ -16,7 +16,8 @@ import {
   CheckCircle2,
   AlertCircle,
   ArrowLeft,
-  Building2,
+  UserPlus,
+  LogIn,
 } from "lucide-react";
 import { CreativeSoulMark } from "@/components/SoulsventureLogo";
 import {
@@ -26,6 +27,7 @@ import {
   verifyAdminLogin,
   registerNewTeamMember,
   saveAdminAuthSession,
+  syncTeamWithCloud,
   MASTER_FOUNDER_PASSCODE,
 } from "@/lib/crmStore";
 
@@ -36,13 +38,13 @@ interface AdminAuthGateProps {
 export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
   const [activeTab, setActiveTab] = useState<"login" | "register">("login");
   const [showPassword, setShowPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
 
   // Login form state
   const [loginEmailOrPhone, setLoginEmailOrPhone] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [rememberMe, setRememberMe] = useState(true);
 
   // Register form state
   const [regName, setRegName] = useState("");
@@ -52,20 +54,33 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
   const [regPassword, setRegPassword] = useState("");
   const [regAuthKey, setRegAuthKey] = useState("");
 
-  const handleLoginSubmit = (e: React.FormEvent) => {
+  const handleLoginSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMessage(null);
+    setIsSubmitting(true);
 
     if (!loginEmailOrPhone.trim() || !loginPassword.trim()) {
-      setErrorMessage("Please enter your registered email/phone and password.");
+      setErrorMessage("Please enter both Login ID and Password.");
+      setIsSubmitting(false);
       return;
     }
 
-    const verifiedUser = verifyAdminLogin(loginEmailOrPhone, loginPassword);
+    let verifiedUser = verifyAdminLogin(loginEmailOrPhone, loginPassword);
+    if (!verifiedUser) {
+      // Async fallback: sync team from cloud in case account was added on another device
+      try {
+        await syncTeamWithCloud();
+        verifiedUser = verifyAdminLogin(loginEmailOrPhone, loginPassword);
+      } catch (err) {
+        console.warn("Cloud fallback check failed:", err);
+      }
+    }
+
     if (!verifiedUser) {
       setErrorMessage(
-        "Access Denied: Unrecognized credentials. Only authorized founders and team members added to Concierge OS may access this console."
+        "Invalid Login ID or Password. Only authorized founders and staff members added in Concierge OS may access this console."
       );
+      setIsSubmitting(false);
       return;
     }
 
@@ -76,10 +91,10 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
     };
 
     saveAdminAuthSession(session);
-    setSuccessMessage(`Welcome back, ${verifiedUser.name}. Initializing Concierge OS...`);
+    setSuccessMessage(`Welcome back, ${verifiedUser.name}. Launching Concierge OS...`);
     setTimeout(() => {
       onLoginSuccess(session);
-    }, 600);
+    }, 400);
   };
 
   const handleQuickLogin = (founder: "Suraj Uniyal" | "Harsh Sood") => {
@@ -97,10 +112,10 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
         loginTime: new Date().toISOString(),
       };
       saveAdminAuthSession(session);
-      setSuccessMessage(`One-touch authentication verified for ${founder}. Entering dashboard...`);
+      setSuccessMessage(`Founder access verified for ${founder}. Launching dashboard...`);
       setTimeout(() => {
         onLoginSuccess(session);
-      }, 500);
+      }, 350);
     }
   };
 
@@ -109,13 +124,13 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
     setErrorMessage(null);
 
     if (!regName.trim() || !regEmail.trim() || !regPhone.trim() || !regPassword.trim()) {
-      setErrorMessage("Please fill out all registration fields.");
+      setErrorMessage("Please complete all registration fields.");
       return;
     }
 
     if (!regAuthKey.trim()) {
       setErrorMessage(
-        "Founder Authorization Key is required. To maintain absolute security, new staff registration requires the master key held by Suraj Uniyal or Harsh Sood."
+        "Founder Authorization Passcode is required to register new staff. Contact Suraj Uniyal or Harsh Sood."
       );
       return;
     }
@@ -143,15 +158,15 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
     };
 
     saveAdminAuthSession(session);
-    setSuccessMessage(`Account registered and authorized for ${result.member.name}. Loading workspace...`);
+    setSuccessMessage(`Account authorized for ${result.member.name}. Loading dashboard...`);
     setTimeout(() => {
       onLoginSuccess(session);
-    }, 800);
+    }, 600);
   };
 
   return (
     <div className="min-h-screen bg-[#0D0D0D] flex flex-col justify-between text-[#FDFBF7] font-sans selection:bg-[#C5A059] selection:text-black">
-      {/* Top Subtle Bar */}
+      {/* Top Navigation Bar */}
       <div className="px-6 py-4 flex items-center justify-between border-b border-[#222222]">
         <Link href="/" className="flex items-center gap-2.5 group">
           <CreativeSoulMark className="w-7 h-7 text-[#C5A059]" isScrolled={false} />
@@ -165,32 +180,26 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
           className="text-xs text-[#A1A1AA] hover:text-[#C5A059] flex items-center gap-1.5 transition-colors"
         >
           <ArrowLeft className="w-3.5 h-3.5" />
-          <span>Return to Public Website</span>
+          <span>Public Website</span>
         </Link>
       </div>
 
-      {/* Main Auth Container */}
-      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 my-6">
-        <div className="w-full max-w-md bg-[#161616] border border-[#2B2B2B] rounded-2xl shadow-2xl p-6 sm:p-8 space-y-6 relative overflow-hidden">
-          {/* Subtle Golden Ambient Glow */}
+      {/* Main Login Container */}
+      <div className="flex-1 flex items-center justify-center p-4 sm:p-6 my-4">
+        <div className="w-full max-w-md bg-[#161616] border border-[#2B2B2B] rounded-2xl shadow-2xl p-6 sm:p-8 space-y-5 relative overflow-hidden">
+          {/* Ambient Glow */}
           <div className="absolute top-0 left-1/2 -translate-x-1/2 w-64 h-24 bg-[#C5A059]/10 blur-3xl pointer-events-none rounded-full" />
 
-          {/* Header Block */}
-          <div className="text-center space-y-2 relative">
-            <div className="w-12 h-12 rounded-full bg-[#202020] border border-[#C5A059]/40 text-[#C5A059] mx-auto flex items-center justify-center shadow-inner">
-              <Lock className="w-5 h-5" />
-            </div>
-
-            <div className="space-y-1 pt-1">
-              <span className="text-[10px] uppercase tracking-[0.28em] text-[#C5A059] font-semibold block">
-                Concierge OS • Restricted Terminal
+          {/* 1. HORIZONTAL LOGO AT THE VERY TOP */}
+          <div className="flex items-center justify-center gap-3 py-1 pb-4 border-b border-[#262626]">
+            <CreativeSoulMark className="w-10 h-10 text-[#C5A059]" isScrolled={false} />
+            <div className="flex flex-col text-left">
+              <span className="font-serif tracking-[0.26em] text-xl font-light text-[#FDFBF7] leading-tight">
+                SOULSVENTURE
               </span>
-              <h1 className="font-serif text-2xl font-light text-[#FDFBF7]">
-                Founder & Staff Authentication
-              </h1>
-              <p className="text-xs text-[#A1A1AA] font-light max-w-xs mx-auto">
-                Confidential administrative portal. Accessible solely to verified founders & designated operational personnel.
-              </p>
+              <span className="text-[9px] tracking-[0.28em] uppercase text-[#C5A059] font-semibold mt-0.5">
+                CONCIERGE OS • ADMIN LOGIN
+              </span>
             </div>
           </div>
 
@@ -203,13 +212,14 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                 setErrorMessage(null);
                 setSuccessMessage(null);
               }}
-              className={`py-2 text-xs font-medium rounded-md transition-all cursor-pointer ${
+              className={`py-2 text-xs font-medium rounded-md transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === "login"
                   ? "bg-[#C5A059] text-[#111111] font-semibold shadow-sm"
                   : "text-[#A1A1AA] hover:text-[#FDFBF7]"
               }`}
             >
-              Sign In
+              <LogIn className="w-3.5 h-3.5" />
+              <span>Log In</span>
             </button>
             <button
               type="button"
@@ -218,17 +228,18 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                 setErrorMessage(null);
                 setSuccessMessage(null);
               }}
-              className={`py-2 text-xs font-medium rounded-md transition-all cursor-pointer ${
+              className={`py-2 text-xs font-medium rounded-md transition-all flex items-center justify-center gap-1.5 cursor-pointer ${
                 activeTab === "register"
                   ? "bg-[#C5A059] text-[#111111] font-semibold shadow-sm"
                   : "text-[#A1A1AA] hover:text-[#FDFBF7]"
               }`}
             >
-              Register Team Access
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>Register Staff</span>
             </button>
           </div>
 
-          {/* Status Banners */}
+          {/* Error / Success Alerts */}
           {errorMessage && (
             <div className="p-3 bg-rose-950/40 border border-rose-800/50 rounded-lg text-rose-300 text-xs flex items-start gap-2.5 animate-in fade-in">
               <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-rose-400" />
@@ -243,105 +254,111 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
             </div>
           )}
 
-          {/* TAB 1: SIGN IN FORM */}
+          {/* 2. SIGN IN SCREEN: ID -> PASSWORD -> LOG IN BUTTON */}
           {activeTab === "login" ? (
             <form onSubmit={handleLoginSubmit} className="space-y-4">
+              {/* FIELD 1: LOGIN ID */}
               <div>
                 <label className="block text-[11px] uppercase tracking-wider text-[#A1A1AA] font-semibold mb-1.5">
-                  Official Email or Phone
+                  Login ID (Official Email or Phone)
                 </label>
                 <div className="relative">
-                  <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#71717A]" />
+                  <Mail className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717A]" />
                   <input
                     type="text"
                     required
                     value={loginEmailOrPhone}
                     onChange={(e) => setLoginEmailOrPhone(e.target.value)}
-                    placeholder="e.g. suraj@soulsventure.com"
-                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-9 pr-3 py-2.5 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] transition-colors"
+                    placeholder="e.g. suraj@soulsventure.com or 8126357353"
+                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-10 pr-3 py-3 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] transition-colors"
                   />
                 </div>
               </div>
 
+              {/* FIELD 2: PASSWORD */}
               <div>
                 <div className="flex justify-between items-center mb-1.5">
                   <label className="block text-[11px] uppercase tracking-wider text-[#A1A1AA] font-semibold">
-                    Password or 6-Digit PIN
+                    Password / Access PIN
                   </label>
                 </div>
                 <div className="relative">
-                  <KeyRound className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-[#71717A]" />
+                  <KeyRound className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#71717A]" />
                   <input
                     type={showPassword ? "text" : "password"}
                     required
                     value={loginPassword}
                     onChange={(e) => setLoginPassword(e.target.value)}
-                    placeholder="Enter password or founder PIN"
-                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-9 pr-10 py-2.5 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] transition-colors font-mono"
+                    placeholder="Enter your login password or founder PIN"
+                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-10 pr-10 py-3 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] transition-colors font-mono"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717A] hover:text-[#FDFBF7] cursor-pointer"
+                    className="absolute right-3.5 top-1/2 -translate-y-1/2 text-[#71717A] hover:text-[#FDFBF7] cursor-pointer"
+                    title={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
                   </button>
                 </div>
               </div>
 
-              <div className="flex items-center justify-between text-xs pt-1">
-                <label className="flex items-center gap-2 cursor-pointer text-[#A1A1AA]">
-                  <input
-                    type="checkbox"
-                    checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="rounded bg-[#1F1F1F] border-[#333333] text-[#C5A059] focus:ring-0"
-                  />
-                  <span>Remember this device</span>
-                </label>
-                <span className="text-[10px] text-[#71717A]">256-Bit SSL Secured</span>
-              </div>
-
+              {/* FIELD 3: LOG IN BUTTON */}
               <button
                 type="submit"
-                className="w-full py-3 bg-[#C5A059] hover:bg-[#D4AF37] text-[#111111] text-xs uppercase tracking-[0.2em] font-semibold rounded-lg shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer mt-2"
+                disabled={isSubmitting}
+                className="w-full py-3.5 bg-gradient-to-r from-[#C5A059] to-[#D4AF37] hover:from-[#D4AF37] hover:to-[#E5C158] text-[#111111] text-xs uppercase tracking-[0.22em] font-bold rounded-lg shadow-lg hover:shadow-[#C5A059]/20 transition-all flex items-center justify-center gap-2 cursor-pointer mt-2 disabled:opacity-50"
               >
-                <span>Authorize & Unlock</span>
+                <span>Log In</span>
                 <ArrowRight className="w-4 h-4" />
               </button>
 
-              {/* Founder Fast-Pass Access Card */}
-              <div className="pt-4 mt-4 border-t border-[#262626] space-y-2">
+              {/* FOUNDER FAST-PASS 1-CLICK ACCESS */}
+              <div className="pt-4 mt-3 border-t border-[#262626] space-y-2">
                 <span className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold block text-center">
-                  Founder Fast-Pass Access
+                  Founder 1-Click Fast Pass
                 </span>
-                <div className="grid grid-cols-2 gap-2">
+                <div className="grid grid-cols-2 gap-2.5">
                   <button
                     type="button"
                     onClick={() => handleQuickLogin("Suraj Uniyal")}
-                    className="px-3 py-2 bg-[#202020] hover:bg-[#282828] border border-[#2F2F2F] hover:border-[#C5A059]/40 rounded-lg text-left transition-colors cursor-pointer group"
+                    className="px-3.5 py-2.5 bg-[#202020] hover:bg-[#282828] border border-[#2F2F2F] hover:border-[#C5A059]/60 rounded-lg text-left transition-all cursor-pointer group"
                   >
-                    <span className="text-[11px] font-medium text-[#FDFBF7] block group-hover:text-[#C5A059]">
-                      Suraj Uniyal
-                    </span>
-                    <span className="text-[9px] text-[#71717A] block">PIN: 812635</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-[#C5A059]/20 border border-[#C5A059]/50 flex items-center justify-center text-[10px] text-[#C5A059] font-bold">
+                        SU
+                      </div>
+                      <div>
+                        <span className="text-xs font-medium text-[#FDFBF7] block group-hover:text-[#C5A059]">
+                          Suraj Uniyal
+                        </span>
+                        <span className="text-[9px] text-[#71717A] block font-mono">PIN: 812635</span>
+                      </div>
+                    </div>
                   </button>
 
                   <button
                     type="button"
                     onClick={() => handleQuickLogin("Harsh Sood")}
-                    className="px-3 py-2 bg-[#202020] hover:bg-[#282828] border border-[#2F2F2F] hover:border-[#C5A059]/40 rounded-lg text-left transition-colors cursor-pointer group"
+                    className="px-3.5 py-2.5 bg-[#202020] hover:bg-[#282828] border border-[#2F2F2F] hover:border-[#C5A059]/60 rounded-lg text-left transition-all cursor-pointer group"
                   >
-                    <span className="text-[11px] font-medium text-[#FDFBF7] block group-hover:text-[#C5A059]">
-                      Harsh Sood
-                    </span>
-                    <span className="text-[9px] text-[#71717A] block">PIN: 931984</span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-full bg-[#C5A059]/20 border border-[#C5A059]/50 flex items-center justify-center text-[10px] text-[#C5A059] font-bold">
+                        HS
+                      </div>
+                      <div>
+                        <span className="text-xs font-medium text-[#FDFBF7] block group-hover:text-[#C5A059]">
+                          Harsh Sood
+                        </span>
+                        <span className="text-[9px] text-[#71717A] block font-mono">PIN: 931984</span>
+                      </div>
+                    </div>
                   </button>
                 </div>
               </div>
             </form>
           ) : (
-            /* TAB 2: REGISTER TEAM MEMBER */
+            /* TAB 2: REGISTER NEW STAFF */
             <form onSubmit={handleRegisterSubmit} className="space-y-3.5">
               <div>
                 <label className="block text-[11px] uppercase tracking-wider text-[#A1A1AA] font-semibold mb-1">
@@ -355,7 +372,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                     value={regName}
                     onChange={(e) => setRegName(e.target.value)}
                     placeholder="e.g. Vikramaditya Rawat"
-                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-9 pr-3 py-2 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] pl-9 pr-3 py-2.5 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   />
                 </div>
               </div>
@@ -363,7 +380,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
               <div className="grid grid-cols-2 gap-2.5">
                 <div>
                   <label className="block text-[11px] uppercase tracking-wider text-[#A1A1AA] font-semibold mb-1">
-                    Email *
+                    Login ID (Email) *
                   </label>
                   <input
                     type="email"
@@ -371,7 +388,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                     value={regEmail}
                     onChange={(e) => setRegEmail(e.target.value)}
                     placeholder="name@soulsventure.com"
-                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] px-3 py-2 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] px-3 py-2.5 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   />
                 </div>
 
@@ -385,23 +402,23 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                     value={regPhone}
                     onChange={(e) => setRegPhone(e.target.value)}
                     placeholder="+91 98..."
-                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] px-3 py-2 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
+                    className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] px-3 py-2.5 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059]"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-[11px] uppercase tracking-wider text-[#A1A1AA] font-semibold mb-1">
-                  Assigned Operational Role
+                  Operational Role
                 </label>
                 <select
                   value={regRole}
                   onChange={(e) => setRegRole(e.target.value as TeamRole)}
-                  className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] px-3 py-2 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] cursor-pointer"
+                  className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] px-3 py-2.5 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] cursor-pointer"
                 >
-                  <option value="Senior Curator">Senior Curator (Client Proposals & Radar)</option>
-                  <option value="On-Ground Concierge">On-Ground Concierge (Field Updates & Stays)</option>
-                  <option value="Finance & Accounts">Finance & Accounts (B2B Rates & Invoicing)</option>
+                  <option value="Senior Curator">Senior Curator (Itinerary Design & Proposals)</option>
+                  <option value="On-Ground Concierge">On-Ground Concierge (Field Ops & Stays)</option>
+                  <option value="Finance & Accounts">Finance & Accounts (B2B Rates & Payouts)</option>
                   <option value="Junior Assistant">Junior Assistant (Restricted / Read-Only)</option>
                   <option value="Founder (Unrestricted)">Founder (Unrestricted Master Admin)</option>
                 </select>
@@ -409,7 +426,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
 
               <div>
                 <label className="block text-[11px] uppercase tracking-wider text-[#A1A1AA] font-semibold mb-1">
-                  Create Password / PIN *
+                  Create Password *
                 </label>
                 <input
                   type="password"
@@ -417,7 +434,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
                   placeholder="Min 6 characters or PIN"
-                  className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] px-3 py-2 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] font-mono"
+                  className="w-full bg-[#1F1F1F] text-xs text-[#FDFBF7] px-3 py-2.5 rounded-lg border border-[#2E2E2E] focus:outline-none focus:border-[#C5A059] font-mono"
                 />
               </div>
 
@@ -425,7 +442,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                 <div className="flex items-center gap-1.5 text-[#C5A059]">
                   <ShieldCheck className="w-3.5 h-3.5" />
                   <span className="text-[10px] uppercase tracking-wider font-semibold">
-                    Founder Authorization Key *
+                    Founder Authorization Passcode *
                   </span>
                 </div>
                 <input
@@ -437,7 +454,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                   className="w-full bg-[#131313] text-xs text-[#FDFBF7] px-3 py-1.5 rounded border border-[#3A3A3A] focus:outline-none focus:border-[#C5A059] font-mono"
                 />
                 <span className="text-[10px] text-[#71717A] block leading-tight">
-                  Required to prevent unauthorized accounts. Provided directly by Suraj Uniyal or Harsh Sood.
+                  Security authorization required from Suraj Uniyal or Harsh Sood.
                 </span>
               </div>
 
@@ -445,7 +462,7 @@ export default function AdminAuthGate({ onLoginSuccess }: AdminAuthGateProps) {
                 type="submit"
                 className="w-full py-3 bg-[#C5A059] hover:bg-[#D4AF37] text-[#111111] text-xs uppercase tracking-[0.2em] font-semibold rounded-lg shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer pt-2"
               >
-                <span>Authorize & Create Account</span>
+                <span>Authorize & Register</span>
                 <CheckCircle2 className="w-4 h-4" />
               </button>
             </form>

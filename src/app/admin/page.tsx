@@ -30,6 +30,7 @@ import {
   clearAdminAuthSession,
   getStoredLeads,
   syncLeadsWithCloud,
+  syncTeamWithCloud,
   updateLeadStatus,
   updateLeadNotes,
   updateLeadCurator,
@@ -84,6 +85,7 @@ export default function AdminDashboardPage() {
         setLeads([...synced]);
       })
       .catch((e) => console.warn("Initial cloud sync deferred:", e));
+    syncTeamWithCloud().catch(() => {});
 
     // 3. Multi-tab local sync listener
     const handleSync = () => {
@@ -124,6 +126,10 @@ export default function AdminDashboardPage() {
 
   const handleLogout = () => {
     clearAdminAuthSession();
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("soulsventure_admin_auth_session_v1");
+      sessionStorage.removeItem("soulsventure_admin_auth_session_v1");
+    }
     setAuthSession(null);
   };
 

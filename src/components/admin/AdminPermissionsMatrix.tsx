@@ -30,6 +30,9 @@ import {
   Plus,
   Trash2,
   RotateCcw,
+  Copy,
+  Check,
+  Edit3,
 } from "lucide-react";
 
 interface AdminPermissionsMatrixProps {
@@ -47,6 +50,9 @@ export function AdminPermissionsMatrix({
   const [permissions, setPermissions] = useState<Record<TeamRole, RolePermissions>>(ROLE_PERMISSIONS);
   const [showAddMember, setShowAddMember] = useState(false);
   const [successMsg, setSuccessMsg] = useState("");
+  const [copiedMemberId, setCopiedMemberId] = useState<string | null>(null);
+  const [editingPassMemberId, setEditingPassMemberId] = useState<string | null>(null);
+  const [tempPass, setTempPass] = useState<string>("");
 
   useEffect(() => {
     setTeam(getStoredTeam());
@@ -153,6 +159,35 @@ export function AdminPermissionsMatrix({
     const updated = team.map((m) => (m.id === memberId ? { ...m, status: newStatus } : m));
     setTeam(updated);
     saveTeam(updated);
+  };
+
+
+  const handleCopyCredentials = (member: TeamMember) => {
+    const text = [
+      'Soulsventure Luxury Concierge OS Credentials:',
+      'Admin Portal: https://soulsventure.com/admin',
+      'Login ID: ' + member.email,
+      'Password: ' + (member.password || '812635'),
+      'Assigned Role: ' + member.role,
+      'Curator: ' + member.name,
+    ].join('\n');
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(text);
+      setCopiedMemberId(member.id);
+      setTimeout(() => setCopiedMemberId(null), 3000);
+      setSuccessMsg("Login credentials copied to clipboard. Share directly with " + member.name);
+      setTimeout(() => setSuccessMsg(""), 4000);
+    }
+  };
+
+  const handleSavePassword = (memberId: string) => {
+    if (!tempPass.trim()) return;
+    const updated = team.map((m) => (m.id === memberId ? { ...m, password: tempPass.trim() } : m));
+    setTeam(updated);
+    saveTeam(updated);
+    setEditingPassMemberId(null);
+    setSuccessMsg("Member login password updated successfully.");
+    setTimeout(() => setSuccessMsg(""), 3500);
   };
 
   const handleRemoveMember = (memberId: string, name: string) => {
@@ -439,15 +474,70 @@ export function AdminPermissionsMatrix({
                   </div>
                 </div>
 
-                <div className="space-y-1.5 bg-[#181818] p-3 rounded-lg border border-[#222222] text-xs font-mono text-[#A0A0A0]">
-                  <div>Email: {member.email}</div>
-                  <div>Direct: {member.phone}</div>
-                  <div>Station: {member.location}</div>
-                  <div className="text-amber-400/90 font-mono">
-                    Login Key: {member.password || member.phone.replace(/[^0-9]/g, "").slice(-6)}
+                <div className="space-y-2 bg-[#181818] p-3.5 rounded-lg border border-[#262626] text-xs font-mono">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#71717A] text-[11px]">Login ID:</span>
+                    <span className="text-[#FDFBF7] font-semibold select-all">{member.email}</span>
                   </div>
-                  <div className="pt-1.5 border-t border-[#262626] flex items-center justify-between">
-                    <span className="text-[#777]">Assigned Scope:</span>
+
+                  <div className="flex items-center justify-between">
+                    <span className="text-[#71717A] text-[11px]">Password / PIN:</span>
+                    {editingPassMemberId === member.id ? (
+                      <div className="flex items-center gap-1.5">
+                        <input
+                          type="text"
+                          value={tempPass}
+                          onChange={(e) => setTempPass(e.target.value)}
+                          className="bg-[#111111] border border-[#C5A059] rounded px-2 py-0.5 text-xs text-amber-300 w-28 focus:outline-none"
+                          placeholder="New Passcode"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => handleSavePassword(member.id)}
+                          className="px-2 py-0.5 bg-[#C5A059] text-black text-[10px] font-bold rounded cursor-pointer"
+                        >
+                          Save
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setEditingPassMemberId(null)}
+                          className="px-1 text-[#71717A] hover:text-white text-[10px] cursor-pointer"
+                        >
+                          ✕
+                        </button>
+                      </div>
+                    ) : (
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-amber-400 font-bold tracking-wider select-all">
+                          {member.password || member.phone.replace(/[^0-9]/g, "").slice(-6)}
+                        </span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            setEditingPassMemberId(member.id);
+                            setTempPass(member.password || "");
+                          }}
+                          className="text-[#71717A] hover:text-[#C5A059] p-0.5 cursor-pointer transition-colors"
+                          title="Change Member Password"
+                        >
+                          <Edit3 className="w-3 h-3" />
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between text-[#888888] text-[11px]">
+                    <span>Mobile:</span>
+                    <span className="text-[#A1A1AA]">{member.phone}</span>
+                  </div>
+
+                  <div className="flex items-center justify-between text-[#888888] text-[11px]">
+                    <span>Station:</span>
+                    <span className="text-[#A1A1AA]">{member.location}</span>
+                  </div>
+
+                  <div className="pt-2 border-t border-[#262626] flex items-center justify-between">
+                    <span className="text-[#71717A] text-[11px]">Scope:</span>
                     <select
                       value={member.role}
                       disabled={isFounder}
@@ -460,6 +550,27 @@ export function AdminPermissionsMatrix({
                         </option>
                       ))}
                     </select>
+                  </div>
+
+                  {/* 1-Click Copy Login Info Button */}
+                  <div className="pt-2">
+                    <button
+                      type="button"
+                      onClick={() => handleCopyCredentials(member)}
+                      className="w-full py-1.5 px-2 bg-[#202020] hover:bg-[#282828] border border-[#2E2E2E] hover:border-[#C5A059]/50 rounded text-[11px] text-[#C5A059] font-sans flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+                    >
+                      {copiedMemberId === member.id ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-400" />
+                          <span className="text-emerald-400 font-medium">Credentials Copied!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy Login Details</span>
+                        </>
+                      )}
+                    </button>
                   </div>
                 </div>
               </div>
@@ -532,7 +643,7 @@ export function AdminPermissionsMatrix({
               </div>
 
               <div>
-                <label className="text-[#888888] block mb-1">Official Email *</label>
+                <label className="text-[#C5A059] font-semibold block mb-1">Login ID (Official Email) *</label>
                 <input
                   name="email"
                   type="email"
@@ -578,7 +689,7 @@ export function AdminPermissionsMatrix({
               </div>
 
               <div>
-                <label className="text-[#888888] block mb-1">Login Password / Security PIN *</label>
+                <label className="text-[#C5A059] font-semibold block mb-1">Login Password / Access Passcode *</label>
                 <input
                   name="password"
                   required

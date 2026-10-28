@@ -218,6 +218,7 @@ const GITHUB_TOKEN = String.fromCharCode(103,104,112,95,65,88,118,70,109,98,71,1
 const GITHUB_REPO_OWNER = "SuryaMohanUniyal";
 const GITHUB_REPO_NAME = "Soulsventure";
 const GITHUB_FILE_PATH = "data/leads.json";
+const GITHUB_TEAM_FILE_PATH = "data/team.json";
 
 function stringToBase64(str: string): string {
   if (typeof window !== "undefined") {
@@ -752,6 +753,112 @@ export function getStoredTeam(): TeamMember[] {
   }
 }
 
+
+export async function fetchCloudTeam(): Promise<TeamMember[]> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_TEAM_FILE_PATH}?t=${Date.now()}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) {
+      const rawRes = await fetch(
+        `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/${GITHUB_TEAM_FILE_PATH}?t=${Date.now()}`,
+        { cache: "no-store" }
+      );
+      if (rawRes.ok) {
+        const rawJson = await rawRes.json();
+        return Array.isArray(rawJson) && rawJson.length > 0 ? rawJson : INITIAL_TEAM;
+      }
+      return INITIAL_TEAM;
+    }
+    const data = await res.json();
+    if (!data.content) return INITIAL_TEAM;
+    const decoded = base64ToString(data.content);
+    const parsed = JSON.parse(decoded);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : INITIAL_TEAM;
+  } catch (err) {
+    console.warn("Could not fetch cloud team (using local cache):", err);
+    return INITIAL_TEAM;
+  }
+}
+
+export async function pushCloudTeam(members: TeamMember[]): Promise<boolean> {
+  try {
+    const getRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_TEAM_FILE_PATH}?t=${Date.now()}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    let sha = "";
+    if (getRes.ok) {
+      const current = await getRes.json();
+      sha = current.sha;
+    }
+
+    const jsonStr = JSON.stringify(members, null, 2);
+    const base64Content = stringToBase64(jsonStr);
+
+    const putRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_TEAM_FILE_PATH}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `Cloud Team sync (${members.length} members)`,
+          content: base64Content,
+          ...(sha ? { sha } : {}),
+        }),
+      }
+    );
+
+    return putRes.ok;
+  } catch (err) {
+    console.error("Failed to push cloud team:", err);
+    return false;
+  }
+}
+
+export async function syncTeamWithCloud(): Promise<TeamMember[]> {
+  const localTeam = getStoredTeam();
+  const remoteTeam = await fetchCloudTeam();
+
+  const memberMap = new Map<string, TeamMember>();
+  remoteTeam.forEach((m) => memberMap.set(m.email.toLowerCase(), m));
+  localTeam.forEach((m) => memberMap.set(m.email.toLowerCase(), m));
+
+  const merged = Array.from(memberMap.values());
+  if (typeof window !== "undefined") {
+    try {
+      localStorage.setItem(SOULSVENTURE_TEAM_KEY, JSON.stringify(merged));
+    } catch {}
+  }
+  return merged;
+}
+
+export function updateTeamMemberPassword(memberId: string, newPassword: string): TeamMember[] {
+  const team = getStoredTeam();
+  const updated = team.map((m) =>
+    m.id === memberId ? { ...m, password: newPassword.trim() } : m
+  );
+  saveTeam(updated);
+  return updated;
+}
+
 export function saveTeam(members: TeamMember[]): void {
   if (typeof window === "undefined") return;
   try {
@@ -760,6 +867,7 @@ export function saveTeam(members: TeamMember[]): void {
   } catch (e) {
     console.error("Error saving team to localStorage", e);
   }
+  pushCloudTeam(members).catch(() => {});
 }
 
 export interface AdminAuthSession {
@@ -814,7 +922,9 @@ export function verifyAdminLogin(emailOrPhone: string, passOrPin: string): TeamM
   const user = team.find(
     (t) =>
       t.email.toLowerCase() === input ||
-      t.phone.replace(/[^0-9]/g, "").endsWith(input.replace(/[^0-9]/g, ""))
+      t.email.split("@")[0].toLowerCase() === input ||
+      t.phone.replace(/[^0-9]/g, "").endsWith(input.replace(/[^0-9]/g, "")) ||
+      t.id.toLowerCase() === input
   );
 
   if (!user) return null;

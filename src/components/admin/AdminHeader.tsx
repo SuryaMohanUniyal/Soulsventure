@@ -287,7 +287,7 @@ export default function AdminHeader({
                       className="w-full text-left px-2.5 py-1.5 rounded text-xs flex items-center gap-2 text-rose-400 hover:bg-rose-950/40 hover:text-rose-200 transition-colors cursor-pointer"
                     >
                       <LogOut className="w-3.5 h-3.5" />
-                      <span>Lock System & Sign Out</span>
+                      <span>Log Out</span>
                     </button>
                   </div>
                 )}
@@ -305,16 +305,20 @@ export default function AdminHeader({
             <ExternalLink className="w-3.5 h-3.5 text-[#A1A1AA]" />
           </Link>
 
-          {/* Secure Lock / Sign Out */}
+          {/* Secure Log Out Button */}
           {onLogout && (
             <button
               type="button"
-              onClick={onLogout}
-              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-semibold text-rose-300 hover:text-white bg-rose-950/60 hover:bg-rose-900 border border-rose-800/60 shadow-sm transition-all cursor-pointer"
-              title="Lock Console & Sign Out"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                onLogout();
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-md text-xs font-semibold text-rose-300 hover:text-white bg-rose-950/70 hover:bg-rose-900 border border-rose-800/70 shadow-sm transition-all cursor-pointer"
+              title="Log Out of Concierge OS"
             >
               <LogOut className="w-3.5 h-3.5 text-rose-400" />
-              <span>Lock System</span>
+              <span>Log Out</span>
             </button>
           )}
         </div>
