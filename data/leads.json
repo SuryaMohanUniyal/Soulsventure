@@ -1,1 +1,40 @@
-[]
+[
+  {
+    "id": "lead-test-1793210112227",
+    "referenceCode": "SV-9999-IND",
+    "createdAt": "2026-10-28T17:55:12.227Z",
+    "dateKey": "2026-10-28",
+    "clientName": "Rahul & Priya Sharma",
+    "firstName": "Rahul",
+    "lastName": "Sharma",
+    "email": "rahul.sharma@example.com",
+    "phone": "+91 98201 11222",
+    "destinations": [
+      "rajasthan"
+    ],
+    "destinationSummary": "Rajasthan",
+    "travelWindow": "Within the next 3 months",
+    "duration": "10-14 Days",
+    "companions": "Couple / Honeymoon",
+    "budgetTier": "₹6,00,000 - ₹12,00,000 pp",
+    "estimatedValueINR": 900000,
+    "specialInterests": [
+      "Palace Stays",
+      "Culinary & Wine"
+    ],
+    "specialRequests": "Mobile test inquiry",
+    "consultationMethod": "phone",
+    "preferredTimeOfDay": "Evening",
+    "status": "New Lead",
+    "assignedCurator": "Suraj Uniyal",
+    "internalNotes": "Live end-to-end mobile submission test",
+    "milestones": {
+      "inquiryLogged": true,
+      "discoveryCallCompleted": false,
+      "proposalSent": false,
+      "depositReceived": false,
+      "vouchersIssued": false,
+      "conciergeActive": false
+    }
+  }
+]
