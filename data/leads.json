@@ -1,5 +1,44 @@
 [
   {
+    "referenceCode": "SV-6010-IND",
+    "clientName": "Suraj Uniyal",
+    "firstName": "Suraj",
+    "lastName": "Uniyal",
+    "email": "surajuniyal06@gmail.com",
+    "phone": "+918126357353",
+    "destinations": [
+      "rajasthan"
+    ],
+    "destinationSummary": "Rajasthan",
+    "travelWindow": "3 to 6 months out",
+    "duration": "14 to 21 Days",
+    "companions": "Couple / Honeymoon",
+    "familyAges": "",
+    "budgetTier": "₹6,00,000 - ₹12,00,000 pp",
+    "estimatedValueINR": 900000,
+    "specialInterests": [
+      "Culinary & Wine",
+      "Wildlife & Nature"
+    ],
+    "specialRequests": "",
+    "consultationMethod": "whatsapp",
+    "preferredTimeOfDay": "Afternoon (12:00 - 17:00)",
+    "id": "lead-1793211106857",
+    "createdAt": "2026-10-28T18:11:46.857Z",
+    "dateKey": "2026-10-28",
+    "status": "New Lead",
+    "assignedCurator": "Suraj Uniyal",
+    "internalNotes": "Incoming online luxury enquiry. Requires initial curator review within 2 hours.",
+    "milestones": {
+      "inquiryLogged": true,
+      "discoveryCallCompleted": false,
+      "proposalSent": false,
+      "depositReceived": false,
+      "vouchersIssued": false,
+      "conciergeActive": false
+    }
+  },
+  {
     "referenceCode": "SV-2553-IND",
     "clientName": "Suraj Uniyal",
     "firstName": "Suraj",
