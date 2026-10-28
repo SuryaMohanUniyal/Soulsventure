@@ -15,9 +15,10 @@ import {
   Palette,
   Camera,
   KeyRound,
+  Lock,
 } from "lucide-react";
 
-import { TeamRole } from "@/lib/crmStore";
+import { TeamRole, RolePermissions } from "@/lib/crmStore";
 
 export type AdminTab =
   | "crm"
@@ -32,12 +33,37 @@ export type AdminTab =
   | "scrapbooks"
   | "permissions";
 
+export function isTabLockedForRole(tab: AdminTab, perms?: RolePermissions): boolean {
+  if (!perms) return false;
+  switch (tab) {
+    case "radar":
+      return !perms.canAccessRadar;
+    case "vendors":
+      return !perms.canAccessVendorLedger;
+    case "analytics":
+      return !perms.canViewFinancialMargins;
+    case "permissions":
+      return !perms.canManageTeam;
+    case "live":
+      return !perms.canIssueVouchers;
+    case "pipeline":
+      return !perms.canEditMilestones;
+    case "crm":
+    case "calendar":
+      return !perms.canViewAllLeads;
+    default:
+      return false;
+  }
+}
+
 interface AdminSidebarProps {
   currentTab: AdminTab;
   setCurrentTab: (tab: AdminTab) => void;
   newLeadsCount: number;
   activeTravelersCount: number;
   activeRole?: TeamRole;
+  rolePermissions?: RolePermissions;
+  onLockedClick?: (tabLabel: string) => void;
 }
 
 export default function AdminSidebar({
@@ -46,6 +72,8 @@ export default function AdminSidebar({
   newLeadsCount,
   activeTravelersCount,
   activeRole = "Founder (Unrestricted)",
+  rolePermissions,
+  onLockedClick,
 }: AdminSidebarProps) {
   const operationsItems = [
     {
@@ -125,6 +153,74 @@ export default function AdminSidebar({
     },
   ];
 
+  const renderNavButton = (item: {
+    id: AdminTab;
+    label: string;
+    icon: React.ComponentType<{ className?: string }>;
+    badge?: string;
+    badgeColor?: string;
+  }) => {
+    const Icon = item.icon;
+    const isActive = currentTab === item.id;
+    const isLocked = isTabLockedForRole(item.id, rolePermissions);
+
+    const handleClick = () => {
+      if (isLocked) {
+        if (onLockedClick) {
+          onLockedClick(item.label);
+        }
+        return;
+      }
+      setCurrentTab(item.id);
+    };
+
+    if (isLocked) {
+      return (
+        <button
+          key={item.id}
+          type="button"
+          onClick={handleClick}
+          title={`Access Restricted: '${item.label}' is locked for ${activeRole} by the Founder in the Permissions Matrix.`}
+          className="w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium opacity-40 cursor-not-allowed bg-transparent text-[#777777] hover:bg-transparent transition-all select-none group border border-transparent"
+        >
+          <div className="flex items-center gap-2.5">
+            <Lock className="w-3.5 h-3.5 text-amber-500/80 flex-shrink-0" />
+            <span className="truncate line-through decoration-amber-500/60">{item.label}</span>
+          </div>
+          <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-amber-950/80 text-amber-400 border border-amber-800/50 flex items-center gap-1 flex-shrink-0">
+            <Lock className="w-2.5 h-2.5" />
+            <span>Locked</span>
+          </span>
+        </button>
+      );
+    }
+
+    return (
+      <button
+        key={item.id}
+        type="button"
+        onClick={handleClick}
+        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer ${
+          isActive
+            ? "bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 shadow-sm"
+            : "text-[#A1A1AA] hover:text-[#FDFBF7] hover:bg-[#1C1C1C]"
+        }`}
+      >
+        <div className="flex items-center gap-2.5">
+          <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#C5A059]" : "text-[#71717A]"}`} />
+          <span className="truncate">{item.label}</span>
+        </div>
+        {item.badge && (
+          <span
+            className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${item.badgeColor}`}
+          >
+            {item.badge}
+          </span>
+        )}
+      </button>
+    );
+  };
+
   return (
     <aside className="w-64 bg-[#141414] border-r border-[#262626] flex flex-col justify-between p-4 flex-shrink-0 min-h-[calc(100vh-61px)] overflow-y-auto">
       {/* Top Nav Items */}
@@ -135,33 +231,7 @@ export default function AdminSidebar({
             Core Operations
           </span>
           <nav className="space-y-1">
-            {operationsItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setCurrentTab(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-                    isActive
-                      ? "bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 shadow-sm"
-                      : "text-[#A1A1AA] hover:text-[#FDFBF7] hover:bg-[#1C1C1C]"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#C5A059]" : "text-[#71717A]"}`} />
-                    <span className="truncate">{item.label}</span>
-                  </div>
-                  {item.badge && (
-                    <span
-                      className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${item.badgeColor}`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+            {operationsItems.map(renderNavButton)}
           </nav>
         </div>
 
@@ -171,33 +241,7 @@ export default function AdminSidebar({
             VIP Intelligence & Assets
           </span>
           <nav className="space-y-1">
-            {intelligenceItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setCurrentTab(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-                    isActive
-                      ? "bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 shadow-sm"
-                      : "text-[#A1A1AA] hover:text-[#FDFBF7] hover:bg-[#1C1C1C]"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#C5A059]" : "text-[#71717A]"}`} />
-                    <span className="truncate">{item.label}</span>
-                  </div>
-                  {item.badge && (
-                    <span
-                      className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${item.badgeColor}`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+            {intelligenceItems.map(renderNavButton)}
           </nav>
         </div>
 
@@ -207,33 +251,7 @@ export default function AdminSidebar({
             Finance & Governance
           </span>
           <nav className="space-y-1">
-            {enterpriseItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = currentTab === item.id;
-              return (
-                <button
-                  key={item.id}
-                  onClick={() => setCurrentTab(item.id)}
-                  className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-xs font-medium transition-all cursor-pointer ${
-                    isActive
-                      ? "bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30 shadow-sm"
-                      : "text-[#A1A1AA] hover:text-[#FDFBF7] hover:bg-[#1C1C1C]"
-                  }`}
-                >
-                  <div className="flex items-center gap-2.5">
-                    <Icon className={`w-3.5 h-3.5 ${isActive ? "text-[#C5A059]" : "text-[#71717A]"}`} />
-                    <span className="truncate">{item.label}</span>
-                  </div>
-                  {item.badge && (
-                    <span
-                      className={`text-[9px] font-semibold px-1.5 py-0.5 rounded-full ${item.badgeColor}`}
-                    >
-                      {item.badge}
-                    </span>
-                  )}
-                </button>
-              );
-            })}
+            {enterpriseItems.map(renderNavButton)}
           </nav>
         </div>
 

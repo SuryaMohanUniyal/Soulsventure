@@ -35,11 +35,13 @@ import {
 interface AdminPermissionsMatrixProps {
   activeRole: TeamRole;
   setActiveRole: (role: TeamRole) => void;
+  onPermissionsChange?: (perms: Record<TeamRole, RolePermissions>) => void;
 }
 
 export function AdminPermissionsMatrix({
   activeRole,
   setActiveRole,
+  onPermissionsChange,
 }: AdminPermissionsMatrixProps) {
   const [team, setTeam] = useState<TeamMember[]>([]);
   const [permissions, setPermissions] = useState<Record<TeamRole, RolePermissions>>(ROLE_PERMISSIONS);
@@ -120,6 +122,9 @@ export function AdminPermissionsMatrix({
 
     setPermissions(updated);
     saveRolePermissions(updated);
+    if (onPermissionsChange) {
+      onPermissionsChange(updated);
+    }
 
     const statusWord = !currentVal ? "GRANTED" : "RESTRICTED";
     setSuccessMsg(`Permission '${permKey}' is now ${statusWord} for '${role}'.`);
@@ -129,6 +134,9 @@ export function AdminPermissionsMatrix({
   const handleResetPermissions = () => {
     setPermissions(ROLE_PERMISSIONS);
     saveRolePermissions(ROLE_PERMISSIONS);
+    if (onPermissionsChange) {
+      onPermissionsChange(ROLE_PERMISSIONS);
+    }
     setSuccessMsg("All role permissions reset to default enterprise baseline.");
     setTimeout(() => setSuccessMsg(""), 3500);
   };

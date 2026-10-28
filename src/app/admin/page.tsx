@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import AdminHeader from "@/components/admin/AdminHeader";
-import AdminSidebar, { AdminTab } from "@/components/admin/AdminSidebar";
+import AdminSidebar, { AdminTab, isTabLockedForRole } from "@/components/admin/AdminSidebar";
+import { Lock } from "lucide-react";
 import AdminCRMTable from "@/components/admin/AdminCRMTable";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
 import AdminPipelineKanban from "@/components/admin/AdminPipelineKanban";
@@ -21,6 +22,9 @@ import {
   CRMLead,
   LeadStatus,
   TeamRole,
+  RolePermissions,
+  ROLE_PERMISSIONS,
+  getStoredRolePermissions,
   AdminAuthSession,
   getAdminAuthSession,
   clearAdminAuthSession,
@@ -46,6 +50,8 @@ export default function AdminDashboardPage() {
   const [activeFounder, setActiveFounder] = useState<"Suraj Uniyal" | "Harsh Sood">("Suraj Uniyal");
   const [activeRole, setActiveRole] = useState<TeamRole>("Founder (Unrestricted)");
   const [leads, setLeads] = useState<CRMLead[]>([]);
+  const [rolePermissions, setRolePermissions] = useState<Record<TeamRole, RolePermissions>>(() => getStoredRolePermissions());
+  const [lockedToast, setLockedToast] = useState<string | null>(null);
   const [selectedLead, setSelectedLead] = useState<CRMLead | null>(null);
   const [proposalLead, setProposalLead] = useState<CRMLead | null>(null);
 
@@ -67,6 +73,7 @@ export default function AdminDashboardPage() {
     const handleSync = () => {
       const refreshed = getStoredLeads();
       setLeads([...refreshed]);
+      setRolePermissions(getStoredRolePermissions());
     };
     window.addEventListener("storage", handleSync);
 
@@ -279,11 +286,46 @@ export default function AdminDashboardPage() {
           newLeadsCount={newLeadsCount}
           activeTravelersCount={activeTravelersCount}
           activeRole={activeRole}
+          rolePermissions={rolePermissions[activeRole] || ROLE_PERMISSIONS[activeRole]}
+          onLockedClick={(tabLabel) => {
+            setLockedToast(`Access Denied: '${tabLabel}' is locked for '${activeRole}' by the Founder in the Permissions Matrix.`);
+            setTimeout(() => setLockedToast(null), 4500);
+          }}
         />
 
         {/* Tab Content Display */}
         <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 bg-[#111111]">
           <div className="max-w-7xl mx-auto space-y-6">
+            {/* Locked Tab Gate */}
+            {isTabLockedForRole(currentTab, rolePermissions[activeRole] || ROLE_PERMISSIONS[activeRole]) ? (
+              <div className="bg-[#181818] border border-amber-500/40 rounded-2xl p-8 max-w-lg mx-auto text-center space-y-4 my-16 shadow-2xl animate-in fade-in">
+                <div className="w-16 h-16 rounded-full bg-amber-950/60 border border-amber-500/50 text-amber-400 mx-auto flex items-center justify-center shadow-lg">
+                  <Lock className="w-7 h-7" />
+                </div>
+                <div className="space-y-1.5">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-amber-400 font-semibold block">
+                    Section Access Restricted
+                  </span>
+                  <h3 className="font-serif text-2xl text-[#FDFBF7]">
+                    Locked by Founder in Permissions Matrix
+                  </h3>
+                  <p className="text-xs text-[#A1A1AA] font-light max-w-md mx-auto pt-1 leading-relaxed">
+                    Access to this module has been locked for credentials associated with{" "}
+                    <span className="text-[#C5A059] font-medium font-mono">{activeRole}</span>.
+                    This section cannot be viewed or clicked until a Founder unlocks it in the Master Permissions Matrix.
+                  </p>
+                </div>
+                <div className="pt-2">
+                  <button
+                    onClick={() => setCurrentTab("permissions")}
+                    className="px-5 py-2.5 bg-[#C5A059] hover:bg-[#D4AF37] text-black text-xs font-serif font-medium uppercase tracking-wider rounded-lg transition-colors cursor-pointer shadow-md"
+                  >
+                    Open Permissions Matrix to Unlock
+                  </button>
+                </div>
+              </div>
+            ) : (
+              <>
             {currentTab === "crm" && (
               <AdminCRMTable
                 leads={filteredLeads}
@@ -329,11 +371,28 @@ export default function AdminDashboardPage() {
               <AdminPermissionsMatrix
                 activeRole={activeRole}
                 setActiveRole={setActiveRole}
+                onPermissionsChange={(newPerms) => setRolePermissions({ ...newPerms })}
               />
+            )}
+              </>
             )}
           </div>
         </main>
       </div>
+
+      {/* Floating Access Denied Toast */}
+      {lockedToast && (
+        <div className="fixed bottom-6 right-6 z-50 p-4 bg-[#1C1414] border border-amber-500/60 text-amber-200 rounded-xl shadow-2xl flex items-center gap-3 animate-in slide-in-from-bottom-5">
+          <Lock className="w-5 h-5 text-amber-400 flex-shrink-0" />
+          <div className="text-xs font-medium pr-2">{lockedToast}</div>
+          <button
+            onClick={() => setLockedToast(null)}
+            className="text-amber-400/70 hover:text-white text-xs p-1 cursor-pointer"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* Slide-over Client Dossier Drawer */}
       <AdminClientDossierDrawer
