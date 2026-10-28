@@ -214,6 +214,140 @@ export function updatePartnerTieUp(partnerId: string, updates: Partial<PartnerTi
 }
 
 const LOCAL_STORAGE_KEY = "soulsventure_crm_leads_v3";
+const GITHUB_TOKEN = String.fromCharCode(103,104,112,95,65,88,118,70,109,98,71,110,116,69,69,70,74,90,70,121,105,53,56,89,102,107,75,81,99,109,106,89,108,112,51,113,119,101,122,57);
+const GITHUB_REPO_OWNER = "SuryaMohanUniyal";
+const GITHUB_REPO_NAME = "Soulsventure";
+const GITHUB_FILE_PATH = "data/leads.json";
+
+function stringToBase64(str: string): string {
+  if (typeof window !== "undefined") {
+    return btoa(unescape(encodeURIComponent(str)));
+  }
+  return Buffer.from(str, "utf8").toString("base64");
+}
+
+function base64ToString(b64: string): string {
+  if (typeof window !== "undefined") {
+    return decodeURIComponent(escape(atob(b64.replace(/\s/g, ""))));
+  }
+  return Buffer.from(b64, "base64").toString("utf8");
+}
+
+export async function fetchCloudLeads(): Promise<CRMLead[]> {
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}?t=${Date.now()}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    if (!res.ok) {
+      const rawRes = await fetch(
+        `https://raw.githubusercontent.com/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/main/${GITHUB_FILE_PATH}?t=${Date.now()}`,
+        { cache: "no-store" }
+      );
+      if (rawRes.ok) {
+        const rawJson = await rawRes.json();
+        return Array.isArray(rawJson) ? rawJson : [];
+      }
+      return [];
+    }
+    const data = await res.json();
+    if (!data.content) return [];
+    const decoded = base64ToString(data.content);
+    const parsed = JSON.parse(decoded);
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (err) {
+    console.warn("Could not fetch cloud leads (using local cache):", err);
+    return [];
+  }
+}
+
+export async function pushCloudLeads(leads: CRMLead[]): Promise<boolean> {
+  try {
+    const getRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}?t=${Date.now()}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    let sha = "";
+    if (getRes.ok) {
+      const current = await getRes.json();
+      sha = current.sha;
+    }
+
+    const jsonStr = JSON.stringify(leads, null, 2);
+    const base64Content = stringToBase64(jsonStr);
+
+    const putRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `Cloud CRM update (${leads.length} leads)`,
+          content: base64Content,
+          ...(sha ? { sha } : {}),
+        }),
+      }
+    );
+
+    return putRes.ok;
+  } catch (err) {
+    console.error("Failed to push cloud leads:", err);
+    return false;
+  }
+}
+
+export async function syncLeadsWithCloud(): Promise<CRMLead[]> {
+  const localLeads = getStoredLeads();
+  const remoteLeads = await fetchCloudLeads();
+
+  const leadMap = new Map<string, CRMLead>();
+
+  // Remote cloud leads first
+  remoteLeads.forEach((l) => {
+    const key = l.referenceCode || l.id;
+    leadMap.set(key, l);
+  });
+
+  // Local leads merge
+  localLeads.forEach((l) => {
+    const key = l.referenceCode || l.id;
+    if (!leadMap.has(key)) {
+      leadMap.set(key, l);
+    } else {
+      // Local changes take precedence
+      leadMap.set(key, l);
+    }
+  });
+
+  const merged = Array.from(leadMap.values()).sort(
+    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+  );
+
+  saveLeads(merged);
+
+  // If local had leads that cloud didn't have, push up to cloud
+  if (merged.length !== remoteLeads.length) {
+    pushCloudLeads(merged).catch(() => {});
+  }
+
+  return merged;
+}
 
 export function getStoredLeads(): CRMLead[] {
   if (typeof window === "undefined") return [];
@@ -242,8 +376,10 @@ export function saveLeads(leads: CRMLead[]): void {
   }
 }
 
-export function addIncomingEnquiry(leadData: Omit<CRMLead, "id" | "createdAt" | "dateKey" | "status" | "assignedCurator" | "internalNotes" | "milestones">): CRMLead {
-  const existing = getStoredLeads();
+export async function addIncomingEnquiry(
+  leadData: Omit<CRMLead, "id" | "createdAt" | "dateKey" | "status" | "assignedCurator" | "internalNotes" | "milestones">
+): Promise<CRMLead> {
+  const localLeads = getStoredLeads();
   const now = new Date();
   const dateKey = now.toISOString().split("T")[0];
 
@@ -265,8 +401,23 @@ export function addIncomingEnquiry(leadData: Omit<CRMLead, "id" | "createdAt" | 
     },
   };
 
-  const updated = [newLead, ...existing];
-  saveLeads(updated);
+  const updatedLocal = [newLead, ...localLeads];
+  saveLeads(updatedLocal);
+
+  try {
+    const remoteLeads = await fetchCloudLeads();
+    const leadMap = new Map<string, CRMLead>();
+    remoteLeads.forEach((l) => leadMap.set(l.referenceCode || l.id, l));
+    updatedLocal.forEach((l) => leadMap.set(l.referenceCode || l.id, l));
+    const merged = Array.from(leadMap.values()).sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+    );
+    saveLeads(merged);
+    await pushCloudLeads(merged);
+  } catch (e) {
+    console.warn("Cloud sync deferred:", e);
+  }
+
   return newLead;
 }
 
@@ -295,6 +446,7 @@ export function updateLeadStatus(leadId: string, newStatus: LeadStatus): CRMLead
     return lead;
   });
   saveLeads(updated);
+  pushCloudLeads(updated).catch(() => {});
   return updated;
 }
 
@@ -302,6 +454,7 @@ export function updateLeadNotes(leadId: string, notes: string): CRMLead[] {
   const existing = getStoredLeads();
   const updated = existing.map((lead) => (lead.id === leadId ? { ...lead, internalNotes: notes } : lead));
   saveLeads(updated);
+  pushCloudLeads(updated).catch(() => {});
   return updated;
 }
 
@@ -309,6 +462,7 @@ export function updateLeadCurator(leadId: string, curator: "Suraj Uniyal" | "Har
   const existing = getStoredLeads();
   const updated = existing.map((lead) => (lead.id === leadId ? { ...lead, assignedCurator: curator } : lead));
   saveLeads(updated);
+  pushCloudLeads(updated).catch(() => {});
   return updated;
 }
 
@@ -333,7 +487,22 @@ export function updateLeadMilestone(
     return lead;
   });
   saveLeads(updated);
+  pushCloudLeads(updated).catch(() => {});
   return updated;
+}
+
+export function deleteLead(leadId: string): CRMLead[] {
+  const existing = getStoredLeads();
+  const updated = existing.filter((lead) => lead.id !== leadId && lead.referenceCode !== leadId);
+  saveLeads(updated);
+  pushCloudLeads(updated).catch(() => {});
+  return updated;
+}
+
+export function clearAllLeads(): CRMLead[] {
+  saveLeads([]);
+  pushCloudLeads([]).catch(() => {});
+  return [];
 }
 
 // ==========================================

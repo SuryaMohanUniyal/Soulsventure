@@ -16,6 +16,7 @@ import {
   CheckCircle2,
   ChevronDown,
   X,
+  Trash2,
 } from "lucide-react";
 import { CRMLead, LeadStatus, TeamRole, ROLE_PERMISSIONS } from "@/lib/crmStore";
 import { Lock as LockIcon } from "lucide-react";
@@ -25,6 +26,8 @@ interface AdminCRMTableProps {
   onOpenDossier: (lead: CRMLead) => void;
   onUpdateStatus: (leadId: string, newStatus: LeadStatus) => void;
   onAddManualLead: (newLead: Partial<CRMLead>) => void;
+  onDeleteLead?: (leadId: string) => void;
+  onClearAllLeads?: () => void;
   activeRole?: TeamRole;
 }
 
@@ -33,6 +36,8 @@ export default function AdminCRMTable({
   onOpenDossier,
   onUpdateStatus,
   onAddManualLead,
+  onDeleteLead,
+  onClearAllLeads,
   activeRole = "Founder (Unrestricted)",
 }: AdminCRMTableProps) {
   const [searchTerm, setSearchTerm] = useState("");
@@ -157,6 +162,17 @@ export default function AdminCRMTable({
               <Download className="w-4 h-4 text-[#A1A1AA]" />
               <span>Export CSV</span>
             </button>
+
+            {leads.length > 0 && onClearAllLeads && (
+              <button
+                onClick={onClearAllLeads}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-lg bg-red-950/40 hover:bg-red-900/60 text-red-300 text-xs font-medium border border-red-800/40 transition-colors cursor-pointer"
+                title="Clear all enquiries from CRM & Cloud"
+              >
+                <Trash2 className="w-3.5 h-3.5 text-red-400" />
+                <span>Clear All</span>
+              </button>
+            )}
           </div>
         </div>
 
@@ -395,6 +411,21 @@ export default function AdminCRMTable({
                           >
                             <Phone className="w-4 h-4" />
                           </a>
+
+                          {/* Delete Lead Button */}
+                          {onDeleteLead && (
+                            <button
+                              onClick={() => {
+                                if (confirm(`Remove enquiry ${lead.referenceCode} for ${lead.clientName}?`)) {
+                                  onDeleteLead(lead.id);
+                                }
+                              }}
+                              className="p-1.5 rounded bg-[#242424] hover:bg-red-900/70 text-[#71717A] hover:text-red-300 transition-colors cursor-pointer"
+                              title="Delete Enquiry"
+                            >
+                              <Trash2 className="w-4 h-4" />
+                            </button>
+                          )}
                         </div>
                       </td>
                     </tr>

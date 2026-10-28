@@ -65,17 +65,26 @@ export default function EnquiryWizard() {
   const [referenceCode, setReferenceCode] = useState("");
   const [stepError, setStepError] = useState<string | null>(null);
 
+  const [selectedDests, setSelectedDests] = useState<string[]>(() => {
+    if (preselectedDest) return [preselectedDest.toLowerCase()];
+    return ["rajasthan"];
+  });
+  const [selectedCompanions, setSelectedCompanions] = useState<string>("Couple / Honeymoon");
+  const [selectedInterests, setSelectedInterests] = useState<string[]>([
+    "Culinary & Wine",
+    "Wildlife & Nature",
+  ]);
+
   const {
     control,
     handleSubmit,
-    watch,
     setValue,
     clearErrors,
     formState: { errors },
   } = useForm<EnquiryFormData>({
     resolver: zodResolver(enquirySchema),
     defaultValues: {
-      destinations: preselectedDest ? [preselectedDest] : [],
+      destinations: preselectedDest ? [preselectedDest.toLowerCase()] : ["rajasthan"],
       companions: "Couple / Honeymoon",
       familyAges: "",
       travelWindow: "Within the next 6 months",
@@ -92,11 +101,6 @@ export default function EnquiryWizard() {
     },
   });
 
-  const selectedDests = watch("destinations") || [];
-  const selectedCompanions = watch("companions");
-  const selectedInterests = watch("specialInterests") || [];
-  const selectedMethod = watch("consultationMethod");
-
   // Step advancement with validation
   const nextStep = () => {
     setStepError(null);
@@ -105,12 +109,14 @@ export default function EnquiryWizard() {
         setStepError("Please select at least one destination (or choose 'Open to Inspiration') to continue.");
         return;
       }
+      setValue("destinations", selectedDests, { shouldValidate: true });
     }
     if (currentStep === 2) {
       if (!selectedCompanions) {
         setStepError("Please select who will be travelling with you.");
         return;
       }
+      setValue("companions", selectedCompanions, { shouldValidate: true });
     }
     // Steps 3 & 4 have valid defaults already selected
     setCurrentStep((prev) => Math.min(prev + 1, 5));
@@ -127,56 +133,63 @@ export default function EnquiryWizard() {
     }
   };
 
-  const onSubmit = (data: EnquiryFormData) => {
+  const onSubmit = async (data: EnquiryFormData) => {
     setIsSubmitting(true);
-    setTimeout(() => {
-      setIsSubmitting(false);
-      const code = `SV-${Math.floor(1000 + Math.random() * 9000)}-IND`;
-      setReferenceCode(code);
+    const code = `SV-${Math.floor(1000 + Math.random() * 9000)}-IND`;
+    setReferenceCode(code);
 
-      let estimatedVal = 600000;
-      if (data.budgetTier.includes("3,50,000")) estimatedVal = 475000;
-      else if (data.budgetTier.includes("6,00,000")) estimatedVal = 900000;
-      else if (data.budgetTier.includes("12,00,000")) estimatedVal = 1850000;
-      else if (data.budgetTier.includes("25,00,000")) estimatedVal = 3500000;
+    let estimatedVal = 600000;
+    if (data.budgetTier.includes("3,50,000")) estimatedVal = 475000;
+    else if (data.budgetTier.includes("6,00,000")) estimatedVal = 900000;
+    else if (data.budgetTier.includes("12,00,000")) estimatedVal = 1850000;
+    else if (data.budgetTier.includes("25,00,000")) estimatedVal = 3500000;
 
-      addIncomingEnquiry({
+    const finalDests = selectedDests.length > 0 ? selectedDests : data.destinations;
+    const finalInterests = selectedInterests.length > 0 ? selectedInterests : (data.specialInterests || []);
+
+    try {
+      await addIncomingEnquiry({
         referenceCode: code,
         clientName: `${data.firstName} ${data.lastName}`,
         firstName: data.firstName,
         lastName: data.lastName,
         email: data.email,
         phone: data.phone,
-        destinations: data.destinations,
-        destinationSummary: data.destinations.join(", "),
+        destinations: finalDests,
+        destinationSummary: finalDests
+          .map((d) => (d === "open-inspiration" ? "Open to Inspiration" : d.charAt(0).toUpperCase() + d.slice(1)))
+          .join(", "),
         travelWindow: data.travelWindow,
         duration: data.duration,
-        companions: data.companions,
+        companions: selectedCompanions || data.companions,
         familyAges: data.familyAges,
         budgetTier: data.budgetTier,
         estimatedValueINR: estimatedVal,
-        specialInterests: data.specialInterests || [],
+        specialInterests: finalInterests,
         specialRequests: data.specialRequests || "",
         consultationMethod: data.consultationMethod,
         preferredTimeOfDay: data.preferredTimeOfDay,
       });
+    } catch (e) {
+      console.error("Enquiry save error:", e);
+    }
 
-      // Dispatch real-time storage event for live admin dashboard sync
-      if (typeof window !== "undefined") {
-        window.dispatchEvent(new Event("storage"));
-      }
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new Event("storage"));
+    }
 
-      setSubmissionSuccess(true);
-      if (typeof window !== "undefined") {
-        window.scrollTo({ top: 120, behavior: "smooth" });
-      }
-    }, 600);
+    setIsSubmitting(false);
+    setSubmissionSuccess(true);
+    if (typeof window !== "undefined") {
+      window.scrollTo({ top: 120, behavior: "smooth" });
+    }
   };
 
   const toggleDestination = (destSlug: string) => {
     setStepError(null);
     clearErrors("destinations");
     if (destSlug === "open-inspiration") {
+      setSelectedDests(["open-inspiration"]);
       setValue("destinations", ["open-inspiration"], { shouldValidate: true, shouldDirty: true });
       return;
     }
@@ -187,18 +200,19 @@ export default function EnquiryWizard() {
     } else {
       next = [...current, destSlug];
     }
+    setSelectedDests(next);
     setValue("destinations", next, { shouldValidate: true, shouldDirty: true });
   };
 
   const toggleInterest = (interest: string) => {
+    let next: string[];
     if (selectedInterests.includes(interest)) {
-      setValue(
-        "specialInterests",
-        selectedInterests.filter((i) => i !== interest)
-      );
+      next = selectedInterests.filter((i) => i !== interest);
     } else {
-      setValue("specialInterests", [...selectedInterests, interest]);
+      next = [...selectedInterests, interest];
     }
+    setSelectedInterests(next);
+    setValue("specialInterests", next);
   };
 
   return (
@@ -472,7 +486,10 @@ export default function EnquiryWizard() {
                     <button
                       key={option.label}
                       type="button"
-                      onClick={() => setValue("companions", option.label)}
+                      onClick={() => {
+                        setSelectedCompanions(option.label);
+                        setValue("companions", option.label, { shouldValidate: true });
+                      }}
                       className={`p-5 text-left border transition-all cursor-pointer ${
                         selectedCompanions === option.label
                           ? "bg-[#1A1A1A] text-white border-[#1A1A1A]"

@@ -21,11 +21,15 @@ import {
   LeadStatus,
   TeamRole,
   getStoredLeads,
+  syncLeadsWithCloud,
   updateLeadStatus,
   updateLeadNotes,
   updateLeadCurator,
   updateLeadMilestone,
+  deleteLead,
+  clearAllLeads,
   saveLeads,
+  pushCloudLeads,
   ACTIVE_TRAVELERS,
 } from "@/lib/crmStore";
 
@@ -39,32 +43,72 @@ export default function AdminDashboardPage() {
   const [selectedLead, setSelectedLead] = useState<CRMLead | null>(null);
   const [proposalLead, setProposalLead] = useState<CRMLead | null>(null);
 
-  // Load from localStorage safely on mount with real-time multi-tab sync
+  // Load from localStorage safely on mount with cloud sync
   useEffect(() => {
     setMounted(true);
+    // 1. Instant local render (0ms)
     const stored = getStoredLeads();
     setLeads(stored);
 
+    // 2. Immediate cloud database fetch & merge
+    syncLeadsWithCloud()
+      .then((synced) => {
+        setLeads([...synced]);
+      })
+      .catch((e) => console.warn("Initial cloud sync deferred:", e));
+
+    // 3. Multi-tab local sync listener
     const handleSync = () => {
       const refreshed = getStoredLeads();
       setLeads([...refreshed]);
     };
-
     window.addEventListener("storage", handleSync);
-    const interval = setInterval(handleSync, 2500);
+
+    // 4. Polling cloud database every 10 seconds for real-time mobile submissions
+    const cloudInterval = setInterval(() => {
+      if (typeof document !== "undefined" && document.visibilityState === "visible") {
+        syncLeadsWithCloud()
+          .then((synced) => {
+            setLeads([...synced]);
+          })
+          .catch(() => {});
+      }
+    }, 10000);
 
     return () => {
       window.removeEventListener("storage", handleSync);
-      clearInterval(interval);
+      clearInterval(cloudInterval);
     };
   }, []);
 
-  const refreshLeads = () => {
-    const stored = getStoredLeads();
-    setLeads([...stored]);
-    if (selectedLead) {
-      const refreshedSelected = stored.find((l) => l.id === selectedLead.id) || null;
-      setSelectedLead(refreshedSelected);
+  const refreshLeads = async () => {
+    // Sync with cloud on manual refresh click
+    try {
+      const synced = await syncLeadsWithCloud();
+      setLeads([...synced]);
+      if (selectedLead) {
+        const refreshedSelected = synced.find((l) => l.id === selectedLead.id) || null;
+        setSelectedLead(refreshedSelected);
+      }
+    } catch {
+      const stored = getStoredLeads();
+      setLeads([...stored]);
+    }
+  };
+
+  const handleDeleteLead = (leadId: string) => {
+    const updated = deleteLead(leadId);
+    setLeads([...updated]);
+    if (selectedLead && (selectedLead.id === leadId || selectedLead.referenceCode === leadId)) {
+      setSelectedLead(null);
+    }
+  };
+
+  const handleClearAllLeads = () => {
+    if (confirm("Are you sure you want to clear all enquiries? This will clear local cache and update cloud storage.")) {
+      const updated = clearAllLeads();
+      setLeads([...updated]);
+      setSelectedLead(null);
     }
   };
 
@@ -149,6 +193,7 @@ export default function AdminDashboardPage() {
     const updated = [newLead, ...leads];
     saveLeads(updated);
     setLeads(updated);
+    pushCloudLeads(updated).catch(console.error);
   };
 
   const handleGenerateProposal = (lead: CRMLead) => {
@@ -221,6 +266,8 @@ export default function AdminDashboardPage() {
                 onOpenDossier={(lead) => setSelectedLead(lead)}
                 onUpdateStatus={handleUpdateStatus}
                 onAddManualLead={handleAddManualLead}
+                onDeleteLead={handleDeleteLead}
+                onClearAllLeads={handleClearAllLeads}
                 activeRole={activeRole}
               />
             )}
