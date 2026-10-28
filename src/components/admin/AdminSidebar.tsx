@@ -104,7 +104,7 @@ export default function AdminSidebar({
   const enterpriseItems = [
     {
       id: "vendors" as AdminTab,
-      label: "Palace & Vendor Ledger",
+      label: "Partner & Vendor Tie-Ups",
       icon: Building2,
     },
     {

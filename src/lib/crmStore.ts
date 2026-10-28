@@ -129,73 +129,89 @@ export const SEASONAL_INTEL: SeasonalIntel[] = [
 
 export const ACTIVE_TRAVELERS: ActiveTraveler[] = [];
 
-export const VENDOR_PAYOUTS: VendorPayout[] = [
-  {
-    id: "vend-1",
-    vendorName: "The Indian Hotels Company (IHCL)",
-    propertyOrService: "Taj Lake Palace & Umaid Bhawan Palace",
-    region: "Rajasthan",
-    category: "Palace Hotel",
-    totalBookingsINR: 3450000,
-    commissionRate: 15,
-    commissionEarnedINR: 517500,
-    paymentStatus: "Advance Paid",
-    nextDue: "Nov 02, 2026",
-    vipContact: "Manvendra Rathore (Head of Luxury Sales)",
-  },
-  {
-    id: "vend-2",
-    vendorName: "SUJÁN Luxury Camps",
-    propertyOrService: "SUJÁN JAWAI & SUJÁN Sher Bagh",
-    region: "Rajasthan & Central India",
-    category: "Wilderness Camp",
-    totalBookingsINR: 2850000,
-    commissionRate: 18,
-    commissionEarnedINR: 513000,
-    paymentStatus: "Paid in Full",
-    nextDue: "Nov 15, 2026",
-    vipContact: "Yuvraj Singh (Camp Director)",
-  },
-  {
-    id: "vend-3",
-    vendorName: "The Ultimate Travelling Camp (TUTC)",
-    propertyOrService: "TUTC Chamba Camp Thiksey",
-    region: "Ladakh",
-    category: "Wilderness Camp",
-    totalBookingsINR: 2100000,
-    commissionRate: 20,
-    commissionEarnedINR: 420000,
-    paymentStatus: "Paid in Full",
-    nextDue: "Completed",
-    vipContact: "Tashi Namgyal (Operations Lead)",
-  },
-  {
-    id: "vend-4",
-    vendorName: "Taj Wilderness Safari Lodges",
-    propertyOrService: "Taj Mahua Kothi & Taj Pashan Garh",
-    region: "Central India (Bandhavgarh & Panna)",
-    category: "Wilderness Camp",
-    totalBookingsINR: 1980000,
-    commissionRate: 15,
-    commissionEarnedINR: 297000,
-    paymentStatus: "Advance Paid",
-    nextDue: "Nov 20, 2026",
-    vipContact: "Deepak Sharma (Lead Naturalist Coordinator)",
-  },
-  {
-    id: "vend-5",
-    vendorName: "Club One Air / Private Aviation Charters",
-    propertyOrService: "Pilatus PC-12 & Falcon 2000 Turboprop Convoys",
-    region: "Pan-India",
-    category: "Private Aviation",
-    totalBookingsINR: 4500000,
-    commissionRate: 10,
-    commissionEarnedINR: 450000,
-    paymentStatus: "Advance Paid",
-    nextDue: "Nov 05, 2026",
-    vipContact: "Captain Sandhu (VIP Charter Operations)",
-  },
-];
+export const VENDOR_PAYOUTS: VendorPayout[] = [];
+
+// ==========================================
+// PARTNER TIE-UPS (Hotels, Vehicles, Tour Guides)
+// ==========================================
+
+export type PartnerTieUpCategory =
+  | "Hotels & Stays"
+  | "Vehicles & Transport"
+  | "Tour Guides & Escorts"
+  | "Activities & Aviation";
+
+export interface PartnerTieUp {
+  id: string;
+  name: string;
+  category: PartnerTieUpCategory;
+  serviceOrAssets: string; // e.g. "Luxury Palace Suites", "Innova Crysta & Mercedes Fleet", "Licensed ASI Senior Historian"
+  region: string;          // e.g. "Rajasthan (Jaipur / Udaipur)", "Ladakh", "Uttarakhand"
+  contactPerson: string;
+  phone: string;
+  email?: string;
+  commissionOrMargin: string; // e.g. "15% on direct booking" or "Net B2B Rate"
+  negotiatedTariff: string;   // e.g. "₹4,500/day driver & fuel", "₹18,000/night MAP"
+  status: "Active Tie-Up" | "Under Review" | "Seasonal Hold";
+  paymentTerms: string;   // e.g. "Pay after trip completion", "50% advance"
+  notes?: string;
+  createdAt: string;
+}
+
+export const INITIAL_PARTNERS: PartnerTieUp[] = [];
+
+const PARTNERS_STORAGE_KEY = "soulsventure_partner_tieups_v1";
+
+export function getStoredPartners(): PartnerTieUp[] {
+  if (typeof window === "undefined") return INITIAL_PARTNERS;
+  try {
+    const raw = localStorage.getItem(PARTNERS_STORAGE_KEY);
+    if (!raw) {
+      localStorage.setItem(PARTNERS_STORAGE_KEY, JSON.stringify(INITIAL_PARTNERS));
+      return INITIAL_PARTNERS;
+    }
+    const parsed = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed : INITIAL_PARTNERS;
+  } catch (e) {
+    console.error("Failed to parse partners from localStorage:", e);
+    return INITIAL_PARTNERS;
+  }
+}
+
+export function savePartners(partners: PartnerTieUp[]): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(PARTNERS_STORAGE_KEY, JSON.stringify(partners));
+  } catch (e) {
+    console.error("Failed to save partners:", e);
+  }
+}
+
+export function addPartnerTieUp(partnerData: Omit<PartnerTieUp, "id" | "createdAt">): PartnerTieUp {
+  const existing = getStoredPartners();
+  const newPartner: PartnerTieUp = {
+    ...partnerData,
+    id: `partner-${Date.now()}`,
+    createdAt: new Date().toISOString(),
+  };
+  const updated = [newPartner, ...existing];
+  savePartners(updated);
+  return newPartner;
+}
+
+export function deletePartnerTieUp(partnerId: string): PartnerTieUp[] {
+  const existing = getStoredPartners();
+  const updated = existing.filter((p) => p.id !== partnerId);
+  savePartners(updated);
+  return updated;
+}
+
+export function updatePartnerTieUp(partnerId: string, updates: Partial<PartnerTieUp>): PartnerTieUp[] {
+  const existing = getStoredPartners();
+  const updated = existing.map((p) => (p.id === partnerId ? { ...p, ...updates } : p));
+  savePartners(updated);
+  return updated;
+}
 
 const LOCAL_STORAGE_KEY = "soulsventure_crm_leads_v3";
 
