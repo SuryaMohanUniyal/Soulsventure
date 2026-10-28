@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import {
   Users,
   Calendar,
@@ -17,6 +17,7 @@ import {
   KeyRound,
   Lock,
   X,
+  ChevronDown,
 } from "lucide-react";
 
 import { TeamRole, RolePermissions } from "@/lib/crmStore";
@@ -158,6 +159,55 @@ export default function AdminSidebar({
     },
   ];
 
+  const categories = [
+    {
+      id: "operations",
+      label: "Core Operations",
+      items: operationsItems,
+    },
+    {
+      id: "intelligence",
+      label: "VIP Intelligence & Assets",
+      items: intelligenceItems,
+    },
+    {
+      id: "enterprise",
+      label: "Finance & Governance",
+      items: enterpriseItems,
+    },
+  ];
+
+  const isTabInCat = (catId: string, tab: AdminTab) => {
+    if (catId === "operations") return ["crm", "calendar", "pipeline", "live"].includes(tab);
+    if (catId === "intelligence") return ["radar", "flight-weather", "moodboards", "scrapbooks"].includes(tab);
+    if (catId === "enterprise") return ["vendors", "analytics", "permissions"].includes(tab);
+    return false;
+  };
+
+  // State to track which categories are open
+  // Opens the category that holds the currently active tab by default
+  const [openCategories, setOpenCategories] = useState<Record<string, boolean>>(() => ({
+    operations: ["crm", "calendar", "pipeline", "live"].includes(currentTab),
+    intelligence: ["radar", "flight-weather", "moodboards", "scrapbooks"].includes(currentTab),
+    enterprise: ["vendors", "analytics", "permissions"].includes(currentTab),
+  }));
+
+  // Auto-expand the category when currentTab changes
+  useEffect(() => {
+    categories.forEach((cat) => {
+      if (isTabInCat(cat.id, currentTab)) {
+        setOpenCategories((prev) => ({ ...prev, [cat.id]: true }));
+      }
+    });
+  }, [currentTab]);
+
+  const toggleCategory = (catId: string) => {
+    setOpenCategories((prev) => ({
+      ...prev,
+      [catId]: !prev[catId],
+    }));
+  };
+
   const renderNavButton = (item: {
     id: AdminTab;
     label: string;
@@ -231,40 +281,66 @@ export default function AdminSidebar({
 
   const navContent = (
     <div className="flex flex-col justify-between h-full space-y-6">
-      {/* Top Nav Items */}
-      <div className="space-y-6">
-        {/* Core Operations */}
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#71717A] px-3 font-semibold block mb-2">
-            Core Operations
-          </span>
-          <nav className="space-y-1">
-            {operationsItems.map(renderNavButton)}
-          </nav>
-        </div>
+      {/* Top Nav Items with Collapsible / Accordion Categories */}
+      <div className="space-y-3">
+        {categories.map((cat) => {
+          const isOpen = !!openCategories[cat.id];
+          const hasActiveTab = cat.items.some((item) => item.id === currentTab);
 
-        {/* Intelligence & VIP Tools */}
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#71717A] px-3 font-semibold block mb-2">
-            VIP Intelligence & Assets
-          </span>
-          <nav className="space-y-1">
-            {intelligenceItems.map(renderNavButton)}
-          </nav>
-        </div>
+          return (
+            <div key={cat.id} className="rounded-xl overflow-hidden transition-all">
+              {/* Main Category Header (Click to Expand / Scroll Down) */}
+              <button
+                type="button"
+                onClick={() => toggleCategory(cat.id)}
+                className={`w-full flex items-center justify-between px-3 py-2.5 rounded-lg text-left transition-all cursor-pointer group ${
+                  hasActiveTab
+                    ? "bg-[#1E1E1E] border border-[#2E2E2E] text-[#FDFBF7]"
+                    : "hover:bg-[#1A1A1A] text-[#8E8E93] hover:text-[#FDFBF7] border border-transparent"
+                }`}
+                title={`Click to ${isOpen ? "collapse" : "expand"} ${cat.label}`}
+              >
+                <div className="flex items-center gap-2 min-w-0">
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full flex-shrink-0 transition-colors ${
+                      hasActiveTab ? "bg-[#C5A059] shadow-sm shadow-[#C5A059]" : "bg-[#333333] group-hover:bg-[#555555]"
+                    }`}
+                  />
+                  <span className="text-[10px] uppercase tracking-[0.22em] font-semibold truncate">
+                    {cat.label}
+                  </span>
+                </div>
 
-        {/* Enterprise & Governance */}
-        <div>
-          <span className="text-[10px] uppercase tracking-[0.25em] text-[#71717A] px-3 font-semibold block mb-2">
-            Finance & Governance
-          </span>
-          <nav className="space-y-1">
-            {enterpriseItems.map(renderNavButton)}
-          </nav>
-        </div>
+                <div className="flex items-center gap-2 flex-shrink-0">
+                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-[#222222] text-[#71717A] group-hover:text-[#A1A1AA]">
+                    {cat.items.length}
+                  </span>
+                  <ChevronDown
+                    className={`w-3.5 h-3.5 transition-transform duration-300 ease-in-out ${
+                      isOpen ? "rotate-180 text-[#C5A059]" : "rotate-0 text-[#71717A]"
+                    }`}
+                  />
+                </div>
+              </button>
+
+              {/* Sub-categories (Smooth Animated Slide Down) */}
+              <div
+                className={`transition-all duration-300 ease-in-out overflow-hidden ${
+                  isOpen
+                    ? "max-h-96 opacity-100 pt-1.5 pb-1"
+                    : "max-h-0 opacity-0 pointer-events-none"
+                }`}
+              >
+                <nav className="space-y-1 pl-2.5 border-l border-[#262626] ml-3.5">
+                  {cat.items.map(renderNavButton)}
+                </nav>
+              </div>
+            </div>
+          );
+        })}
 
         {/* Founders Direct Box */}
-        <div className="p-3 bg-[#1A1A1A] rounded-lg border border-[#262626] space-y-1.5">
+        <div className="p-3 bg-[#1A1A1A] rounded-lg border border-[#262626] space-y-1.5 mt-2">
           <div className="flex items-center gap-1.5 text-xs font-medium text-[#C5A059]">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Founders Direct Line</span>
