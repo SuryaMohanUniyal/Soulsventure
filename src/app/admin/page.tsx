@@ -213,8 +213,7 @@ export default function AdminDashboardPage() {
   const handleDeleteLead = (leadId: string) => {
     const updated = deleteLead(leadId);
     setLeads(updated);
-    pushCloudLeads(updated).catch(console.error);
-    if (selectedLead && selectedLead.id === leadId) {
+    if (selectedLead && (selectedLead.id === leadId || selectedLead.referenceCode === leadId)) {
       setSelectedLead(null);
     }
   };
@@ -222,7 +221,6 @@ export default function AdminDashboardPage() {
   const handleClearAllLeads = () => {
     const updated = clearAllLeads();
     setLeads(updated);
-    pushCloudLeads(updated).catch(console.error);
     setSelectedLead(null);
   };
 

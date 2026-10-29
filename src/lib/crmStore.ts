@@ -354,6 +354,42 @@ const GITHUB_REPO_NAME = "Soulsventure";
 const GITHUB_FILE_PATH = "data/leads.json";
 const GITHUB_TEAM_FILE_PATH = "data/team.json";
 
+const DELETED_LEADS_STORAGE_KEY = "soulsventure_deleted_lead_ids_v1";
+
+export function getDeletedLeadIds(): Set<string> {
+  if (typeof window === "undefined") return new Set();
+  try {
+    const raw = localStorage.getItem(DELETED_LEADS_STORAGE_KEY);
+    if (!raw) return new Set();
+    const parsed = JSON.parse(raw);
+    return new Set(Array.isArray(parsed) ? parsed : []);
+  } catch {
+    return new Set();
+  }
+}
+
+export function recordDeletedLead(idOrRef: string): void {
+  if (typeof window === "undefined" || !idOrRef) return;
+  try {
+    const set = getDeletedLeadIds();
+    set.add(idOrRef);
+    localStorage.setItem(DELETED_LEADS_STORAGE_KEY, JSON.stringify(Array.from(set)));
+  } catch (e) {
+    console.error("Failed to record deleted lead tombstone:", e);
+  }
+}
+
+export function clearDeletedLeadIds(): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(DELETED_LEADS_STORAGE_KEY);
+  } catch {}
+}
+
+let isCloudPushing = false;
+let pendingCloudPushLeads: CRMLead[] | null = null;
+
+
 function stringToBase64(str: string): string {
   if (typeof window !== "undefined") {
     return btoa(unescape(encodeURIComponent(str)));
@@ -369,6 +405,7 @@ function base64ToString(b64: string): string {
 }
 
 export async function fetchCloudLeads(): Promise<CRMLead[]> {
+  const deleted = getDeletedLeadIds();
   try {
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}?t=${Date.now()}`,
@@ -387,7 +424,8 @@ export async function fetchCloudLeads(): Promise<CRMLead[]> {
       );
       if (rawRes.ok) {
         const rawJson = await rawRes.json();
-        return Array.isArray(rawJson) ? rawJson : [];
+        const arr = Array.isArray(rawJson) ? rawJson : [];
+        return arr.filter((l: any) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
       }
       return [];
     }
@@ -395,7 +433,8 @@ export async function fetchCloudLeads(): Promise<CRMLead[]> {
     if (!data.content) return [];
     const decoded = base64ToString(data.content);
     const parsed = JSON.parse(decoded);
-    return Array.isArray(parsed) ? parsed : [];
+    const arr = Array.isArray(parsed) ? parsed : [];
+    return arr.filter((l: any) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
   } catch (err) {
     console.warn("Could not fetch cloud leads (using local cache):", err);
     return [];
@@ -403,6 +442,15 @@ export async function fetchCloudLeads(): Promise<CRMLead[]> {
 }
 
 export async function pushCloudLeads(leads: CRMLead[]): Promise<boolean> {
+  const deleted = getDeletedLeadIds();
+  const cleanLeads = leads.filter((l) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
+
+  if (isCloudPushing) {
+    pendingCloudPushLeads = cleanLeads;
+    return true;
+  }
+  isCloudPushing = true;
+
   try {
     const getRes = await fetch(
       `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}?t=${Date.now()}`,
@@ -420,7 +468,7 @@ export async function pushCloudLeads(leads: CRMLead[]): Promise<boolean> {
       sha = current.sha;
     }
 
-    const jsonStr = JSON.stringify(leads, null, 2);
+    const jsonStr = JSON.stringify(cleanLeads, null, 2);
     const base64Content = stringToBase64(jsonStr);
 
     const putRes = await fetch(
@@ -433,41 +481,45 @@ export async function pushCloudLeads(leads: CRMLead[]): Promise<boolean> {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          message: `Cloud CRM update (${leads.length} leads)`,
+          message: `Cloud CRM update (${cleanLeads.length} leads)`,
           content: base64Content,
           ...(sha ? { sha } : {}),
         }),
       }
     );
 
+    isCloudPushing = false;
+    if (pendingCloudPushLeads) {
+      const nextLeads = pendingCloudPushLeads;
+      pendingCloudPushLeads = null;
+      return pushCloudLeads(nextLeads);
+    }
+
     return putRes.ok;
   } catch (err) {
+    isCloudPushing = false;
     console.error("Failed to push cloud leads:", err);
     return false;
   }
 }
 
 export async function syncLeadsWithCloud(): Promise<CRMLead[]> {
-  const localLeads = getStoredLeads();
-  const remoteLeads = await fetchCloudLeads();
+  const deleted = getDeletedLeadIds();
+  const localLeads = getStoredLeads().filter((l) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
+  const remoteLeads = (await fetchCloudLeads()).filter((l) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
 
   const leadMap = new Map<string, CRMLead>();
 
-  // Remote cloud leads first
+  // Remote cloud leads (only non-deleted)
   remoteLeads.forEach((l) => {
     const key = l.referenceCode || l.id;
     leadMap.set(key, l);
   });
 
-  // Local leads merge
+  // Local leads merge & take precedence
   localLeads.forEach((l) => {
     const key = l.referenceCode || l.id;
-    if (!leadMap.has(key)) {
-      leadMap.set(key, l);
-    } else {
-      // Local changes take precedence
-      leadMap.set(key, l);
-    }
+    leadMap.set(key, l);
   });
 
   const merged = Array.from(leadMap.values()).sort(
@@ -476,7 +528,7 @@ export async function syncLeadsWithCloud(): Promise<CRMLead[]> {
 
   saveLeads(merged);
 
-  // If local had leads that cloud didn't have, push up to cloud
+  // If cloud had deleted items or count differs, push cleaned set
   if (merged.length !== remoteLeads.length) {
     pushCloudLeads(merged).catch(() => {});
   }
@@ -489,13 +541,14 @@ export function getStoredLeads(): CRMLead[] {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
     if (!raw) {
-      // Clear legacy storage keys if present
       localStorage.removeItem("soulsventure_crm_leads_v2");
       localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([]));
       return [];
     }
     const parsed = JSON.parse(raw);
-    return Array.isArray(parsed) ? parsed : [];
+    const arr = Array.isArray(parsed) ? parsed : [];
+    const deleted = getDeletedLeadIds();
+    return arr.filter((l: any) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
   } catch (e) {
     console.error("Failed to parse CRM leads from localStorage:", e);
     return [];
@@ -651,15 +704,74 @@ export function isLeadDepositConfirmed(lead?: CRMLead | null, client?: ClientAcc
 
 export function deleteLead(leadId: string): CRMLead[] {
   const existing = getStoredLeads();
+  const toDelete = existing.find((l) => l.id === leadId || l.referenceCode === leadId);
+  if (toDelete) {
+    recordDeletedLead(toDelete.id);
+    if (toDelete.referenceCode) recordDeletedLead(toDelete.referenceCode);
+  } else {
+    recordDeletedLead(leadId);
+  }
+
   const updated = existing.filter((lead) => lead.id !== leadId && lead.referenceCode !== leadId);
   saveLeads(updated);
   pushCloudLeads(updated).catch(() => {});
+
+  // Clean up any client account actively referencing this deleted enquiry
+  try {
+    const clientAccounts = getStoredClientAccounts();
+    let accountsUpdated = false;
+    clientAccounts.forEach((c) => {
+      if (c.activeTripRef === leadId || (toDelete && c.activeTripRef === toDelete.referenceCode)) {
+        c.activeTripRef = "NEW-MEMBER";
+        accountsUpdated = true;
+      }
+    });
+    if (accountsUpdated) {
+      saveClientAccounts(clientAccounts);
+      const curSession = getClientAuthSession();
+      if (curSession && (curSession.activeTripRef === leadId || (toDelete && curSession.activeTripRef === toDelete.referenceCode))) {
+        curSession.activeTripRef = "NEW-MEMBER";
+        saveClientAuthSession(curSession);
+      }
+    }
+  } catch (err) {
+    console.warn("Client account cleanup on delete deferred:", err);
+  }
+
   return updated;
 }
 
 export function clearAllLeads(): CRMLead[] {
+  const existing = getStoredLeads();
+  existing.forEach((l) => {
+    recordDeletedLead(l.id);
+    if (l.referenceCode) recordDeletedLead(l.referenceCode);
+  });
+
   saveLeads([]);
   pushCloudLeads([]).catch(() => {});
+
+  try {
+    const clientAccounts = getStoredClientAccounts();
+    let accountsUpdated = false;
+    clientAccounts.forEach((c) => {
+      if (c.activeTripRef && c.activeTripRef.startsWith("SV-")) {
+        c.activeTripRef = "NEW-MEMBER";
+        accountsUpdated = true;
+      }
+    });
+    if (accountsUpdated) {
+      saveClientAccounts(clientAccounts);
+      const curSession = getClientAuthSession();
+      if (curSession && curSession.activeTripRef && curSession.activeTripRef.startsWith("SV-")) {
+        curSession.activeTripRef = "NEW-MEMBER";
+        saveClientAuthSession(curSession);
+      }
+    }
+  } catch (err) {
+    console.warn("Client account cleanup on clear all deferred:", err);
+  }
+
   return [];
 }
 
