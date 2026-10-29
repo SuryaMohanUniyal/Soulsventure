@@ -13,12 +13,13 @@ export default function Footer() {
   const [subscribed, setSubscribed] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  // Completely hide public website footer on Admin OS portal and private client portals
+  // Completely hide public website footer on Admin OS portal, private client portals and vendor portals
   if (
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/moodboard") ||
     pathname?.startsWith("/scrapbook") ||
-    pathname?.startsWith("/client")
+    pathname?.startsWith("/client") ||
+    pathname?.startsWith("/vendor")
   ) {
     return null;
   }
@@ -200,6 +201,11 @@ export default function Footer() {
               <li>
                 <Link href="/client/register" className="hover:text-white transition-colors text-white/70">
                   New Client Registration
+                </Link>
+              </li>
+              <li>
+                <Link href="/vendor/login" className="hover:text-[#C5A880] transition-colors text-white/60 font-mono text-[11px] flex items-center gap-1">
+                  <span>B2B Partner Portal</span>
                 </Link>
               </li>
             </ul>

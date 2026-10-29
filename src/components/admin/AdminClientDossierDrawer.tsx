@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   X,
   Phone,
@@ -26,6 +26,12 @@ import {
   Hotel,
   Utensils,
   Heart,
+  Building2,
+  Compass,
+  Share2,
+  Check,
+  AlertCircle,
+  KeyRound,
 } from "lucide-react";
 import {
   CRMLead,
@@ -35,6 +41,11 @@ import {
   VoiceCallTranscript,
   getStoredLeads,
   saveLeads,
+  PartnerTieUp,
+  VendorRole,
+  VendorBookingAssignment,
+  getStoredPartners,
+  updateLeadVendorAssignment,
 } from "@/lib/crmStore";
 
 interface AdminClientDossierDrawerProps {
@@ -74,10 +85,111 @@ export default function AdminClientDossierDrawer({
     }
   );
 
+  // Vendor Dispatch Matrix State
+  const [allPartners, setAllPartners] = useState<PartnerTieUp[]>([]);
+  const [regionFilter, setRegionFilter] = useState<string>("all");
+  const [hotelPartnerId, setHotelPartnerId] = useState<string>(
+    lead.vendorAssignments?.hotel?.partnerId || ""
+  );
+  const [hotelStatus, setHotelStatus] = useState<string>(
+    lead.vendorAssignments?.hotel?.status || "Pending Confirmation"
+  );
+  const [hotelNotes, setHotelNotes] = useState<string>(
+    lead.vendorAssignments?.hotel?.notes || ""
+  );
+
+  const [driverPartnerId, setDriverPartnerId] = useState<string>(
+    lead.vendorAssignments?.driver?.partnerId || ""
+  );
+  const [driverStatus, setDriverStatus] = useState<string>(
+    lead.vendorAssignments?.driver?.status || "Pending Dispatch"
+  );
+  const [driverNotes, setDriverNotes] = useState<string>(
+    lead.vendorAssignments?.driver?.notes || ""
+  );
+
+  const [guidePartnerId, setGuidePartnerId] = useState<string>(
+    lead.vendorAssignments?.guide?.partnerId || ""
+  );
+  const [guideStatus, setGuideStatus] = useState<string>(
+    lead.vendorAssignments?.guide?.status || "Pending Assignment"
+  );
+  const [guideNotes, setGuideNotes] = useState<string>(
+    lead.vendorAssignments?.guide?.notes || ""
+  );
+
+  const [dispatchSavedToast, setDispatchSavedToast] = useState("");
+
+  useEffect(() => {
+    const partners = getStoredPartners();
+    setAllPartners(partners);
+
+    if (lead.vendorAssignments) {
+      if (lead.vendorAssignments.hotel) {
+        setHotelPartnerId(lead.vendorAssignments.hotel.partnerId || "");
+        setHotelStatus(lead.vendorAssignments.hotel.status || "Pending Confirmation");
+        setHotelNotes(lead.vendorAssignments.hotel.notes || "");
+      }
+      if (lead.vendorAssignments.driver) {
+        setDriverPartnerId(lead.vendorAssignments.driver.partnerId || "");
+        setDriverStatus(lead.vendorAssignments.driver.status || "Pending Dispatch");
+        setDriverNotes(lead.vendorAssignments.driver.notes || "");
+      }
+      if (lead.vendorAssignments.guide) {
+        setGuidePartnerId(lead.vendorAssignments.guide.partnerId || "");
+        setGuideStatus(lead.vendorAssignments.guide.status || "Pending Assignment");
+        setGuideNotes(lead.vendorAssignments.guide.notes || "");
+      }
+    }
+  }, [lead]);
+
   const handleSaveNotes = () => {
     onUpdateNotes(lead.id, notes);
     setIsSavedAlert(true);
     setTimeout(() => setIsSavedAlert(false), 2000);
+  };
+
+  // Dispatch individual or all vendor roles
+  const handleSaveVendorAssignments = () => {
+    const selectedHotel = allPartners.find((p) => p.id === hotelPartnerId);
+    const selectedDriver = allPartners.find((p) => p.id === driverPartnerId);
+    const selectedGuide = allPartners.find((p) => p.id === guidePartnerId);
+
+    if (selectedHotel) {
+      updateLeadVendorAssignment(lead.id, "hotel", {
+        partnerId: selectedHotel.id,
+        partnerName: selectedHotel.name,
+        role: "hotel",
+        status: hotelStatus,
+        notes: hotelNotes,
+        assignedAt: new Date().toISOString(),
+      });
+    }
+
+    if (selectedDriver) {
+      updateLeadVendorAssignment(lead.id, "driver", {
+        partnerId: selectedDriver.id,
+        partnerName: selectedDriver.name,
+        role: "driver",
+        status: driverStatus,
+        notes: driverNotes,
+        assignedAt: new Date().toISOString(),
+      });
+    }
+
+    if (selectedGuide) {
+      updateLeadVendorAssignment(lead.id, "guide", {
+        partnerId: selectedGuide.id,
+        partnerName: selectedGuide.name,
+        role: "guide",
+        status: guideStatus,
+        notes: guideNotes,
+        assignedAt: new Date().toISOString(),
+      });
+    }
+
+    setDispatchSavedToast("Vendor allocations saved! Live sync updated for Vendor Portals.");
+    setTimeout(() => setDispatchSavedToast(""), 4000);
   };
 
   // Simulate AI Voice Call & Transcription Sync
@@ -120,6 +232,22 @@ export default function AdminClientDossierDrawer({
       setTimeout(() => setVoiceCallAlert(""), 5000);
     }, 1200);
   };
+
+  // Filter partners by role and region
+  const availableRegions = Array.from(new Set(allPartners.map((p) => p.region))).filter(Boolean);
+
+  const hotelOptions = allPartners.filter(
+    (p) => (p.role === "hotel" || p.category === "Hotels & Stays") &&
+           (regionFilter === "all" || p.region.toLowerCase().includes(regionFilter.toLowerCase()))
+  );
+  const driverOptions = allPartners.filter(
+    (p) => (p.role === "driver" || p.category === "Vehicles & Transport") &&
+           (regionFilter === "all" || p.region.toLowerCase().includes(regionFilter.toLowerCase()))
+  );
+  const guideOptions = allPartners.filter(
+    (p) => (p.role === "guide" || p.category === "Tour Guides & Escorts") &&
+           (regionFilter === "all" || p.region.toLowerCase().includes(regionFilter.toLowerCase()))
+  );
 
   const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
   const whatsappGreeting = `Greetings ${lead.firstName},
@@ -178,6 +306,13 @@ concierge@soulsventure.com • Dehradun, Uttarakhand`;
             <div className="p-3 bg-emerald-950/70 border border-emerald-800 text-emerald-300 rounded-xl text-xs flex items-center gap-2 animate-in fade-in">
               <Sparkles className="w-4 h-4 flex-shrink-0 text-[#C5A059]" />
               <span>{voiceCallAlert}</span>
+            </div>
+          )}
+
+          {dispatchSavedToast && (
+            <div className="p-3 bg-emerald-950/80 border border-emerald-800 text-emerald-200 rounded-xl text-xs flex items-center gap-2 animate-in fade-in">
+              <CheckCircle2 className="w-4 h-4 flex-shrink-0 text-emerald-400" />
+              <span>{dispatchSavedToast}</span>
             </div>
           )}
 
@@ -290,6 +425,320 @@ concierge@soulsventure.com • Dehradun, Uttarakhand`;
                   </div>
                 </div>
               </div>
+            </div>
+          </div>
+
+          {/* VENDOR DISPATCH & ALLOCATION MATRIX */}
+          <div className="p-4 bg-gradient-to-br from-[#1C1C1C] to-[#151515] rounded-xl border border-[#3A3A3A] space-y-4 shadow-xl">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-[#2A2A2A] pb-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+                  <h4 className="text-xs uppercase font-serif tracking-wider text-[#C5A059] font-semibold">
+                    Vendor Dispatch & Allocation Matrix
+                  </h4>
+                </div>
+                <p className="text-[10px] text-[#888888] mt-0.5">
+                  Route this booking to specific hotel partners, chauffeurs, and tour guides. Live 2-way sync with Vendor Portal.
+                </p>
+              </div>
+
+              {/* Region Filter Dropdown */}
+              <div className="flex items-center gap-1.5">
+                <span className="text-[10px] font-mono text-[#71717A]">Region:</span>
+                <select
+                  value={regionFilter}
+                  onChange={(e) => setRegionFilter(e.target.value)}
+                  className="bg-[#111111] border border-[#333333] rounded px-2 py-1 text-[11px] text-[#FDFBF7] font-mono focus:outline-none focus:border-[#C5A059]"
+                >
+                  <option value="all">All Operating Regions</option>
+                  <option value="Rajasthan">Rajasthan (Jaipur / Udaipur)</option>
+                  <option value="Ladakh">Ladakh (Leh / Nubra)</option>
+                  <option value="Uttarakhand">Uttarakhand / Himalayas</option>
+                  {availableRegions.map((reg) => (
+                    <option key={reg} value={reg}>{reg}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+
+            {/* 1. Hotel Partner Allocation */}
+            <div className="p-3 rounded-lg bg-[#111111] border border-[#2B2B2B] space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Hotel className="w-4 h-4 text-[#C5A059]" />
+                  <span className="font-semibold text-xs text-[#FDFBF7]">1. Hotel / Resort Partner</span>
+                </div>
+                <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-semibold uppercase ${
+                  hotelStatus === "Accepted" || hotelStatus === "Room Suite Reserved" || hotelStatus === "VIP Welcome Ready"
+                    ? "bg-emerald-950/80 text-emerald-300 border border-emerald-800/40"
+                    : "bg-amber-950/80 text-amber-300 border border-amber-800/40"
+                }`}>
+                  {hotelStatus}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[9px] text-[#71717A] uppercase font-mono block mb-0.5">Assigned Partner Property</label>
+                  <select
+                    value={hotelPartnerId}
+                    onChange={(e) => setHotelPartnerId(e.target.value)}
+                    className="w-full bg-[#181818] border border-[#333333] rounded p-1.5 text-xs text-[#FDFBF7] focus:outline-none focus:border-[#C5A059]"
+                  >
+                    <option value="">-- Select Contracted Hotel --</option>
+                    {hotelOptions.map((h) => (
+                      <option key={h.id} value={h.id}>
+                        {h.name} ({h.region})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[9px] text-[#71717A] uppercase font-mono block mb-0.5">Hotel Confirmation Status</label>
+                  <select
+                    value={hotelStatus}
+                    onChange={(e) => setHotelStatus(e.target.value)}
+                    className="w-full bg-[#181818] border border-[#333333] rounded p-1.5 text-xs text-[#FDFBF7] focus:outline-none focus:border-[#C5A059]"
+                  >
+                    <option value="Pending Confirmation">Pending Confirmation</option>
+                    <option value="Accepted">Accepted by GM / Reservations</option>
+                    <option value="Room Suite Reserved">Room Suite Reserved</option>
+                    <option value="VIP Welcome Ready">VIP Welcome Ready (Flowers & Champagne)</option>
+                    <option value="Checked-In">Guest Checked-In</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  placeholder="Hotel notes (e.g. Kohinoor Suite, late checkout, pure vegetarian meals)"
+                  value={hotelNotes}
+                  onChange={(e) => setHotelNotes(e.target.value)}
+                  className="w-full bg-[#181818] border border-[#2B2B2B] rounded p-1.5 text-[11px] text-[#D4D4D8] focus:outline-none focus:border-[#C5A059]"
+                />
+              </div>
+
+              {hotelPartnerId && (
+                <div className="pt-1 flex items-center justify-between text-[10px]">
+                  {(() => {
+                    const partner = allPartners.find((p) => p.id === hotelPartnerId);
+                    if (!partner) return null;
+                    const loginPhone = partner.loginPhone || partner.phone.replace(/\D/g, "");
+                    const text = encodeURIComponent(
+                      `Namaste ${partner.name},\n\nSoulsVenture Booking Dispatch:\nGuest: ${lead.clientName} (${lead.referenceCode})\nDuration: ${lead.duration}\nDiet: Pure Vegetarian\nStatus: ${hotelStatus}\nNotes: ${hotelNotes || "VIP protocol"}\n\nReview & manage in your Vendor Portal: https://soulsventure.com/vendor/login\nLogin ID: ${loginPhone} | PIN: ${partner.password || "1234"}`
+                    );
+                    return (
+                      <>
+                        <span className="text-[#888888] font-mono">
+                          Partner: <strong className="text-[#FDFBF7]">{partner.name}</strong> ({partner.phone})
+                        </span>
+                        <a
+                          href={`https://wa.me/${partner.phone.replace(/[^0-9]/g, "")}?text=${text}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/40 text-[10px] font-mono"
+                        >
+                          <MessageCircle className="w-3 h-3" />
+                          <span>Dispatch via WhatsApp</span>
+                        </a>
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+
+            {/* 2. Driver / Fleet Allocation */}
+            <div className="p-3 rounded-lg bg-[#111111] border border-[#2B2B2B] space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Car className="w-4 h-4 text-sky-400" />
+                  <span className="font-semibold text-xs text-[#FDFBF7]">2. Chauffeur & Luxury Fleet</span>
+                </div>
+                <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-semibold uppercase ${
+                  driverStatus === "Accepted" || driverStatus === "Vehicle Prepped & Fueled" || driverStatus === "At Airport Pickup Gate"
+                    ? "bg-sky-950/80 text-sky-300 border border-sky-800/40"
+                    : "bg-amber-950/80 text-amber-300 border border-amber-800/40"
+                }`}>
+                  {driverStatus}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[9px] text-[#71717A] uppercase font-mono block mb-0.5">Assigned Chauffeur / Fleet</label>
+                  <select
+                    value={driverPartnerId}
+                    onChange={(e) => setDriverPartnerId(e.target.value)}
+                    className="w-full bg-[#181818] border border-[#333333] rounded p-1.5 text-xs text-[#FDFBF7] focus:outline-none focus:border-sky-400"
+                  >
+                    <option value="">-- Select Chauffeur / Fleet --</option>
+                    {driverOptions.map((d) => (
+                      <option key={d.id} value={d.id}>
+                        {d.name} - {d.serviceOrAssets} ({d.region})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[9px] text-[#71717A] uppercase font-mono block mb-0.5">Dispatch Status</label>
+                  <select
+                    value={driverStatus}
+                    onChange={(e) => setDriverStatus(e.target.value)}
+                    className="w-full bg-[#181818] border border-[#333333] rounded p-1.5 text-xs text-[#FDFBF7] focus:outline-none focus:border-sky-400"
+                  >
+                    <option value="Pending Dispatch">Pending Dispatch</option>
+                    <option value="Accepted">Accepted by Chauffeur</option>
+                    <option value="Vehicle Prepped & Fueled">Vehicle Prepped & Cleaned</option>
+                    <option value="At Airport Pickup Gate">At Airport Pickup Gate</option>
+                    <option value="Transfer Completed">Transfer Completed</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  placeholder="Driver notes (e.g. Flight 6E-205 arrival 13:45, child car seat required)"
+                  value={driverNotes}
+                  onChange={(e) => setDriverNotes(e.target.value)}
+                  className="w-full bg-[#181818] border border-[#2B2B2B] rounded p-1.5 text-[11px] text-[#D4D4D8] focus:outline-none focus:border-sky-400"
+                />
+              </div>
+
+              {driverPartnerId && (
+                <div className="pt-1 flex items-center justify-between text-[10px]">
+                  {(() => {
+                    const partner = allPartners.find((p) => p.id === driverPartnerId);
+                    if (!partner) return null;
+                    const loginPhone = partner.loginPhone || partner.phone.replace(/\D/g, "");
+                    const text = encodeURIComponent(
+                      `Namaste ${partner.name},\n\nSoulsVenture Driver Dispatch Order:\nGuest: ${lead.clientName} (${lead.referenceCode})\nVehicle: ${lead.assignedVehicle || "Luxury SUV"}\nStatus: ${driverStatus}\nInstructions: ${driverNotes || "Airport pickup with name placard"}\n\nManage in Vendor Portal: https://soulsventure.com/vendor/login\nLogin ID: ${loginPhone} | PIN: ${partner.password || "1234"}`
+                    );
+                    return (
+                      <>
+                        <span className="text-[#888888] font-mono">
+                          Driver: <strong className="text-[#FDFBF7]">{partner.name}</strong> ({partner.phone})
+                        </span>
+                        <a
+                          href={`https://wa.me/${partner.phone.replace(/[^0-9]/g, "")}?text=${text}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-sky-950 hover:bg-sky-900 text-sky-300 border border-sky-800/40 text-[10px] font-mono"
+                        >
+                          <MessageCircle className="w-3 h-3" />
+                          <span>Dispatch via WhatsApp</span>
+                        </a>
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+
+            {/* 3. Tour Guide Allocation */}
+            <div className="p-3 rounded-lg bg-[#111111] border border-[#2B2B2B] space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <Compass className="w-4 h-4 text-emerald-400" />
+                  <span className="font-semibold text-xs text-[#FDFBF7]">3. Licensed Tour Guide / Historian</span>
+                </div>
+                <span className={`px-2 py-0.5 rounded text-[9px] font-mono font-semibold uppercase ${
+                  guideStatus === "Accepted" || guideStatus === "Tour Briefing Complete" || guideStatus === "On-Ground With Guests"
+                    ? "bg-emerald-950/80 text-emerald-300 border border-emerald-800/40"
+                    : "bg-amber-950/80 text-amber-300 border border-amber-800/40"
+                }`}>
+                  {guideStatus}
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <div>
+                  <label className="text-[9px] text-[#71717A] uppercase font-mono block mb-0.5">Assigned Tour Guide</label>
+                  <select
+                    value={guidePartnerId}
+                    onChange={(e) => setGuidePartnerId(e.target.value)}
+                    className="w-full bg-[#181818] border border-[#333333] rounded p-1.5 text-xs text-[#FDFBF7] focus:outline-none focus:border-emerald-400"
+                  >
+                    <option value="">-- Select Licensed Guide --</option>
+                    {guideOptions.map((g) => (
+                      <option key={g.id} value={g.id}>
+                        {g.name} ({g.serviceOrAssets})
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="text-[9px] text-[#71717A] uppercase font-mono block mb-0.5">Guide Schedule Status</label>
+                  <select
+                    value={guideStatus}
+                    onChange={(e) => setGuideStatus(e.target.value)}
+                    className="w-full bg-[#181818] border border-[#333333] rounded p-1.5 text-xs text-[#FDFBF7] focus:outline-none focus:border-emerald-400"
+                  >
+                    <option value="Pending Assignment">Pending Assignment</option>
+                    <option value="Accepted">Accepted by Guide</option>
+                    <option value="Tour Briefing Complete">Tour Briefing Complete</option>
+                    <option value="On-Ground With Guests">On-Ground With Guests</option>
+                    <option value="Excursion Completed">Excursion Completed</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <input
+                  type="text"
+                  placeholder="Guide itinerary notes (e.g. City Palace after-hours private access, English commentary)"
+                  value={guideNotes}
+                  onChange={(e) => setGuideNotes(e.target.value)}
+                  className="w-full bg-[#181818] border border-[#2B2B2B] rounded p-1.5 text-[11px] text-[#D4D4D8] focus:outline-none focus:border-emerald-400"
+                />
+              </div>
+
+              {guidePartnerId && (
+                <div className="pt-1 flex items-center justify-between text-[10px]">
+                  {(() => {
+                    const partner = allPartners.find((p) => p.id === guidePartnerId);
+                    if (!partner) return null;
+                    const loginPhone = partner.loginPhone || partner.phone.replace(/\D/g, "");
+                    const text = encodeURIComponent(
+                      `Namaste ${partner.name},\n\nSoulsVenture Tour Guide Assignment:\nGuest: ${lead.clientName} (${lead.referenceCode})\nSites: ${lead.destinationSummary}\nStatus: ${guideStatus}\nNotes: ${guideNotes || "Private bespoke walkthrough"}\n\nAccess Schedule in Vendor Portal: https://soulsventure.com/vendor/login\nLogin ID: ${loginPhone} | PIN: ${partner.password || "1234"}`
+                    );
+                    return (
+                      <>
+                        <span className="text-[#888888] font-mono">
+                          Guide: <strong className="text-[#FDFBF7]">{partner.name}</strong> ({partner.phone})
+                        </span>
+                        <a
+                          href={`https://wa.me/${partner.phone.replace(/[^0-9]/g, "")}?text=${text}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-emerald-950 hover:bg-emerald-900 text-emerald-300 border border-emerald-800/40 text-[10px] font-mono"
+                        >
+                          <MessageCircle className="w-3 h-3" />
+                          <span>Dispatch via WhatsApp</span>
+                        </a>
+                      </>
+                    );
+                  })()}
+                </div>
+              )}
+            </div>
+
+            {/* Save Allocations Button */}
+            <div className="flex items-center justify-end pt-2 border-t border-[#2A2A2A]">
+              <button
+                type="button"
+                onClick={handleSaveVendorAssignments}
+                className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-[#C5A059] to-[#b08e48] hover:from-[#d8b368] hover:to-[#be9b52] text-black font-serif font-semibold text-xs rounded-lg transition-all shadow-md cursor-pointer"
+              >
+                <Check className="w-3.5 h-3.5" />
+                <span>Save Vendor Allocations & Sync Portals</span>
+              </button>
             </div>
           </div>
 

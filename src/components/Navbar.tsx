@@ -56,12 +56,13 @@ export default function Navbar() {
     "Islands",
   ];
 
-  // Completely hide public website header on Admin OS portal and private client portals
+  // Completely hide public website header on Admin OS portal, private client portals and vendor portals
   if (
     pathname?.startsWith("/admin") ||
     pathname?.startsWith("/moodboard") ||
     pathname?.startsWith("/scrapbook") ||
-    pathname?.startsWith("/client")
+    pathname?.startsWith("/client") ||
+    pathname?.startsWith("/vendor")
   ) {
     return null;
   }
@@ -358,6 +359,18 @@ export default function Navbar() {
                     className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs uppercase tracking-wider font-semibold transition-all text-center cursor-pointer"
                   >
                     <span>Register</span>
+                  </Link>
+                </div>
+
+                {/* B2B Partner Link */}
+                <div className="pt-1 flex items-center justify-between text-[11px] text-[#A1A1AA]">
+                  <span>Hotel, Chauffeur or Guide Partner?</span>
+                  <Link
+                    href="/vendor/login"
+                    onClick={() => setMenuDrawerOpen(false)}
+                    className="text-[#C5A880] hover:underline font-mono text-[10px] font-semibold"
+                  >
+                    B2B Vendor Portal →
                   </Link>
                 </div>
 

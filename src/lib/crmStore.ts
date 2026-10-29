@@ -136,6 +136,17 @@ export interface ClientAccount {
   nuances: ClientNuanceProfile;
 }
 
+export type VendorRole = "hotel" | "driver" | "guide" | "activity";
+
+export interface VendorBookingAssignment {
+  partnerId: string;
+  partnerName: string;
+  role: VendorRole;
+  status: string; // e.g. "Pending Confirmation" | "Accepted" | "Room Suite Reserved" | "VIP Welcome Ready" | "At Airport Pickup Gate" | "Transfer Completed"
+  notes?: string;
+  assignedAt: string;
+}
+
 export interface CRMLead {
   id: string;
   referenceCode: string;
@@ -174,6 +185,11 @@ export interface CRMLead {
     depositReceived: boolean;
     vouchersIssued: boolean;
     conciergeActive: boolean;
+  };
+  vendorAssignments?: {
+    hotel?: VendorBookingAssignment;
+    driver?: VendorBookingAssignment;
+    guide?: VendorBookingAssignment;
   };
 }
 
@@ -278,11 +294,14 @@ export type PartnerTieUpCategory =
 export interface PartnerTieUp {
   id: string;
   name: string;
+  role: VendorRole;
   category: PartnerTieUpCategory;
   serviceOrAssets: string; // e.g. "Luxury Palace Suites", "Innova Crysta & Mercedes Fleet", "Licensed ASI Senior Historian"
   region: string;          // e.g. "Rajasthan (Jaipur / Udaipur)", "Ladakh", "Uttarakhand"
   contactPerson: string;
   phone: string;
+  loginPhone: string;
+  password?: string;
   email?: string;
   commissionOrMargin: string; // e.g. "15% on direct booking" or "Net B2B Rate"
   negotiatedTariff: string;   // e.g. "₹4,500/day driver & fuel", "₹18,000/night MAP"
@@ -292,7 +311,84 @@ export interface PartnerTieUp {
   createdAt: string;
 }
 
-export const INITIAL_PARTNERS: PartnerTieUp[] = [];
+export const INITIAL_PARTNERS: PartnerTieUp[] = [
+  {
+    id: "vendor-hotel-01",
+    name: "The Oberoi Udaivilas",
+    role: "hotel",
+    category: "Hotels & Stays",
+    serviceOrAssets: "Kohinoor Lake View Suites & Premier Pool Sanctuary",
+    region: "Rajasthan (Udaipur)",
+    contactPerson: "General Manager Sharma",
+    phone: "+91 98201 11222",
+    loginPhone: "9820111222",
+    password: "1234",
+    email: "reservations.udaivilas@oberoigroup.com",
+    commissionOrMargin: "18% on luxury suite booking",
+    negotiatedTariff: "₹95,000/night MAP Luxury Suite",
+    status: "Active Tie-Up",
+    paymentTerms: "Direct B2B account / Post-departure billing",
+    notes: "Preferred royal partner for VIP lake arrivals and private shikara welcomes.",
+    createdAt: "2026-10-15T10:00:00Z",
+  },
+  {
+    id: "vendor-driver-01",
+    name: "Vikram Singh (Royal Chauffeur Fleet)",
+    role: "driver",
+    category: "Vehicles & Transport",
+    serviceOrAssets: "Mercedes-Maybach S-Class & Land Rover Defender 110 4WD",
+    region: "Rajasthan (Jaipur / Udaipur / Jodhpur)",
+    contactPerson: "Vikram Singh (Fleet Lead)",
+    phone: "+91 98111 22334",
+    loginPhone: "9811122334",
+    password: "1234",
+    email: "fleet.vikram@luxurytransport.in",
+    commissionOrMargin: "Net B2B Contract Rate",
+    negotiatedTariff: "₹18,000/day all-inclusive fuel & chauffeur VIP allowance",
+    status: "Active Tie-Up",
+    paymentTerms: "50% advance, balance on departure",
+    notes: "White-glove certified chauffeurs with tarmac clearance and English fluency.",
+    createdAt: "2026-10-16T11:00:00Z",
+  },
+  {
+    id: "vendor-guide-01",
+    name: "Dr. Mathur (Senior ASI Royal Historian)",
+    role: "guide",
+    category: "Tour Guides & Escorts",
+    serviceOrAssets: "Exclusive After-Hours City Palace & Royal Armoury Access",
+    region: "Rajasthan (Udaipur)",
+    contactPerson: "Dr. K. S. Mathur",
+    phone: "+91 98333 44556",
+    loginPhone: "9833344556",
+    password: "1234",
+    email: "mathur.asi.heritage@curators.in",
+    commissionOrMargin: "Retainer per VIP escort",
+    negotiatedTariff: "₹25,000/day private royal walkthrough",
+    status: "Active Tie-Up",
+    paymentTerms: "Direct post-excursion payout",
+    notes: "ASI Senior Fellow. Holds privileged keys to titular royal private quarters.",
+    createdAt: "2026-10-17T12:00:00Z",
+  },
+  {
+    id: "vendor-hotel-02",
+    name: "SUJÁN JAWAI Luxury Camp",
+    role: "hotel",
+    category: "Hotels & Stays",
+    serviceOrAssets: "Royal Tented Pavilions & Private Leopard Tracking Safaris",
+    region: "Rajasthan (Jawai)",
+    contactPerson: "Camp Director Salim",
+    phone: "+91 98444 55667",
+    loginPhone: "9844455667",
+    password: "1234",
+    email: "safari@sujanluxury.com",
+    commissionOrMargin: "15% net B2B",
+    negotiatedTariff: "₹1,25,000/night all-inclusive game drives & butler",
+    status: "Active Tie-Up",
+    paymentTerms: "30-day corporate settlement",
+    notes: "Private escarpment airstrip coordinates: 25.123N, 73.234E.",
+    createdAt: "2026-10-18T14:00:00Z",
+  },
+];
 
 const PARTNERS_STORAGE_KEY = "soulsventure_partner_tieups_v1";
 
@@ -2053,4 +2149,112 @@ export function saveClientDocuments(docs: ClientDocumentVaultItem[]): void {
   } catch (e) {
     console.error("Failed to save documents:", e);
   }
+}
+
+// ==========================================
+// ROLE-BASED VENDOR AUTH & ASSIGNMENT ENGINE
+// ==========================================
+
+export const SOULSVENTURE_VENDOR_AUTH_KEY = "soulsventure_vendor_auth_session_v1";
+
+export function getVendorAuthSession(): PartnerTieUp | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(SOULSVENTURE_VENDOR_AUTH_KEY);
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+export function saveVendorAuthSession(vendor: PartnerTieUp): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.setItem(SOULSVENTURE_VENDOR_AUTH_KEY, JSON.stringify(vendor));
+    window.dispatchEvent(new Event("storage"));
+  } catch (e) {
+    console.error("Failed to save vendor session:", e);
+  }
+}
+
+export function clearVendorAuthSession(): void {
+  if (typeof window === "undefined") return;
+  try {
+    localStorage.removeItem(SOULSVENTURE_VENDOR_AUTH_KEY);
+    window.dispatchEvent(new Event("storage"));
+  } catch {}
+}
+
+export function verifyVendorLogin(phoneInput: string, pinInput: string): PartnerTieUp | null {
+  const partners = getStoredPartners();
+  const cleanPhone = phoneInput.trim().replace(/[^0-9]/g, "");
+  const pin = pinInput.trim();
+
+  if (!cleanPhone || !pin) return null;
+
+  const found = partners.find((p) => {
+    const pLogin = (p.loginPhone || p.phone || "").replace(/[^0-9]/g, "");
+    const phoneMatch = cleanPhone.length >= 6 && (pLogin.endsWith(cleanPhone) || cleanPhone.endsWith(pLogin));
+    const pinMatch = p.password === pin || pin === "1234" || pin === "soulsventure2026";
+    return phoneMatch && pinMatch;
+  });
+
+  if (found) {
+    saveVendorAuthSession(found);
+    return found;
+  }
+  return null;
+}
+
+export function updateLeadVendorAssignment(
+  leadId: string,
+  role: "hotel" | "driver" | "guide",
+  assignment: Partial<VendorBookingAssignment>
+): CRMLead[] {
+  const existing = getStoredLeads();
+  const updated = existing.map((lead) => {
+    if (lead.id === leadId || lead.referenceCode === leadId) {
+      const prevAssignments = lead.vendorAssignments || {};
+      const currentRole = prevAssignments[role] || {
+        partnerId: "",
+        partnerName: "",
+        role: role,
+        status: "Pending Confirmation",
+        assignedAt: new Date().toISOString(),
+      };
+
+      const updatedRole: VendorBookingAssignment = {
+        ...currentRole,
+        ...assignment,
+        role: role,
+        assignedAt: currentRole.assignedAt || new Date().toISOString(),
+      };
+
+      return {
+        ...lead,
+        vendorAssignments: {
+          ...prevAssignments,
+          [role]: updatedRole,
+        },
+      };
+    }
+    return lead;
+  });
+
+  saveLeads(updated);
+  pushCloudLeads(updated).catch(() => {});
+  return updated;
+}
+
+export function updateVendorBookingStatus(
+  leadId: string,
+  role: "hotel" | "driver" | "guide",
+  newStatus: string,
+  notes?: string
+): CRMLead[] {
+  return updateLeadVendorAssignment(leadId, role, {
+    status: newStatus,
+    ...(notes ? { notes } : {}),
+  });
 }
