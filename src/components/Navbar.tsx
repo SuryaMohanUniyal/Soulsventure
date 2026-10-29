@@ -335,10 +335,10 @@ export default function Navbar() {
 
                 <div>
                   <h3 className="font-serif text-lg sm:text-xl text-white font-medium">
-                    Client Portal Access
+                    Private Client Portal
                   </h3>
                   <p className="text-xs text-[#A1A1AA] mt-1 leading-relaxed">
-                    Apne confirmed itineraries, luxury palace vouchers, assigned vehicle aur direct concierge ko access karne ke liye Sign In ya Register karein:
+                    Sign in or register to securely access your confirmed bespoke itineraries, 5-star palace vouchers, assigned chauffeur fleet, and dedicated concierge desk:
                   </p>
                 </div>
 
@@ -377,7 +377,7 @@ export default function Navbar() {
                 {/* What Unlocks in Your Portal */}
                 <div className="pt-3 border-t border-white/10 space-y-2.5">
                   <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold block">
-                    Portal Me Login Karne Se Kya Milega:
+                    Exclusive Member Inclusions & Benefits:
                   </span>
 
                   <div className="space-y-2 text-xs">
@@ -386,7 +386,7 @@ export default function Navbar() {
                       <div>
                         <strong className="text-white font-medium block">Bespoke Day-by-Day Itineraries</strong>
                         <span className="text-[11px] text-[#A1A1AA]">
-                          Pura day-wise sightseeing schedule, private escort guides & mountain briefings.
+                          Complete day-wise sightseeing schedules, private guide timings, and high-altitude mountain briefings.
                         </span>
                       </div>
                     </div>
@@ -396,7 +396,7 @@ export default function Navbar() {
                       <div>
                         <strong className="text-white font-medium block">5-Star Palace Vouchers & Confirmations</strong>
                         <span className="text-[11px] text-[#A1A1AA]">
-                          The Oberoi Udaivilas, Taj Lake Palace & SUJÁN Jawai ke official vouchers bina WhatsApp PDF jhanjhat ke.
+                          Official verified booking vouchers for The Oberoi Udaivilas, Taj Lake Palace, and SUJÁN Jawai.
                         </span>
                       </div>
                     </div>
@@ -406,7 +406,7 @@ export default function Navbar() {
                       <div>
                         <strong className="text-white font-medium block">Private Heritage Guides & Naturalists</strong>
                         <span className="text-[11px] text-[#A1A1AA]">
-                          Licensed senior ASI royal historians, wildlife naturalists aur personal on-ground concierges.
+                          Licensed senior ASI royal historians, wildlife trackers, and dedicated on-ground concierge hosts.
                         </span>
                       </div>
                     </div>
@@ -416,7 +416,7 @@ export default function Navbar() {
                       <div>
                         <strong className="text-white font-medium block">Dedicated Fleet & Royal Chauffeur</strong>
                         <span className="text-[11px] text-[#A1A1AA]">
-                          Assigned Mercedes-Maybach / Land Rover Defender 4WD details aur chauffeur line.
+                          Assigned Mercedes-Maybach and Land Rover Defender 4WD details with direct 24/7 chauffeur dispatch.
                         </span>
                       </div>
                     </div>
@@ -426,7 +426,7 @@ export default function Navbar() {
                       <div>
                         <strong className="text-white font-medium block">Pre-Curated Menus & Dietary Nuances</strong>
                         <span className="text-[11px] text-[#A1A1AA]">
-                          Pure Veg, Jain & bespoke food preferences jo direct executive chefs ko brief hoti hain.
+                          Pure Vegetarian, Jain, organic, and bespoke culinary profiles briefed directly to executive palace chefs.
                         </span>
                       </div>
                     </div>
@@ -436,7 +436,7 @@ export default function Navbar() {
                       <div>
                         <strong className="text-white font-medium block">Digital Document Vault & Tax Invoices</strong>
                         <span className="text-[11px] text-[#A1A1AA]">
-                          Official 5% tourism GST pro-forma invoices & military inner-line permits ek encrypted vault me.
+                          Official 5% tourism GST pro-forma tax invoices and military inner-line passes secured in an encrypted vault.
                         </span>
                       </div>
                     </div>

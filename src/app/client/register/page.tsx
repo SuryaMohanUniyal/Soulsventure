@@ -30,19 +30,19 @@ export default function ClientRegisterPage() {
     setErrorMsg("");
 
     if (!name.trim()) {
-      setErrorMsg("Kripya apna poora naam enter karein.");
+      setErrorMsg("Please enter your full name.");
       return;
     }
     if (!phone.trim()) {
-      setErrorMsg("Kripya apna contact number enter karein.");
+      setErrorMsg("Please enter your contact telephone number.");
       return;
     }
     if (!email.trim() || !email.includes("@")) {
-      setErrorMsg("Kripya valid email address enter karein.");
+      setErrorMsg("Please enter a valid email address.");
       return;
     }
     if (!pin.trim() || pin.trim().length < 4) {
-      setErrorMsg("Kripya kam se kam 4 digits ka Secret PIN banayein (e.g. 123456).");
+      setErrorMsg("Please create a 4-digit Security PIN (e.g. 1234).");
       return;
     }
 
@@ -60,7 +60,7 @@ export default function ClientRegisterPage() {
       window.location.href = "/client/portal";
     } else {
       setIsSubmitting(false);
-      setErrorMsg(res.error || "Registration me samasya aayi. Kripya details check karein.");
+      setErrorMsg(res.error || "Unable to complete registration. Please review your details and try again.");
     }
   };
 
@@ -76,7 +76,7 @@ export default function ClientRegisterPage() {
             Private Member Registration
           </h1>
           <p className="text-xs text-[#A1A1AA] leading-relaxed">
-            Pehle apna Name, Contact Number, Email aur Secret PIN set karein. Baad me isi Phone/Email aur PIN se aap apne trips aur vouchers check karne ke liye Login karenge.
+            Register your name, contact phone number, email, and a personal 4-digit Security PIN to access your bespoke itineraries and palace vouchers.
           </p>
         </div>
 
@@ -89,7 +89,7 @@ export default function ClientRegisterPage() {
         {/* Step-by-Step Badge */}
         <div className="p-3 bg-[#1C1C1C] border border-[#C5A059]/30 rounded-xl flex items-center gap-2.5 text-xs text-[#C5A059]">
           <Sparkles className="w-4 h-4 flex-shrink-0" />
-          <span>Step 1: Register Here ➔ Step 2: Login with Phone/Email & PIN</span>
+          <span>Step 1: Register Account ➔ Step 2: Instant Portal Access with PIN</span>
         </div>
 
         {/* Registration Form */}
@@ -105,7 +105,7 @@ export default function ClientRegisterPage() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Suraj Uniyal ya Mr. Rajesh Sharma"
+              placeholder="e.g. Mr. Rajesh Sharma"
               className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
             />
           </div>
@@ -121,7 +121,7 @@ export default function ClientRegisterPage() {
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="e.g. 8126357353 ya +91 98XXXXXXXX"
+              placeholder="e.g. +91 98201 11222"
               className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
             />
           </div>
@@ -137,7 +137,7 @@ export default function ClientRegisterPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. name@example.com"
+              placeholder="e.g. sharma@example.com"
               className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
             />
           </div>
@@ -147,9 +147,9 @@ export default function ClientRegisterPage() {
             <div className="flex justify-between items-center mb-1.5">
               <label className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold flex items-center gap-1.5">
                 <KeyRound className="w-3.5 h-3.5 text-[#C5A059]" />
-                <span>Create Your Secret PIN</span>
+                <span>Create 4-Digit Security PIN</span>
               </label>
-              <span className="text-[10px] text-[#A1A1AA] font-mono">4 to 6 Digits</span>
+              <span className="text-[10px] text-[#A1A1AA] font-mono">4 Digits (e.g. 1234)</span>
             </div>
 
             <div className="relative">
@@ -158,7 +158,7 @@ export default function ClientRegisterPage() {
                 required
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                placeholder="e.g. 123456 ya apna 4-6 digit secret PIN"
+                placeholder="•••••• (Enter 4-digit PIN)"
                 className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555] pr-10 tracking-widest font-mono"
               />
               <button
@@ -170,7 +170,7 @@ export default function ClientRegisterPage() {
               </button>
             </div>
             <p className="text-[10px] text-[#71717A] mt-1">
-              *Is PIN ko yaad rakhein. Login karte waqt ye PIN maanga jayega.
+              *Please record this PIN. You will use your phone number and PIN to sign in anytime.
             </p>
           </div>
 
@@ -180,7 +180,7 @@ export default function ClientRegisterPage() {
             disabled={isSubmitting}
             className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-gradient-to-r from-[#C5A059] to-[#D4AF37] hover:brightness-110 text-black font-semibold text-xs tracking-wider uppercase transition-all shadow-lg cursor-pointer disabled:opacity-50 mt-2"
           >
-            <span>{isSubmitting ? "Account Registering..." : "Register & Set PIN"}</span>
+            <span>{isSubmitting ? "Creating Account..." : "Register & Activate Member Portal"}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -188,12 +188,12 @@ export default function ClientRegisterPage() {
         {/* Existing Member Login Link */}
         <div className="text-center pt-2 border-t border-[#262626]">
           <span className="text-xs text-[#71717A]">
-            Pehle se account hai?{" "}
+            Already have an active account?{" "}
             <Link
               href="/client/login"
               className="text-[#C5A059] hover:underline font-semibold"
             >
-              PIN Daal Kar Login Karein →
+              Sign In with PIN →
             </Link>
           </span>
         </div>

@@ -360,9 +360,9 @@ export default function ClientPortalDashboard() {
                 </>
               ) : activeLead ? (
                 <>
-                  Aapki bespoke luxury travel query SoulsVenture Founders Desk{" "}
-                  <span className="text-[#FDFBF7] font-medium">(Suraj Uniyal & Harsh Sood)</span> ke pass active review me hai. Aapka complete personalized Day-by-Day itinerary, royal palace vouchers aur dedicated chauffeur passes is portal me tabhi unlock honge jab aapki query ka{" "}
-                  <span className="text-amber-300 font-semibold underline underline-offset-2">initial deposit confirm</span> ho jayega.
+                  Your bespoke luxury travel commission is currently under active choreography at the SoulsVenture Founders Desk{" "}
+                  <span className="text-[#FDFBF7] font-medium">(Suraj Uniyal & Harsh Sood)</span>. Your complete personalized day-by-day itinerary, 5-star palace vouchers, and dedicated chauffeur passes will unlock in this portal immediately upon{" "}
+                  <span className="text-amber-300 font-semibold underline underline-offset-2">booking deposit confirmation</span>.
                 </>
               ) : (
                 <>
@@ -437,7 +437,7 @@ export default function ClientPortalDashboard() {
                 Your Bespoke Journey is Awaiting Booking Deposit Confirmation
               </h2>
               <p className="text-xs text-[#A1A1AA] mt-1 max-w-2xl">
-                Luxury palace suites (The Oberoi Udaivilas, Taj Lake Palace, SUJÁN) aur dedicated chauffeur fleet hold karne ke liye booking deposit confirm hona anivarya hai. Jaise hi aapka deposit verify hoga, full day-by-day plan aur vouchers unlock ho jayenge.
+                Securing luxury palace suites (The Oberoi Udaivilas, Taj Lake Palace, SUJÁN) and dedicated chauffeur fleet requires booking deposit confirmation. Once verified, your full day-by-day plan, hotel vouchers, and assigned fleet credentials will unlock immediately.
               </p>
             </div>
 
@@ -762,7 +762,7 @@ export default function ClientPortalDashboard() {
                   Day-by-Day Schedule Unlocks Upon Deposit Confirmation
                 </h3>
                 <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed">
-                  Aapki luxury trip ka personalized day-by-day plan, assigned luxury fleet vehicle (Mercedes Maybach / Land Rover Defender), assigned royal chauffeur aur curated dining menu yahan portal me tabhi unlock honge jab aapki query ka initial deposit confirm ho jayega.
+                  Your personalized day-by-day itinerary, assigned luxury fleet vehicle (Mercedes-Maybach / Land Rover Defender), dedicated royal chauffeur, and executive chef menus will unlock in your member portal immediately upon booking deposit confirmation.
                 </p>
               </div>
 

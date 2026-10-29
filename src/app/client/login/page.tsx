@@ -33,11 +33,11 @@ export default function ClientLoginPage() {
     setErrorMsg("");
 
     if (!emailOrPhone.trim()) {
-      setErrorMsg("Kripya apna registered Phone Number ya Email enter karein.");
+      setErrorMsg("Please enter your registered Phone Number or Email address.");
       return;
     }
     if (!pin.trim()) {
-      setErrorMsg("Kripya apna Secret PIN enter karein.");
+      setErrorMsg("Please enter your 4-digit Security PIN.");
       return;
     }
 
@@ -49,7 +49,7 @@ export default function ClientLoginPage() {
       window.location.href = "/client/portal";
     } else {
       setIsSubmitting(false);
-      setErrorMsg("Invalid Phone/Email ya PIN. Agar aapne abhi tak Register nahi kiya hai, toh kripya pehle Register karein.");
+      setErrorMsg("Invalid credentials or Security PIN. If you have not created your private account yet, please register below.");
     }
   };
 
@@ -73,7 +73,7 @@ export default function ClientLoginPage() {
             Private Member Sign In
           </h1>
           <p className="text-xs text-[#A1A1AA] leading-relaxed">
-            Apna registered Contact Number ya Email aur Secret PIN daal kar Sign In karein aur apne confirmed trip documents dekhein.
+            Enter your registered Phone Number or Email and Secret PIN to view your verified itineraries, palace vouchers, and concierge briefings.
           </p>
         </div>
 
@@ -81,13 +81,13 @@ export default function ClientLoginPage() {
         <div className="p-3 bg-[#1E1E1E] border border-[#C5A059]/40 rounded-xl flex items-center justify-between text-xs">
           <div className="flex items-center gap-2">
             <Sparkles className="w-4 h-4 text-[#C5A059] flex-shrink-0" />
-            <span className="text-[#FDFBF7] text-[11px]">Naye client hain?</span>
+            <span className="text-[#FDFBF7] text-[11px]">New to SoulsVenture?</span>
           </div>
           <Link
             href="/client/register"
             className="text-[11px] font-semibold text-[#C5A059] hover:underline flex items-center gap-1"
           >
-            <span>Pehle Register Karein</span>
+            <span>Register Member Account</span>
             <ArrowRight className="w-3 h-3" />
           </Link>
         </div>
@@ -96,7 +96,7 @@ export default function ClientLoginPage() {
           <div className="p-3.5 bg-red-950/60 border border-red-800 text-red-300 rounded-xl text-xs space-y-2">
             <p>{errorMsg}</p>
             <div className="pt-1 border-t border-red-900/40 flex justify-between items-center">
-              <span>Account nahi bana hai?</span>
+              <span>Need an account?</span>
               <Link
                 href="/client/register"
                 className="text-[#C5A059] hover:underline font-semibold"
@@ -120,7 +120,7 @@ export default function ClientLoginPage() {
               required
               value={emailOrPhone}
               onChange={(e) => setEmailOrPhone(e.target.value)}
-              placeholder="e.g. 8126357353 ya name@example.com"
+              placeholder="e.g. 9820111222 or client@example.com"
               className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
             />
           </div>
@@ -130,13 +130,13 @@ export default function ClientLoginPage() {
             <div className="flex justify-between items-center mb-1.5">
               <label className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold flex items-center gap-1.5">
                 <KeyRound className="w-3.5 h-3.5 text-[#C5A059]" />
-                <span>Secret PIN</span>
+                <span>Security PIN</span>
               </label>
               <Link
                 href="/client/register"
                 className="text-[10px] text-[#A1A1AA] hover:text-[#C5A059]"
               >
-                PIN Bhool Gaye? Reset Karein
+                Forgot PIN? Reset here
               </Link>
             </div>
 
@@ -146,7 +146,7 @@ export default function ClientLoginPage() {
                 required
                 value={pin}
                 onChange={(e) => setPin(e.target.value)}
-                placeholder="•••••• (Enter your PIN)"
+                placeholder="•••••• (Enter your 4-digit PIN)"
                 className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555] pr-10 tracking-widest font-mono"
               />
               <button
@@ -164,7 +164,7 @@ export default function ClientLoginPage() {
             disabled={isSubmitting}
             className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-gradient-to-r from-[#C5A059] to-[#D4AF37] hover:brightness-110 text-black font-semibold text-xs tracking-wider uppercase transition-all shadow-lg cursor-pointer disabled:opacity-50 mt-2"
           >
-            <span>{isSubmitting ? "Verifying PIN..." : "Sign In with PIN"}</span>
+            <span>{isSubmitting ? "Verifying PIN..." : "Sign In to Member Portal"}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -204,7 +204,7 @@ export default function ClientLoginPage() {
                   Mrs. Ananya Kapoor
                 </span>
                 <span className="text-[10px] text-[#71717A]">
-                  Kashmir Powder Heli-Skiing Odyssey (Ref: SV-2026-KSH)
+                  Kashmir Winter Expedition (Ref: SV-2026-KSH)
                 </span>
               </div>
               <span className="text-[10px] font-mono text-[#C5A059] px-2 py-0.5 rounded bg-black/40">
@@ -242,7 +242,7 @@ export default function ClientLoginPage() {
               href="/client/register"
               className="text-[#C5A059] hover:underline font-semibold"
             >
-              Request Access / Register Here
+              Register Member Account Here
             </Link>
           </span>
         </div>
