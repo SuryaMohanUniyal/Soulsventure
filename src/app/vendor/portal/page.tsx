@@ -26,11 +26,13 @@ import {
   RefreshCw,
   Search,
   Filter,
+  LogOut,
 } from "lucide-react";
 import {
   PartnerTieUp,
   CRMLead,
   getVendorAuthSession,
+  clearVendorAuthSession,
   getStoredLeads,
   updateVendorBookingStatus,
   getStoredPartners,
@@ -50,12 +52,12 @@ export default function VendorPortalPage() {
   useEffect(() => {
     const session = getVendorAuthSession();
     if (!session) {
-      router.push("/vendor/login");
+      window.location.href = "/vendor/login";
       return;
     }
     setPartner(session);
     loadLeads(session);
-  }, [router]);
+  }, []);
 
   const loadLeads = (currentPartner: PartnerTieUp) => {
     setLoading(true);
@@ -199,6 +201,17 @@ export default function VendorPortalPage() {
             >
               <RefreshCw className="w-3.5 h-3.5 text-[#C5A059]" />
               <span>Refresh Allocations</span>
+            </button>
+
+            <button
+              onClick={() => {
+                clearVendorAuthSession();
+                window.location.href = "/vendor/login";
+              }}
+              className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 border border-rose-900/50 text-xs font-mono transition-colors cursor-pointer"
+            >
+              <LogOut className="w-3.5 h-3.5" />
+              <span>Log Out</span>
             </button>
 
             <a

@@ -34,9 +34,9 @@ export default function VendorLoginPage() {
     // If already logged in, redirect straight to portal
     const existing = getVendorAuthSession();
     if (existing) {
-      router.push("/vendor/portal");
+      window.location.href = "/vendor/portal";
     }
-  }, [router]);
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,13 +45,11 @@ export default function VendorLoginPage() {
 
     const partner = verifyVendorLogin(phone, pin);
     if (partner) {
-      setTimeout(() => {
-        router.push("/vendor/portal");
-      }, 300);
+      window.location.href = "/vendor/portal";
     } else {
       setLoading(false);
       setErrorMsg(
-        "Invalid Phone Number or PIN. Please use your registered partner phone number and admin-set 4-digit PIN."
+        "Invalid Phone Number or PIN. Please enter your registered partner phone number and admin-set 4-digit PIN (default demo PIN: 1234)."
       );
     }
   };
@@ -59,9 +57,14 @@ export default function VendorLoginPage() {
   const handleQuickLogin = (demoPhone: string, demoPin: string) => {
     setPhone(demoPhone);
     setPin(demoPin);
+    setErrorMsg("");
+    setLoading(true);
     const partner = verifyVendorLogin(demoPhone, demoPin);
     if (partner) {
-      router.push("/vendor/portal");
+      window.location.href = "/vendor/portal";
+    } else {
+      setLoading(false);
+      setErrorMsg("Demo login could not be authenticated. Please retry.");
     }
   };
 
