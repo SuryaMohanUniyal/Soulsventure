@@ -18,6 +18,7 @@ import {
   Receipt,
 } from "lucide-react";
 import AdminItineraryBuilder from "@/components/admin/AdminItineraryBuilder";
+import AdminContentEngine from "@/components/admin/AdminContentEngine";
 import AdminGSTInvoicingSuite from "@/components/admin/AdminGSTInvoicingSuite";
 import AdminCharterBookingModule from "@/components/admin/AdminCharterBookingModule";
 import AdminCRMTable from "@/components/admin/AdminCRMTable";
@@ -36,6 +37,8 @@ import { AdminProposalModal } from "@/components/admin/AdminProposalModal";
 import AdminAuthGate from "@/components/admin/AdminAuthGate";
 import {
   CRMLead,
+  ClientNuanceProfile,
+  VoiceCallTranscript,
   LeadStatus,
   TeamRole,
   RolePermissions,
@@ -273,6 +276,44 @@ export default function AdminDashboardPage() {
     setProposalLead(lead);
   };
 
+  const handleUpdateLeadNuances = (
+    leadId: string,
+    updatedNuances: Partial<ClientNuanceProfile>,
+    newTranscript?: VoiceCallTranscript
+  ) => {
+    const updated = leads.map((l) => {
+      if (l.id !== leadId) return l;
+      const existingNuances = l.clientNuances || {
+        dietaryRestrictions: [],
+        roomPreferences: [],
+        beveragePreferences: [],
+        vehiclePreference: "",
+        milestoneEvents: [],
+        voiceCalls: [],
+      };
+      const combinedVoiceCalls = newTranscript
+        ? [newTranscript, ...(existingNuances.voiceCalls || [])]
+        : existingNuances.voiceCalls || [];
+
+      const newNuances: ClientNuanceProfile = {
+        dietaryRestrictions: Array.from(new Set([...(existingNuances.dietaryRestrictions || []), ...(updatedNuances.dietaryRestrictions || [])])),
+        roomPreferences: Array.from(new Set([...(existingNuances.roomPreferences || []), ...(updatedNuances.roomPreferences || [])])),
+        beveragePreferences: Array.from(new Set([...(existingNuances.beveragePreferences || []), ...(updatedNuances.beveragePreferences || [])])),
+        vehiclePreference: updatedNuances.vehiclePreference || existingNuances.vehiclePreference || "",
+        milestoneEvents: [...(existingNuances.milestoneEvents || []), ...(updatedNuances.milestoneEvents || [])],
+        voiceCalls: combinedVoiceCalls,
+        specialProtocol: updatedNuances.specialProtocol || existingNuances.specialProtocol,
+      };
+      return {
+        ...l,
+        clientNuances: newNuances,
+      };
+    });
+    saveLeads(updated);
+    setLeads(updated);
+    pushCloudLeads(updated).catch(console.error);
+  };
+
   // Filter leads by global search query
   const filteredLeads = (leads || []).filter((l) => {
     if (!l) return false;
@@ -474,6 +515,13 @@ export default function AdminDashboardPage() {
                   <AdminItineraryBuilder
                     initialLead={proposalLead || selectedLead || leads[0]}
                     onSelectLead={(l) => setSelectedLead(l)}
+                  />
+                )}
+
+                {currentTab === "content-engine" && (
+                  <AdminContentEngine
+                    leads={leads}
+                    onUpdateLeadNuances={handleUpdateLeadNuances}
                   />
                 )}
 
