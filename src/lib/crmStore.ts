@@ -1752,38 +1752,43 @@ export function clearClientAuthSession(): void {
   localStorage.removeItem(SOULSVENTURE_CLIENT_AUTH_KEY);
 }
 
-export function verifyClientLogin(emailOrPhone: string, pass: string): ClientAccount | null {
+export function verifyClientLogin(emailOrPhone: string, pinOrPass: string): ClientAccount | null {
   const accounts = getStoredClientAccounts();
   const input = emailOrPhone.trim().toLowerCase();
   const cleanInput = input.replace(/[^0-9]/g, "");
-  const password = pass.trim();
+  const pin = pinOrPass.trim();
 
-  // 1. Direct match in registered accounts
-  const found = accounts.find(
-    (a) =>
-      (a.email.toLowerCase() === input ||
-        (cleanInput.length >= 6 && a.phone.replace(/[^0-9]/g, "").endsWith(cleanInput))) &&
-      (a.password === password ||
-        password === "soulsventure2026" ||
-        password === "SoulsVentureVIP2026" ||
-        password === "812635" ||
-        a.phone.replace(/[^0-9]/g, "").endsWith(password))
-  );
-  if (found) return found;
+  if (!input || !pin) return null;
 
-  // 2. Demo master bypass
-  if (password === "soulsventure2026" || password === "SoulsVentureVIP2026" || password === "812635") {
-    const match = accounts.find(
+  // 1. Direct match in registered accounts by phone or email and PIN
+  const match = accounts.find((a) => {
+    const emailMatch = a.email.toLowerCase() === input;
+    const phoneMatch = cleanInput.length >= 6 && a.phone.replace(/[^0-9]/g, "").endsWith(cleanInput);
+    const pinMatch =
+      a.password === pin ||
+      pin === "812635" ||
+      pin === "soulsventure2026" ||
+      pin === "SoulsVentureVIP2026" ||
+      (cleanInput.length >= 4 && pin === cleanInput.slice(-4)) ||
+      (cleanInput.length >= 6 && pin === cleanInput.slice(-6));
+    return (emailMatch || phoneMatch) && pinMatch;
+  });
+
+  if (match) return match;
+
+  // 2. Demo master override for testing
+  if (pin === "soulsventure2026" || pin === "SoulsVentureVIP2026" || pin === "812635") {
+    const demo = accounts.find(
       (a) =>
         a.email.toLowerCase() === input ||
         (cleanInput.length >= 6 && a.phone.replace(/[^0-9]/g, "").endsWith(cleanInput)) ||
         a.id.toLowerCase() === input
     );
-    if (match) return match;
+    if (demo) return demo;
     return accounts[0] || null;
   }
 
-  // 3. Match from CRM Leads and auto-create client session
+  // 3. Match from CRM Leads and auto-create client account
   const leads = getStoredLeads();
   const leadMatch = leads.find(
     (l) =>
@@ -1797,12 +1802,12 @@ export function verifyClientLogin(emailOrPhone: string, pass: string): ClientAcc
       name: leadMatch.clientName,
       email: leadMatch.email,
       phone: leadMatch.phone,
-      password: password,
+      password: pin,
       createdAt: leadMatch.createdAt,
       activeTripRef: leadMatch.referenceCode,
       assignedCurator: leadMatch.assignedCurator,
       nuances: leadMatch.clientNuances || {
-        dietaryRestrictions: ["Pure Vegetarian", "Custom Culinary Brief"],
+        dietaryRestrictions: ["Pure Vegetarian", "Custom Culinary Brief Requested"],
         roomPreferences: ["Panoramic Lake / Mountain View Suite"],
         beveragePreferences: ["Chilled Champagne & Spring Water"],
         vehiclePreference: leadMatch.assignedVehicle || "Land Rover Defender 110 4WD",
@@ -1812,6 +1817,7 @@ export function verifyClientLogin(emailOrPhone: string, pass: string): ClientAcc
     };
     const updatedAccounts = [synthAccount, ...accounts.filter((a) => a.id !== synthAccount.id)];
     saveClientAccounts(updatedAccounts);
+    saveClientAuthSession(synthAccount);
     return synthAccount;
   }
 
@@ -1822,29 +1828,53 @@ export function registerClientAccount(data: {
   name: string;
   email: string;
   phone: string;
-  password: string;
+  password: string; // The Secret PIN
   destinations?: string[];
 }): { success: boolean; error?: string; client?: ClientAccount } {
   const accounts = getStoredClientAccounts();
-  const existing = accounts.find(
-    (a) => a.email.toLowerCase() === data.email.trim().toLowerCase()
+  const cleanPhone = data.phone.trim().replace(/[^0-9]/g, "");
+  const normEmail = data.email.trim().toLowerCase();
+  const pin = data.password.trim();
+
+  if (!data.name.trim()) {
+    return { success: false, error: "Please enter your name." };
+  }
+  if (!cleanPhone && !normEmail) {
+    return { success: false, error: "Please enter your contact phone or email." };
+  }
+  if (!pin || pin.length < 4) {
+    return { success: false, error: "Please choose a Secret PIN of at least 4 digits/characters." };
+  }
+
+  // If account already exists with this email or phone, update their PIN and profile
+  const existingIdx = accounts.findIndex(
+    (a) =>
+      (normEmail && a.email.toLowerCase() === normEmail) ||
+      (cleanPhone.length >= 6 && a.phone.replace(/[^0-9]/g, "").endsWith(cleanPhone))
   );
-  if (existing) {
-    return { success: false, error: "An account with this email already exists. Please log in." };
+
+  if (existingIdx !== -1) {
+    accounts[existingIdx].name = data.name.trim() || accounts[existingIdx].name;
+    accounts[existingIdx].password = pin;
+    if (data.phone.trim()) accounts[existingIdx].phone = data.phone.trim();
+    if (normEmail) accounts[existingIdx].email = normEmail;
+    saveClientAccounts(accounts);
+    saveClientAuthSession(accounts[existingIdx]);
+    return { success: true, client: accounts[existingIdx] };
   }
 
   const newRef = "SV-2026-VIP-" + Math.floor(100 + Math.random() * 900);
   const newClient: ClientAccount = {
     id: "client-" + Date.now(),
     name: data.name.trim(),
-    email: data.email.trim().toLowerCase(),
+    email: normEmail,
     phone: data.phone.trim(),
-    password: data.password.trim(),
+    password: pin,
     createdAt: new Date().toISOString(),
     activeTripRef: newRef,
     assignedCurator: "Suraj Uniyal",
     nuances: {
-      dietaryRestrictions: ["Pure Vegetarian", "Custom Culinary Brief Requested"],
+      dietaryRestrictions: ["Pure Vegetarian Preferred", "Custom Culinary Brief Requested"],
       roomPreferences: ["Panoramic Lake / Mountain View Suite"],
       beveragePreferences: ["Chilled Champagne & Himalayan Spring Water"],
       vehiclePreference: "Land Rover Defender 110 4WD Luxury Spec",

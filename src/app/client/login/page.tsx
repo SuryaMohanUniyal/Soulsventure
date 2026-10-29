@@ -9,7 +9,11 @@ import {
   ShieldCheck,
   User,
   KeyRound,
+  Eye,
+  EyeOff,
+  Phone,
   CheckCircle2,
+  UserPlus,
 } from "lucide-react";
 import {
   verifyClientLogin,
@@ -19,22 +23,33 @@ import {
 
 export default function ClientLoginPage() {
   const [emailOrPhone, setEmailOrPhone] = useState("");
-  const [password, setPassword] = useState("");
+  const [pin, setPin] = useState("");
+  const [showPin, setShowPin] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
+
+    if (!emailOrPhone.trim()) {
+      setErrorMsg("Kripya apna registered Phone Number ya Email enter karein.");
+      return;
+    }
+    if (!pin.trim()) {
+      setErrorMsg("Kripya apna Secret PIN enter karein.");
+      return;
+    }
+
     setIsSubmitting(true);
 
-    const client = verifyClientLogin(emailOrPhone, password);
+    const client = verifyClientLogin(emailOrPhone.trim(), pin.trim());
     if (client) {
       saveClientAuthSession(client);
       window.location.href = "/client/portal";
     } else {
       setIsSubmitting(false);
-      setErrorMsg("Account not found or password incorrect. Please verify your details or use 1-Click Demo Access below.");
+      setErrorMsg("Invalid Phone/Email ya PIN. Agar aapne abhi tak Register nahi kiya hai, toh kripya pehle Register karein.");
     }
   };
 
@@ -58,20 +73,35 @@ export default function ClientLoginPage() {
             Private Member Sign In
           </h1>
           <p className="text-xs text-[#A1A1AA] leading-relaxed">
-            Welcome to the SoulsVenture Private Client Portal. Enter your credentials to access your verified itineraries, vouchers, and direct concierge desk.
+            Apna registered Contact Number ya Email aur Secret PIN daal kar Sign In karein aur apne confirmed trip documents dekhein.
           </p>
+        </div>
+
+        {/* New Traveler Prominent Banner */}
+        <div className="p-3 bg-[#1E1E1E] border border-[#C5A059]/40 rounded-xl flex items-center justify-between text-xs">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-[#C5A059] flex-shrink-0" />
+            <span className="text-[#FDFBF7] text-[11px]">Naye client hain?</span>
+          </div>
+          <Link
+            href="/client/register"
+            className="text-[11px] font-semibold text-[#C5A059] hover:underline flex items-center gap-1"
+          >
+            <span>Pehle Register Karein</span>
+            <ArrowRight className="w-3 h-3" />
+          </Link>
         </div>
 
         {errorMsg && (
           <div className="p-3.5 bg-red-950/60 border border-red-800 text-red-300 rounded-xl text-xs space-y-2">
             <p>{errorMsg}</p>
             <div className="pt-1 border-t border-red-900/40 flex justify-between items-center">
-              <span>New traveler?</span>
+              <span>Account nahi bana hai?</span>
               <Link
                 href="/client/register"
                 className="text-[#C5A059] hover:underline font-semibold"
               >
-                Register Here in 10s →
+                Register & Set PIN Here →
               </Link>
             </div>
           </div>
@@ -79,42 +109,62 @@ export default function ClientLoginPage() {
 
         {/* Login Form */}
         <form onSubmit={handleSubmit} className="space-y-4 text-xs">
+          {/* Phone or Email */}
           <div>
-            <label className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold block mb-1.5">
-              Email Address or Phone Number
-            </label>
-            <div className="relative">
-              <input
-                type="text"
-                required
-                value={emailOrPhone}
-                onChange={(e) => setEmailOrPhone(e.target.value)}
-                placeholder="e.g. rajesh.sharma@luxuryinvest.in or +91 98XXXXXXXX"
-                className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold block mb-1.5">
-              Password
+            <label className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold block mb-1.5 flex items-center gap-1.5">
+              <Phone className="w-3.5 h-3.5 text-[#C5A059]" />
+              <span>Registered Contact Number or Email</span>
             </label>
             <input
-              type="password"
+              type="text"
               required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••••"
+              value={emailOrPhone}
+              onChange={(e) => setEmailOrPhone(e.target.value)}
+              placeholder="e.g. 8126357353 ya name@example.com"
               className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
             />
+          </div>
+
+          {/* Secret PIN */}
+          <div>
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold flex items-center gap-1.5">
+                <KeyRound className="w-3.5 h-3.5 text-[#C5A059]" />
+                <span>Secret PIN</span>
+              </label>
+              <Link
+                href="/client/register"
+                className="text-[10px] text-[#A1A1AA] hover:text-[#C5A059]"
+              >
+                PIN Bhool Gaye? Reset Karein
+              </Link>
+            </div>
+
+            <div className="relative">
+              <input
+                type={showPin ? "text" : "password"}
+                required
+                value={pin}
+                onChange={(e) => setPin(e.target.value)}
+                placeholder="•••••• (Enter your PIN)"
+                className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555] pr-10 tracking-widest font-mono"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPin(!showPin)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#71717A] hover:text-[#FDFBF7]"
+              >
+                {showPin ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              </button>
+            </div>
           </div>
 
           <button
             type="submit"
             disabled={isSubmitting}
-            className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-gradient-to-r from-[#C5A059] to-[#D4AF37] hover:brightness-110 text-black font-semibold text-xs tracking-wider uppercase transition-all shadow-lg cursor-pointer disabled:opacity-50"
+            className="w-full flex items-center justify-center gap-2 py-3 rounded-lg bg-gradient-to-r from-[#C5A059] to-[#D4AF37] hover:brightness-110 text-black font-semibold text-xs tracking-wider uppercase transition-all shadow-lg cursor-pointer disabled:opacity-50 mt-2"
           >
-            <span>{isSubmitting ? "Verifying Credentials..." : "Enter Private Portal"}</span>
+            <span>{isSubmitting ? "Verifying PIN..." : "Sign In with PIN"}</span>
             <ArrowRight className="w-4 h-4" />
           </button>
         </form>
@@ -192,7 +242,7 @@ export default function ClientLoginPage() {
               href="/client/register"
               className="text-[#C5A059] hover:underline font-semibold"
             >
-              Request Access / Register
+              Request Access / Register Here
             </Link>
           </span>
         </div>
