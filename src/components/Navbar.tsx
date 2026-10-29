@@ -419,7 +419,7 @@ export default function Navbar() {
                   </div>
 
                   <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
-                    Access your confirmed bespoke itineraries, 5-star palace vouchers, and dedicated concierge briefings.
+                    View your confirmed day-by-day itinerary, hotel vouchers, and driver details.
                   </p>
 
                   <div className="flex items-center gap-2 pt-1">
@@ -464,7 +464,7 @@ export default function Navbar() {
                   </div>
 
                   <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
-                    Contracted Palace Hotels, Luxury Chauffeurs, Heritage Tour Guides, and Activity Operators.
+                    Partner portal for assigned hotels, private chauffeurs, tour guides, and activity operators.
                   </p>
 
                   <div className="pt-1">

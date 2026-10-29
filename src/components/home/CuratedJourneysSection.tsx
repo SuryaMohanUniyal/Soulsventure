@@ -36,10 +36,10 @@ export default function CuratedJourneysSection() {
               <Sparkles className="w-3.5 h-3.5" /> Flagship Collections
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#1A1A1A] leading-tight">
-              Curated journeys, unrepeatable moments.
+              Bespoke trips, unforgettable memories.
             </h2>
             <p className="text-[#1A1A1A]/65 text-sm sm:text-base font-light">
-              Each itinerary represents hundreds of hours of on-the-ground relationship building, private aviation mapping, and architectural selection.
+              Every trip is thoughtfully planned with handpicked palace stays, private drivers, and expert local guides.
             </p>
           </div>
 

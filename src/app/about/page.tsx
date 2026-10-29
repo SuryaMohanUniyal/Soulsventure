@@ -41,10 +41,10 @@ export default function AboutPage() {
             <Sparkles className="w-3.5 h-3.5" /> The House of Soulsventure
           </span>
           <h1 className="font-serif text-4xl sm:text-6xl md:text-7xl font-light text-white leading-tight max-w-4xl">
-            Travel as high art, curated with obsessive craft.
+            Thoughtful luxury travel, made personal for you.
           </h1>
           <p className="text-white/80 font-light text-base sm:text-xl max-w-2xl leading-relaxed">
-            Founded by Harsh Sood and Suraj Uniyal in Dehradun, Uttarakhand. We exist for those who understand that true luxury is not marble lobbies, but unscripted human access, rare privacy, and profound stillness.
+            Founded by Harsh Sood and Suraj Uniyal in Dehradun, Uttarakhand. We create tailor-made private holidays across India, focusing on genuine warmth, rich heritage, and total peace of mind.
           </p>
         </div>
       </section>
@@ -57,16 +57,16 @@ export default function AboutPage() {
               Our Genesis & Vision
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#1A1A1A] leading-tight">
-              An antidote to the homogenized world.
+              A fresh, personal way to travel India.
             </h2>
             <p className="drop-cap text-sm sm:text-base text-[#1A1A1A]/80 font-light leading-relaxed">
-              ounded in Dehradun, Uttarakhand by Harsh Sood and Suraj Uniyal, Soulsventure was established out of a visceral frustration with the cookie-cutter packages sold to India&apos;s most sophisticated travelers. When luxury tourism became formulaic, we committed ourselves to creating unrepeatable domestic journeys shaped around emotional depth, heritage intimacy, and total peace of mind.
+              oulsventure was founded in Dehradun with a simple belief: luxury travel should be personal, relaxed, and authentic. Instead of crowded bus tours and generic packages, we plan private journeys designed completely around your family&apos;s pace and interests.
             </p>
             <p className="text-sm sm:text-base text-[#1A1A1A]/75 font-light leading-relaxed">
-              Headquartered amidst the serene foothills of Uttarakhand in Dehradun, Soulsventure curates journeys with zero intermediaries. Our founders and senior curators personally scout every private tiger reserve zone, vet every living royal palace suite in Rajasthan, and inspect every private houseboat hull in Kerala to guarantee uncompromised exclusivity.
+              Based in the peaceful foothills of Uttarakhand, we work directly with handpicked heritage palaces, private wildlife lodges, and verified local drivers across India. We personally visit every destination to ensure your stay is comfortable, safe, and memorable.
             </p>
             <p className="text-sm sm:text-base text-[#1A1A1A]/75 font-light leading-relaxed">
-              From bespoke dietary choreography (including strict pure vegetarian and gourmet Jain gastronomy prepared by private royal chefs) to white-glove VIP tarmac clearances and domestic aviation charters, we handle every nuance with instinctive cultural mastery.
+              Whether you need pure vegetarian or Jain meals, private airport pickups, or comfortable chauffeur cars, our team takes care of every detail so you can travel with complete ease.
             </p>
           </div>
 

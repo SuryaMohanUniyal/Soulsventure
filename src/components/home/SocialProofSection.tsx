@@ -14,10 +14,10 @@ export default function SocialProofSection() {
               <Sparkles className="w-3.5 h-3.5" /> Private Client Dispatches
             </span>
             <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#1A1A1A] leading-tight">
-              Words from those who have journeyed with us.
+              What Our Guests Say About Us.
             </h2>
             <p className="text-[#1A1A1A]/70 text-sm sm:text-base font-light">
-              Every year we limit our bespoke intake to maintain uncompromising intimacy and perfection in execution.
+              We plan only a limited number of private trips each season to give every guest personal care and attention.
             </p>
           </div>
 

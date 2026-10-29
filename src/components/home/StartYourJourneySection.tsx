@@ -19,21 +19,21 @@ const SPOTLIGHT_DATA: Record<string, SpotlightCard[]> = {
     {
       title: "JAWAI & THE LEOPARDS",
       badge: "UNTAMED WILD",
-      subtitle: "Private 4x4 safaris traversing billion-year-old granite boulders alongside Rabari pastoralists.",
+      subtitle: "Take private 4x4 safaris across ancient hills and spot wild leopards with local guides.",
       image: "https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=1200&q=80",
       link: "/destinations/rajasthan",
       isCustomTypography: true,
     },
     {
       title: "HIGH-ALTITUDE LADAKH",
-      subtitle: "Heated imperial glamping suites at 11,500 ft, private monastery blessings & dark sky stargazing.",
+      subtitle: "Stay in warm luxury tents, visit ancient monasteries, and enjoy star-filled night skies.",
       image: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=1200&q=80",
       link: "/destinations/ladakh",
       isCustomTypography: false,
     },
     {
       title: "ROYAL FLOATING PALACES",
-      subtitle: "Private royal barge arrivals, cusped marble arches, and candlelit dinners on Lake Pichola.",
+      subtitle: "Arrive by private boat, stay in historic palace rooms, and enjoy candlelit dinners on Lake Pichola.",
       image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
       link: "/itineraries/royal-maharajah-palaces-rajasthan",
       isCustomTypography: false,
@@ -43,21 +43,21 @@ const SPOTLIGHT_DATA: Record<string, SpotlightCard[]> = {
     {
       title: "ROYAL HONEYMOONS & ROMANCE",
       badge: "FOR TWO",
-      subtitle: "Private island palaces, secluded candlelit desert dunes, and sunset shikaras on Nigeen Lake.",
+      subtitle: "Relax in private lake palaces, enjoy peaceful desert sunset dinners, and take romantic boat rides.",
       image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80",
       link: "/itineraries?style=Romance",
     },
     {
       title: "MULTI-GEN FAMILY HERITAGE",
       badge: "TOGETHER",
-      subtitle: "Private palace buyouts, conservation tiger tracking, and customized pure veg & Jain culinary care.",
+      subtitle: "Enjoy private heritage stays, exciting wildlife safaris, and fresh meals prepared for your family.",
       image: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1200&q=80",
       link: "/itineraries?style=Family",
     },
     {
       title: "MINDFUL SOLITUDE & RETREATS",
       badge: "SOLITUDE",
-      subtitle: "Himalayan meditation sanctuaries, private yoga ashrams, and authentic lineage Ayurveda in Kerala.",
+      subtitle: "Recharge with gentle yoga, quiet Himalayan retreats, and relaxing Ayurvedic wellness in Kerala.",
       image: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=1200&q=80",
       link: "/itineraries?style=Sanctuary",
     },
@@ -65,19 +65,19 @@ const SPOTLIGHT_DATA: Record<string, SpotlightCard[]> = {
   "MOST POPULAR": [
     {
       title: "THE ROYAL MAHARAJAH CIRCUIT",
-      subtitle: "Udaipur, Jodhpur, Jaipur & Jawai — private royal quarters, vintage car transfers, and desert suites.",
+      subtitle: "Explore Rajasthan's iconic royal cities with private heritage guides and luxury chauffeur cars.",
       image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=1200&q=80",
       link: "/itineraries/royal-maharajah-palaces-rajasthan",
     },
     {
       title: "THE BENGAL TIGER SAFARI",
-      subtitle: "Full-day VIP core zone tracking permits in Ranthambore & Bandhavgarh with master naturalists.",
+      subtitle: "Join expert wildlife naturalists for private morning and afternoon tiger safaris in national parks.",
       image: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=1200&q=80",
       link: "/itineraries/royal-bengal-tiger-safari-central-india",
     },
     {
       title: "MALABAR ROYAL HOUSEBOAT",
-      subtitle: "Private chartered teak Kettuvallam gliding through secluded coconut lagoons with personal chefs.",
+      subtitle: "Cruise quiet palm-fringed backwaters on a private wooden houseboat with your own personal chef.",
       image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=1200&q=80",
       link: "/itineraries/malabar-serenade-kerala-houseboat",
     },
@@ -126,7 +126,7 @@ export default function StartYourJourneySection() {
             Start Your Journey
           </h2>
           <p className="text-[#1A1A1A]/70 text-sm sm:text-base font-light max-w-2xl mx-auto">
-            Explore unscripted journeys across India’s most revered royal palaces, high-altitude Himalayan plateaus, and pristine tiger reserves.
+            Handcrafted private journeys across India's finest palaces, peaceful mountains, and rich wildlife sanctuaries.
           </p>
 
           {/* Interactive Navigation Filter Tabs */}

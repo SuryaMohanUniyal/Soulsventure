@@ -10,36 +10,36 @@ import { DESTINATIONS } from "@/data/mockData";
 const HERO_SLIDES = [
   {
     image: "https://images.unsplash.com/photo-1599661046289-e31897846e41?auto=format&fit=crop&w=2400&q=85",
-    title: "The poetry of royal living, tailored entirely to you.",
-    subtitle: "From floating white marble palaces on Lake Pichola to tracking wild leopards amidst ancient granite boulders.",
+    title: "Experience Royal Living in India's Grand Palaces.",
+    subtitle: "Stay in historic lake palaces in Udaipur, enjoy private boat rides, and spot wild leopards on safari.",
     location: "Lake Pichola & Jawai, Rajasthan",
     slug: "rajasthan",
   },
   {
     image: "https://images.unsplash.com/photo-1581793745862-99fde7fa73d2?auto=format&fit=crop&w=2400&q=85",
-    title: "High-altitude silence at the edge of the world.",
-    subtitle: "Private monastery blessings, heated imperial glamping suites, and pristine cobalt skies over Pangong Lake.",
+    title: "Breathtaking Mountain Journeys in Ladakh.",
+    subtitle: "Visit peaceful monasteries, stay in warm luxury tents, and admire the clear blue waters of Pangong Lake.",
     location: "Thiksey & Nubra Valley, Ladakh",
     slug: "ladakh",
   },
   {
     image: "https://images.unsplash.com/photo-1561731216-c3a4d99437d5?auto=format&fit=crop&w=2400&q=85",
-    title: "In the primeval kingdom of the Bengal Tiger.",
-    subtitle: "Private full-day 4WD core tracking permits, master naturalists, and 1920s luxury colonial tented camps.",
+    title: "Private Tiger Safaris in Central India.",
+    subtitle: "Track wild Bengal tigers with expert guides and relax in beautiful forest safari lodges.",
     location: "Ranthambore & Bandhavgarh, Central India",
     slug: "central-india-safaris",
   },
   {
     image: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?auto=format&fit=crop&w=2400&q=85",
-    title: "The emerald rhythm of the Malabar waters.",
-    subtitle: "Private chartered royal houseboats gliding through silent lagoons with personal Ayurvedic chefs.",
+    title: "Calm Backwaters and Houseboats in Kerala.",
+    subtitle: "Cruise along peaceful green canals on a private houseboat with your own personal chef.",
     location: "Alleppey & Kumarakom, Kerala",
     slug: "kerala-backwaters",
   },
   {
     image: "https://images.unsplash.com/photo-1548013146-72479768bada?auto=format&fit=crop&w=2400&q=85",
-    title: "Paradise rediscovered in cedarwood and snow.",
-    subtitle: "Hand-carved private houseboats on peaceful Nigeen Lake and alpine chalets high in Gulmarg.",
+    title: "Snowy Mountains and Peaceful Lakes in Kashmir.",
+    subtitle: "Stay on classic wooden houseboats in Srinagar and explore the snowy pine valleys of Gulmarg.",
     location: "Nigeen Lake & Gulmarg, Kashmir",
     slug: "kashmir-gulmarg",
   },
@@ -183,7 +183,7 @@ export default function HeroSection() {
               onChange={(e) => setSelectedDestination(e.target.value)}
               className="w-full bg-transparent text-sm font-serif text-[#1A1A1A] focus:outline-none cursor-pointer"
             >
-              <option value="">Any Secluded Corner</option>
+              <option value="">All Destinations</option>
               {DESTINATIONS.map((d) => (
                 <option key={d.id} value={d.slug}>
                   {d.name} ({d.continent})
@@ -202,7 +202,7 @@ export default function HeroSection() {
               onChange={(e) => setSelectedStyle(e.target.value)}
               className="w-full bg-transparent text-sm font-serif text-[#1A1A1A] focus:outline-none cursor-pointer"
             >
-              <option value="">All Architectures</option>
+              <option value="">All Travel Styles</option>
               <option value="Off-the-Grid">Off-the-Grid Expeditions</option>
               <option value="Safari">Private Safari & Wildlife</option>
               <option value="Romance">Honeymoons & Romance</option>
@@ -221,7 +221,7 @@ export default function HeroSection() {
               onChange={(e) => setSelectedDuration(e.target.value)}
               className="w-full bg-transparent text-sm font-serif text-[#1A1A1A] focus:outline-none cursor-pointer"
             >
-              <option value="">Flexible Timeline</option>
+              <option value="">Any Duration</option>
               <option value="7-10">7 to 10 Days</option>
               <option value="10-14">10 to 14 Days</option>
               <option value="14+">14+ Days (Grand Tour)</option>

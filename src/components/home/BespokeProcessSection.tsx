@@ -9,49 +9,49 @@ const STEPS = [
   {
     step: "01",
     title: "Consultation & Discovery",
-    tagline: "An unhurried conversation exploring your curiosities, pacing, and sensibilities.",
+    tagline: "A friendly conversation about your travel dates, interests, and favourite destinations.",
     icon: MessageSquare,
     image: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=1200&q=80",
     description:
-      "Every journey begins with a private video or telephone consultation with one of our specialized Senior Curators. Rather than asking for dates and budgets, we listen to what moves you—the books you read, the architecture you admire, the exact ratio of active exploration to quiet reverie.",
+      "Every journey starts with a friendly conversation with our travel team. We listen carefully to what you love—whether that is staying in royal palaces, discovering wildlife, or enjoying quiet moments with family.",
     details: [
       "Paired with a specialist who has personally lived in or explored your target region",
       "Analysis of party dynamics: multi-gen preferences, culinary restrictions, and physical rhythms",
       "Confidentiality guaranteed through our private client charter",
     ],
-    curatorQuote: "We don't sell predefined packages; we decipher what an unrepeatable Indian royal or wilderness experience looks like for your family.",
+    curatorQuote: "We don't sell ready-made packages. We design a trip that fits your family's personal rhythm and preferences.",
     quoteAuthor: "Harsh Sood, Co-Founder & Head of Curation",
   },
   {
     step: "02",
-    title: "Bespoke Curation & Architectural Selection",
-    tagline: "Every day, flight coordinate, private key, and table meticulously choreographed.",
+    title: "Custom Planning & Handpicked Stays",
+    tagline: "Every day, luxury stay, private ride, and dining experience planned carefully for you.",
     icon: Compass,
     image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1200&q=80",
     description:
-      "Over the course of 3 to 5 business days, our team collaborates with our on-the-ground fixers, private aviators, and palace directors. We secure after-hours royal quarters, private lake barge captains, and luxury wildlife core permits that are never listed on public booking engines.",
+      "Within a few days, we create your custom day-by-day plan. We book the finest palace suites, private lake boats, and exclusive safari permits directly with our trusted partners.",
     details: [
       "Custom digital monograph itinerary with 3D route mapping and private palace suite layouts",
       "Direct coordination with domestic turboprop and helicopter charter operators to eliminate transit fatigue",
       "Unlimited itinerary revisions until the journey matches your vision to the millimeter",
     ],
-    curatorQuote: "Soulsventure's true currency is our rolodex: the palace royal steward who opens the private terrace, the master tracker who spots the tiger.",
+    curatorQuote: "Our strength is our trusted relationships: palace hosts who welcome you warmly, and expert guides who know every hidden trail.",
     quoteAuthor: "Suraj Uniyal, Co-Founder & Operations Director",
   },
   {
     step: "03",
-    title: "24/7 Concierge & Flawless Execution",
-    tagline: "Total peace of mind with tarmac escorts and real-time private assistance.",
+    title: "24/7 Personal Support Throughout Your Trip",
+    tagline: "Enjoy complete peace of mind with private airport pickups and round-the-clock help.",
     icon: ShieldCheck,
     image: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1200&q=80",
     description:
-      "From the moment your flight lands in Delhi, Mumbai, or Jaipur, your Soulsventure concierge is active. VIP tarmac greetings whisk you past commercial lines. Our local team monitors road logistics, park gates, and weather in real-time, adjusting reservations seamlessly without disturbing your state of relaxation.",
+      "From the moment you land, your private chauffeur and local host are ready to welcome you. Our team takes care of all timings, luggage, and road travel, so you can simply relax and enjoy your holiday.",
     details: [
       "Dedicated WhatsApp & direct concierge desk active 24/7 across India",
       "VIP Fast-Track airport clearances and luxury chauffeured tarmac transfers",
       "Complimentary medical evacuation coverage and full financial bonding",
     ],
-    curatorQuote: "True luxury is invisible. You never see the gears turning; you only feel the effortless magic of every moment.",
+    curatorQuote: "Great travel should feel completely effortless. You just enjoy the journey while we handle everything behind the scenes.",
     quoteAuthor: "Suraj Uniyal & Harsh Sood, Founders of Soulsventure",
   },
 ];
@@ -69,10 +69,10 @@ export default function BespokeProcessSection() {
             <Sparkles className="w-3.5 h-3.5" /> The Bespoke Methodology
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#1A1A1A] leading-tight">
-            How we craft the impossible.
+            How We Plan Your Journey.
           </h2>
           <p className="text-[#1A1A1A]/70 text-sm sm:text-base font-light">
-            We operate at the intersection of high architecture, confidential diplomacy, and obsessive concierge craft.
+            From your first call to your safe return home, we take care of every single detail with complete care and attention.
           </p>
         </div>
 

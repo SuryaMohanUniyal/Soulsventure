@@ -24,23 +24,23 @@ export default function EditorialFeatureSection() {
                 <MapPin className="w-3.5 h-3.5 text-[#C5A880]" /> Lake Pichola & The Granite Hills of Jawai, Rajasthan
               </span>
               <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#1A1A1A] leading-[1.15]">
-                Where ancient royalty meets untamed silence.
+                Historic Palaces and Quiet Nature.
               </h2>
             </div>
 
             {/* Drop Cap Paragraph */}
             <p className="drop-cap text-sm sm:text-base text-[#1A1A1A]/80 font-light leading-relaxed">
-              ravelers often ask us what distinguishes true luxury from mere spectacle in India. The answer does not live in crowded tourist circuits or gold leaf lobbies; it lives at dawn on the calm, mirror waters of Lake Pichola. There, as morning mist curls around 18th-century cusped marble arches and temple bells chime across the water, the chaotic modern world completely recedes.
+              Travelers often ask what makes luxury travel truly special in India. It is not crowded tourist attractions or fancy lobbies. It is the peace of Lake Pichola at dawn, when temple bells ring gently across the water and historic marble palaces glow in the morning sun.
             </p>
 
             <p className="text-sm sm:text-base text-[#1A1A1A]/75 font-light leading-relaxed">
-              From our partner palace sanctuaries in Udaipur to the billion-year-old granite boulder caves of Jawai—where wild leopards live in spiritual harmony alongside red-turbaned Rabari pastoralists—we curate private days governed entirely by curiosity and privilege. Board a private royal barge at dusk, or embark on a bespoke 4WD tracking safari with master naturalists who have lived alongside these apex predators for decades.
+              From heritage palace hotels in Udaipur to the rocky hills of Jawai where wild leopards roam, we plan every day with care and privacy. Take an evening boat ride on the lake or head out on a morning safari in a private 4WD with expert local guides.
             </p>
 
             {/* Pull Quote Box */}
             <blockquote className="my-6 p-6 bg-[#F5F2EB] border-l-2 border-[#C5A880] space-y-2">
               <p className="font-serif italic text-base sm:text-lg text-[#1A1A1A] leading-snug">
-                &ldquo;You do not visit Rajasthan simply to see history. You visit to become part of a living royal tapestry where every stone holds a memory.&rdquo;
+                &ldquo;You do not just visit Rajasthan to see historical sites. You visit to experience living traditions, warm royal hospitality, and unforgettable stories.&rdquo;
               </p>
               <cite className="text-[11px] uppercase tracking-wider text-[#C5A880] not-italic block font-sans font-semibold">
                 — Harsh Sood, Co-Founder & Head of Curation

@@ -10,7 +10,7 @@ export const FAQS: FAQItem[] = [
   {
     question: "What distinguishes Soulsventure from conventional luxury tour operators in India?",
     answer:
-      "Unlike mass-market agencies that sell fixed hotel packages or group sightseeing tours, Soulsventure is a private bespoke travel studio operating exclusively within India. Every voyage is designed from a blank canvas by specialized curators. We unlock private palace wings with titular royal families, arrange private turboprop charters to remote airstrips in Jawai and Bandhavgarh, and secure unlisted heritage estates with dedicated butlers, naturalists, and private chefs.",
+      "Unlike regular agencies that sell crowded group tours or fixed packages, Soulsventure plans private, custom holidays across India. Every trip is tailored to your family's personal rhythm. We book authentic royal palace suites, arrange private chauffeur cars, and connect you with verified local guides and expert wildlife naturalists.",
     category: "Bespoke Planning",
   },
   {
@@ -22,7 +22,7 @@ export const FAQS: FAQItem[] = [
   {
     question: "How are strict vegetarian, vegan, and Jain culinary requirements handled at remote Indian hideaways?",
     answer:
-      "Every Soulsventure journey includes bespoke culinary choreography. For our discerning travelers following pure vegetarian, Jain, or vegan traditions, our private client concierges brief executive chefs at every palace, wilderness camp, and private houseboat weeks in advance. Enjoy private multi-course royal Thalis and curated farm-to-table menus prepared with zero onion, garlic, or root vegetables without sacrificing authentic regional flavors.",
+      "We take food preferences very seriously. If you follow a pure vegetarian, Jain, or vegan diet, our team briefs the chefs at every hotel, camp, and houseboat well before you arrive. You will enjoy fresh, delicious local meals prepared strictly to your taste, including Jain meals made without onion or garlic.",
     category: "Dietary & Wellness",
   },
   {
@@ -34,7 +34,7 @@ export const FAQS: FAQItem[] = [
   {
     question: "What is the typical investment for a Soulsventure bespoke journey within India?",
     answer:
-      "Our bespoke domestic journeys typically range from ₹4,50,000 to ₹12,00,000+ per person based on double occupancy for 7 to 10 days. This comprehensive luxury investment includes private royal palace suites and wilderness tented lodges, private aircraft transfers and chauffeured Mercedes/Defender convoys, all VIP permits, private boat charters, expert curators, and 24/7 on-the-ground concierge execution.",
+      "Our private luxury journeys typically range from ₹4,50,000 to ₹12,00,000+ per person for 7 to 10 days. This includes 5-star palace suites and luxury tented lodges, private chauffeur-driven luxury cars, private boat rides, safari permits, and 24/7 support throughout your holiday.",
     category: "Bespoke Planning",
   },
   {

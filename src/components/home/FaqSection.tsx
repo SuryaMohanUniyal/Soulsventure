@@ -59,13 +59,13 @@ export default function FaqSection() {
         {/* Header */}
         <div className="text-center space-y-4 mb-16 max-w-3xl mx-auto">
           <span className="text-[10px] uppercase tracking-[0.3em] text-[#C5A880] font-semibold flex items-center justify-center gap-1.5">
-            <Sparkles className="w-3.5 h-3.5" /> Frequently Asked Inquiries
+            <Sparkles className="w-3.5 h-3.5" /> Frequently Asked Questions
           </span>
           <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl font-light text-[#1A1A1A] leading-tight">
-            Curating Bespoke Luxury with Complete Clarity.
+            Clear Answers to Common Questions.
           </h2>
           <p className="text-[#1A1A1A]/70 text-sm sm:text-base font-light">
-            Everything you need to know about our private client methodology, dietary curations, visa concierges, and private aviation logistics.
+            Everything you need to know about our custom trip planning, meal preferences, private drivers, and booking process.
           </p>
         </div>
 
