@@ -115,7 +115,7 @@ export interface CharterEstimate {
 export interface ClientDocumentVaultItem {
   id: string;
   title: string;
-  category: "Hotel Voucher" | "Flight Ticket" | "Charter Boarding Pass" | "Tax Invoice" | "Permit & Visa";
+  category: "Hotel Voucher" | "Chauffeur Voucher" | "Tax Invoice" | "Permit & Visa";
   referenceCode: string;
   issuer: string;
   issuedDate: string;
@@ -289,7 +289,7 @@ export type PartnerTieUpCategory =
   | "Hotels & Stays"
   | "Vehicles & Transport"
   | "Tour Guides & Escorts"
-  | "Activities & Aviation";
+  | "Activities & Excursions";
 
 export interface PartnerTieUp {
   id: string;
@@ -1903,13 +1903,13 @@ export const INITIAL_CLIENT_DOCUMENTS: ClientDocumentVaultItem[] = [
   },
   {
     id: "doc-3",
-    title: "Pilatus PC-12 Private Turboprop VIP Boarding Pass",
-    category: "Charter Boarding Pass",
+    title: "Mercedes-Maybach & Land Rover Defender Fleet Pass",
+    category: "Chauffeur Voucher",
     referenceCode: "SV-2026-VIP",
-    issuer: "Club One Air VIP Charter Desk",
+    issuer: "SoulsVenture Royal Fleet Operations",
     issuedDate: "2026-10-24",
     status: "Verified & Active",
-    details: "Sector: Jaipur VIP GA Bay → JAWAI Airstrip. Tarmac vehicle clearance granted.",
+    details: "Sector: Udaipur Airport → The Oberoi Udaivilas & Aravali Escort. Assigned Chauffeur: Vikram Singh.",
   },
   {
     id: "doc-4",
@@ -1919,7 +1919,7 @@ export const INITIAL_CLIENT_DOCUMENTS: ClientDocumentVaultItem[] = [
     issuer: "SoulsVenture Luxury Journeys Pvt Ltd",
     issuedDate: "2026-10-20",
     status: "Verified & Active",
-    details: "Total Investment: ₹20,10,150 (Includes 5% Tourism GST + Private Aviation).",
+    details: "Total Investment: ₹20,10,150 (Includes 5% Tourism GST + Dedicated Chauffeur Fleet).",
   },
   {
     id: "doc-5",

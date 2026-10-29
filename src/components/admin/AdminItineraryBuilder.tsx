@@ -966,7 +966,7 @@ WhatsApp / Direct: +91 98XXXXXXXX`
                   THE SOULSVENTURE PLEDGE
                 </span>
                 <p className="text-xs text-[#A1A1AA] max-w-xl mx-auto leading-relaxed">
-                  "Every suite, private aircraft charter, and palace dinner in this commission has been personally inspected and guaranteed by the founders. We do not sell packages; we unlock the living soul of India."
+                  "Every suite, dedicated luxury chauffeur vehicle, and palace dinner in this commission has been personally inspected and guaranteed by the founders. We do not sell packages; we unlock the living soul of India."
                 </p>
                 <div className="text-xs font-serif text-[#C5A059] pt-2">
                   Suraj Uniyal & Harsh Sood • Directors of Private Client Concierge

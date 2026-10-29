@@ -92,7 +92,7 @@ const MASTER_TRIP_DAYS: BespokeItineraryDay[] = [
   },
   {
     dayNumber: 3,
-    title: "Wilderness Flight to SUJÁN JAWAI & Sunset Leopard Tracking",
+    title: "Scenic Overland Safari to SUJÁN JAWAI & Sunset Leopard Tracking",
     location: "Jawai Wilderness, Rajasthan",
     accommodation: {
       name: "SUJÁN JAWAI",
@@ -103,7 +103,7 @@ const MASTER_TRIP_DAYS: BespokeItineraryDay[] = [
       chauffeur: "Lead Naturalist Salim & Chauffeur Bhati",
     },
     highlights: [
-      "Private Pilatus PC-12 turboprop charter flight into Jawai private escarpment strip",
+      "Chauffeured luxury 4x4 convoy transfer across picturesque Aravali foothills into Jawai",
       "Afternoon safari tracking wild apex leopards basking upon prehistoric granite boulders",
       "Sunset sundowners atop granite kopjes with pastoral Rabari herdsmen elders",
     ],
@@ -116,7 +116,7 @@ const MASTER_TRIP_DAYS: BespokeItineraryDay[] = [
   },
   {
     dayNumber: 4,
-    title: "Private Flight to Leh & Indus Valley Acclimatization",
+    title: "Overland Mountain Journey into Leh & Indus Valley Acclimatization",
     location: "Leh, Ladakh",
     accommodation: {
       name: "Chamba Camp Thiksey (TUTC)",
@@ -356,12 +356,12 @@ export default function ClientPortalDashboard() {
                   <span className="text-[#FDFBF7] font-medium">
                     {activeLead?.destinationSummary || "Rajasthan & Ladakh"}
                   </span>{" "}
-                  is confirmed and actively coordinated by our founders. All private charters, palace suites, and dedicated convoys are locked in.
+                  is confirmed and actively coordinated by our founders. All palace suites, dedicated chauffeur fleets, and private royal guides are locked in.
                 </>
               ) : activeLead ? (
                 <>
                   Aapki bespoke luxury travel query SoulsVenture Founders Desk{" "}
-                  <span className="text-[#FDFBF7] font-medium">(Suraj Uniyal & Harsh Sood)</span> ke pass active review me hai. Aapka complete personalized Day-by-Day itinerary, royal palace vouchers aur private aviation passes is portal me tabhi unlock honge jab aapki query ka{" "}
+                  <span className="text-[#FDFBF7] font-medium">(Suraj Uniyal & Harsh Sood)</span> ke pass active review me hai. Aapka complete personalized Day-by-Day itinerary, royal palace vouchers aur dedicated chauffeur passes is portal me tabhi unlock honge jab aapki query ka{" "}
                   <span className="text-amber-300 font-semibold underline underline-offset-2">initial deposit confirm</span> ho jayega.
                 </>
               ) : (
@@ -437,7 +437,7 @@ export default function ClientPortalDashboard() {
                 Your Bespoke Journey is Awaiting Booking Deposit Confirmation
               </h2>
               <p className="text-xs text-[#A1A1AA] mt-1 max-w-2xl">
-                Luxury palace suites (The Oberoi Udaivilas, Taj Lake Palace, SUJÁN) aur private aircraft charters hold karne ke liye booking deposit confirm hona anivarya hai. Jaise hi aapka deposit verify hoga, full day-by-day plan aur vouchers unlock ho jayenge.
+                Luxury palace suites (The Oberoi Udaivilas, Taj Lake Palace, SUJÁN) aur dedicated chauffeur fleet hold karne ke liye booking deposit confirm hona anivarya hai. Jaise hi aapka deposit verify hoga, full day-by-day plan aur vouchers unlock ho jayenge.
               </p>
             </div>
 
@@ -820,7 +820,7 @@ export default function ClientPortalDashboard() {
                     SECURE DIGITAL VAULT
                   </span>
                   <h3 className="font-serif text-xl sm:text-2xl text-[#FDFBF7]">
-                    Hotel Vouchers, Flight Passes & Tax Invoices
+                    Hotel Vouchers, Chauffeur Passes & Tax Invoices
                   </h3>
                   <p className="text-xs text-[#A1A1AA] mt-0.5">
                     All official travel documents issued for your reservation are encrypted and directly accessible here without needing PDFs over messaging apps.
@@ -882,10 +882,10 @@ export default function ClientPortalDashboard() {
                   DIGITAL TRAVEL VAULT LOCKED
                 </span>
                 <h3 className="font-serif text-2xl sm:text-3xl text-[#FDFBF7]">
-                  Palace Vouchers & Flight Passes Issue Post-Deposit
+                  Palace Vouchers & Reservation Passes Issue Post-Deposit
                 </h3>
                 <p className="text-xs sm:text-sm text-[#A1A1AA] leading-relaxed">
-                  Official palace suite reservation vouchers, private charter boarding passes, military high-altitude permits, and pro-forma GST tax invoices will be issued and securely stored here immediately upon deposit confirmation.
+                  Official palace suite reservation vouchers, luxury chauffeur fleet passes, military high-altitude permits, and pro-forma GST tax invoices will be issued and securely stored here immediately upon deposit confirmation.
                 </p>
               </div>
 

@@ -127,13 +127,6 @@ export default function AdminSidebar({
       badgeColor: "bg-[#C5A059] text-black font-bold",
     },
     {
-      id: "charters" as AdminTab,
-      label: "Private Aviation & Choppers",
-      icon: Plane,
-      badge: "Charters",
-      badgeColor: "bg-blue-950 text-blue-300 border border-blue-800/40",
-    },
-    {
       id: "radar" as AdminTab,
       label: "VIP Anniversary Radar",
       icon: Heart,
@@ -142,7 +135,7 @@ export default function AdminSidebar({
     },
     {
       id: "flight-weather" as AdminTab,
-      label: "Flight & Alpine Weather",
+      label: "Arrival & Mountain Passes",
       icon: Compass,
       badge: "Live",
       badgeColor: "bg-blue-950 text-blue-300 border border-blue-800/40",

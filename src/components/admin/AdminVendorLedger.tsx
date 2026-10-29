@@ -156,7 +156,7 @@ export function AdminVendorLedger() {
   const hotelCount = partners.filter((p) => p.role === "hotel" || p.category === "Hotels & Stays").length;
   const driverCount = partners.filter((p) => p.role === "driver" || p.category === "Vehicles & Transport").length;
   const guideCount = partners.filter((p) => p.role === "guide" || p.category === "Tour Guides & Escorts").length;
-  const activityCount = partners.filter((p) => p.role === "activity" || p.category === "Activities & Aviation").length;
+  const activityCount = partners.filter((p) => p.role === "activity" || p.category === "Activities & Excursions").length;
 
   const exportCSV = () => {
     const headers = "Role,Category,Partner Name,Service/Assets,Region,Contact Person,Phone,Login Phone,PIN,Commission,Contract Tariff,Status,Payment Terms\n";
@@ -302,11 +302,11 @@ export function AdminVendorLedger() {
           }`}
         >
           <div className="flex items-center justify-between text-[#888888] mb-2">
-            <span className="text-[11px] font-mono uppercase tracking-wider">Aviation & Safaris</span>
-            <Plane className="w-4 h-4 text-purple-400" />
+            <span className="text-[11px] font-mono uppercase tracking-wider">Safaris & Excursions</span>
+            <Compass className="w-4 h-4 text-purple-400" />
           </div>
           <div className="text-2xl font-serif text-[#FDFBF7]">{activityCount}</div>
-          <div className="text-[11px] text-[#A1A1AA] mt-1 font-mono">Role: activity (Helo & Excursions)</div>
+          <div className="text-[11px] text-[#A1A1AA] mt-1 font-mono">Role: activity (Safaris & Camps)</div>
         </button>
       </div>
 
@@ -618,7 +618,7 @@ export function AdminVendorLedger() {
                     { label: "Hotels & Stays" as PartnerTieUpCategory, role: "hotel" as VendorRole, icon: Hotel, title: "Hotel Partner", desc: "Palace hotels, resorts & wilderness camps" },
                     { label: "Vehicles & Transport" as PartnerTieUpCategory, role: "driver" as VendorRole, icon: Car, title: "Driver / Transport", desc: "Luxury chauffeur fleet & 4x4 SUVs" },
                     { label: "Tour Guides & Escorts" as PartnerTieUpCategory, role: "guide" as VendorRole, icon: Compass, title: "Tour Guide", desc: "Licensed ASI guides & wildlife naturalists" },
-                    { label: "Activities & Aviation" as PartnerTieUpCategory, role: "activity" as VendorRole, icon: Plane, title: "Activity / Aviation", desc: "Helicopter charters & boat safaris" },
+                    { label: "Activities & Excursions" as PartnerTieUpCategory, role: "activity" as VendorRole, icon: Compass, title: "Activity / Excursion", desc: "Private boat safaris, camel treks & wilderness activities" },
                   ].map((cat) => {
                     const Icon = cat.icon;
                     const isSelected = newCategory === cat.label && newRole === cat.role;

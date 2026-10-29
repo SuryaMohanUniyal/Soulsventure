@@ -47,7 +47,7 @@ export default function Footer() {
                 <Sparkles className="w-3.5 h-3.5" /> The Soulsventure Dispatch
               </span>
               <h3 className="font-serif text-2xl sm:text-3xl lg:text-4xl font-light text-white leading-tight">
-                Curated travel essays, secret hideaway reveals, and private flight dispatches.
+                Curated travel essays, secret hideaway reveals, and bespoke journey dispatches.
               </h3>
               <p className="text-white/60 text-xs sm:text-sm font-light max-w-xl">
                 Delivered twice monthly to discerning travelers. No generic packages—only profound destinations and privileged curator insights from India and beyond.

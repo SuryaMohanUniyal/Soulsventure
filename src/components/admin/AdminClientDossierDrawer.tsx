@@ -254,7 +254,7 @@ export default function AdminClientDossierDrawer({
 
 This is ${lead.assignedCurator} from Soulsventure Bespoke Journeys. 
 
-Regarding your confidential inquiry (${lead.referenceCode}) for ${lead.destinationSummary}: we have choreographed a tailored route outline with private aviation and verified palace/camp allocations matching your ${lead.budgetTier} tier.
+Regarding your confidential inquiry (${lead.referenceCode}) for ${lead.destinationSummary}: we have choreographed a tailored route outline with dedicated luxury chauffeur fleet and verified palace/camp allocations matching your ${lead.budgetTier} tier.
 
 👑 You can access your private client portal & day-by-day itinerary here:
 https://soulsventure.com/client/trip/${lead.referenceCode.toLowerCase()}
@@ -912,7 +912,7 @@ concierge@soulsventure.com • Dehradun, Uttarakhand`;
               rows={3}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              placeholder="Add confidential notes on dietary nuances, palace GM instructions, or flight charter details..."
+              placeholder="Add confidential notes on dietary nuances, palace GM instructions, or chauffeur fleet details..."
               className="w-full bg-[#171717] text-xs text-[#FDFBF7] p-3 rounded-lg border border-[#2A2A2A] focus:outline-none focus:border-[#C5A059] leading-relaxed"
             />
 

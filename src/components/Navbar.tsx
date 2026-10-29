@@ -13,7 +13,7 @@ import {
   User,
   Calendar,
   Hotel,
-  Plane,
+  Compass,
   Car,
   Utensils,
   FileText,
@@ -402,11 +402,11 @@ export default function Navbar() {
                     </div>
 
                     <div className="flex items-start gap-2.5 text-[#D4D4D8]">
-                      <Plane className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
+                      <Compass className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
                       <div>
-                        <strong className="text-white font-medium block">Private Charter & Flight Passes</strong>
+                        <strong className="text-white font-medium block">Private Heritage Guides & Naturalists</strong>
                         <span className="text-[11px] text-[#A1A1AA]">
-                          Tarmac clearances, Pilatus PC-12 passes & mountain chopper flight documents.
+                          Licensed senior ASI royal historians, wildlife naturalists aur personal on-ground concierges.
                         </span>
                       </div>
                     </div>

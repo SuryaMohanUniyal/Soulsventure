@@ -295,7 +295,6 @@ export default function AdminDashboardPage() {
     { id: "crm", label: "Leads", icon: Users },
     { id: "itinerary-builder", label: "AI Studio", icon: Sparkles },
     { id: "invoicing", label: "GST Bills", icon: Receipt },
-    { id: "charters", label: "Charters", icon: Plane },
     { id: "pipeline", label: "Pipeline", icon: Layers },
     { id: "calendar", label: "Calendar", icon: Calendar },
     { id: "live", label: "On-Ground", icon: Compass },
@@ -479,8 +478,6 @@ export default function AdminDashboardPage() {
                 )}
 
                 {currentTab === "invoicing" && <AdminGSTInvoicingSuite />}
-
-                {currentTab === "charters" && <AdminCharterBookingModule />}
 
 
                 {currentTab === "permissions" && (

@@ -176,7 +176,7 @@ export default function VendorPortalPage() {
                     ? "Chauffeur & Luxury Fleet Dispatch"
                     : partner.role === "guide"
                     ? "Licensed Tour Guide Schedule"
-                    : "Activity & Aviation Operator"}
+                    : "Activity & Excursion Operator"}
                 </span>
               </span>
               <span className="text-[10px] font-mono text-[#71717A]">
