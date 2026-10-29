@@ -71,9 +71,9 @@ export default function Navbar() {
             : "bg-gradient-to-b from-black/60 via-black/20 to-transparent py-5 text-white"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between gap-6 lg:gap-10">
           {/* Brand Logo with Custom Soul Mascot */}
-          <Link href="/" aria-label="Soulsventure Home">
+          <Link href="/" aria-label="Soulsventure Home" className="flex-shrink-0 mr-6 sm:mr-8 lg:mr-12 xl:mr-16">
             <SoulsventureLogo isScrolled={isScrolled} />
           </Link>
 

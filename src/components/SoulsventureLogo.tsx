@@ -186,7 +186,7 @@ export default function SoulsventureLogo({
 
   // Horizontal Lockup: [LOGO] + VENTURE | BESPOKE JOURNEYS
   return (
-    <div className={`flex items-center gap-2.5 sm:gap-3 group cursor-pointer ${className}`}>
+    <div className={`flex items-center gap-4 sm:gap-5 group cursor-pointer ${className}`}>
       {/* 1. Creative Soul & Compass Emblem */}
       <CreativeSoulMark
         className={`${iconSizes[size]} flex-shrink-0 group-hover:scale-105 group-hover:rotate-6 transition-all duration-500`}
@@ -194,7 +194,7 @@ export default function SoulsventureLogo({
       />
 
       {/* 2. Text Lockup: VENTURE | BESPOKE JOURNEYS */}
-      <div className="flex items-center gap-2.5 sm:gap-3 leading-none">
+      <div className="flex items-center gap-3.5 sm:gap-4.5 leading-none">
         {/* Brand Main Wordmark */}
         <span
           className={`font-serif font-light uppercase ${titleSizes[size]} transition-colors ${
@@ -208,7 +208,7 @@ export default function SoulsventureLogo({
 
         {/* Vertical Divider & Tagline */}
         <div
-          className={`hidden sm:inline-flex items-center pl-2.5 sm:pl-3 border-l transition-colors ${
+          className={`hidden sm:inline-flex items-center pl-3.5 sm:pl-4.5 border-l transition-colors ${
             isScrolled ? "border-[#1A1A1A]/20" : "border-white/20"
           }`}
         >
