@@ -30,7 +30,6 @@ import {
   Sparkles,
   Users,
   KeyRound,
-  ExternalLink,
   Lock,
   Copy,
 } from "lucide-react";
@@ -205,16 +204,6 @@ export function AdminVendorLedger() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
-          <a
-            href="/vendor/login"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-3.5 py-2.5 bg-[#1F1F1F] hover:bg-[#282828] text-[#C5A059] border border-[#C5A059]/30 rounded-xl text-xs font-mono transition-colors shadow-sm"
-          >
-            <ExternalLink className="w-3.5 h-3.5" />
-            <span>Open Vendor Portal (/vendor)</span>
-          </a>
-
           <button
             onClick={exportCSV}
             type="button"

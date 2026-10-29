@@ -20,7 +20,6 @@ import {
   ChevronDown,
   Receipt,
   FileText,
-  ExternalLink,
 } from "lucide-react";
 
 import { TeamRole, RolePermissions } from "@/lib/crmStore";
@@ -357,23 +356,7 @@ export default function AdminSidebar({
           );
         })}
 
-        {/* Client Portal Link Button */}
-        <div className="pt-2">
-          <a
-            href="/client/portal"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="w-full flex items-center justify-between px-3 py-2.5 bg-gradient-to-r from-[#1F1F1F] to-[#171717] hover:bg-[#252525] border border-[#C5A059]/40 rounded-xl text-xs font-semibold text-[#FDFBF7] transition-all group"
-          >
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
-              <span>White-Label Client Portal</span>
-            </div>
-            <ExternalLink className="w-3.5 h-3.5 text-[#C5A059] group-hover:translate-x-0.5 transition-transform" />
-          </a>
-        </div>
-
-        {/* Founders Direct Box */}
+{/* Founders Direct Box */}
         <div className="p-3 bg-[#1A1A1A] rounded-lg border border-[#262626] space-y-1.5 mt-2">
           <div className="flex items-center gap-1.5 text-xs font-medium text-[#C5A059]">
             <Sparkles className="w-3.5 h-3.5" />

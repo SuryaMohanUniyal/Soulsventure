@@ -11,12 +11,7 @@ import {
   ArrowRight,
   Sparkles,
   User,
-  Calendar,
-  Hotel,
-  Compass,
-  Car,
-  Utensils,
-  FileText,
+  Building2,
 } from "lucide-react";
 import SearchModal from "./SearchModal";
 import { DESTINATIONS } from "@/data/mockData";
@@ -320,184 +315,169 @@ export default function Navbar() {
 
             {/* Scrollable Drawer Body */}
             <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6 scrollbar-thin">
-              {/* Private Member Portal Hero Box */}
-              <div className="p-5 bg-gradient-to-br from-[#181818] via-[#1E1E1E] to-[#141414] rounded-2xl border border-[#333333] text-[#FDFBF7] space-y-4 shadow-xl">
-                <div className="flex items-center justify-between">
-                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-[#C5A880]/20 text-[#DFCDAE] border border-[#C5A880]/40">
-                    <Sparkles className="w-3 h-3 text-[#C5A880]" />
-                    Private Member Suite
+              {/* 1. Main Navigation Menu (First) */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-2">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold">
+                    Menu & Experiences
                   </span>
-                  <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    24/7 Concierge
+                  <span className="text-[10px] font-mono text-[#888888] uppercase">
+                    SoulsVenture
                   </span>
                 </div>
 
-                <div>
-                  <h3 className="font-serif text-lg sm:text-xl text-white font-medium">
-                    Private Client Portal
-                  </h3>
-                  <p className="text-xs text-[#A1A1AA] mt-1 leading-relaxed">
-                    Sign in or register to securely access your confirmed bespoke itineraries, 5-star palace vouchers, assigned chauffeur fleet, and dedicated concierge desk:
-                  </p>
-                </div>
-
-                {/* Action Buttons: Log In & Register */}
-                <div className="grid grid-cols-2 gap-2.5 pt-1">
+                <nav className="space-y-1 text-sm font-serif">
                   <Link
-                    href="/client/login"
+                    href="/destinations"
                     onClick={() => setMenuDrawerOpen(false)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#C5A880] hover:bg-[#9E7E50] text-white text-xs uppercase tracking-wider font-semibold transition-all shadow-md text-center cursor-pointer"
+                    className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F5F2EB] text-[#1A1A1A] hover:text-[#C5A880] transition-colors group"
                   >
-                    <User className="w-3.5 h-3.5" />
-                    <span>Log In</span>
+                    <span className="font-medium text-base">Destinations</span>
+                    <ArrowRight className="w-4 h-4 text-[#C5A880] group-hover:translate-x-1 transition-transform" />
                   </Link>
 
                   <Link
-                    href="/client/register"
+                    href="/itineraries"
                     onClick={() => setMenuDrawerOpen(false)}
-                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs uppercase tracking-wider font-semibold transition-all text-center cursor-pointer"
+                    className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F5F2EB] text-[#1A1A1A] hover:text-[#C5A880] transition-colors group"
                   >
-                    <span>Register</span>
+                    <span className="font-medium text-base">Curated Itineraries & Trip Types</span>
+                    <ArrowRight className="w-4 h-4 text-[#C5A880] group-hover:translate-x-1 transition-transform" />
                   </Link>
-                </div>
 
-                {/* B2B Partner Link */}
-                <div className="pt-1 flex items-center justify-between text-[11px] text-[#A1A1AA]">
-                  <span>Hotel, Chauffeur or Guide Partner?</span>
                   <Link
-                    href="/vendor/login"
+                    href="/about"
                     onClick={() => setMenuDrawerOpen(false)}
-                    className="text-[#C5A880] hover:underline font-mono text-[10px] font-semibold"
+                    className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F5F2EB] text-[#1A1A1A] hover:text-[#C5A880] transition-colors group"
                   >
-                    B2B Vendor Portal →
+                    <span className="font-medium text-base">About SoulsVenture</span>
+                    <ArrowRight className="w-4 h-4 text-[#C5A880] group-hover:translate-x-1 transition-transform" />
                   </Link>
-                </div>
 
-                {/* What Unlocks in Your Portal */}
-                <div className="pt-3 border-t border-white/10 space-y-2.5">
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold block">
-                    Exclusive Member Inclusions & Benefits:
+                  <Link
+                    href="/journal"
+                    onClick={() => setMenuDrawerOpen(false)}
+                    className="flex items-center justify-between p-2.5 rounded-xl hover:bg-[#F5F2EB] text-[#1A1A1A] hover:text-[#C5A880] transition-colors group"
+                  >
+                    <span className="font-medium text-base">The Journal & Dispatches</span>
+                    <ArrowRight className="w-4 h-4 text-[#C5A880] group-hover:translate-x-1 transition-transform" />
+                  </Link>
+                </nav>
+
+                {/* Popular Destinations Mini-Grid */}
+                <div className="pt-2">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#888888] font-mono block mb-2">
+                    Popular Destinations
                   </span>
-
-                  <div className="space-y-2 text-xs">
-                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
-                      <Calendar className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-white font-medium block">Bespoke Day-by-Day Itineraries</strong>
-                        <span className="text-[11px] text-[#A1A1AA]">
-                          Complete day-wise sightseeing schedules, private guide timings, and high-altitude mountain briefings.
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
-                      <Hotel className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-white font-medium block">5-Star Palace Vouchers & Confirmations</strong>
-                        <span className="text-[11px] text-[#A1A1AA]">
-                          Official verified booking vouchers for The Oberoi Udaivilas, Taj Lake Palace, and SUJÁN Jawai.
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
-                      <Compass className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-white font-medium block">Private Heritage Guides & Naturalists</strong>
-                        <span className="text-[11px] text-[#A1A1AA]">
-                          Licensed senior ASI royal historians, wildlife trackers, and dedicated on-ground concierge hosts.
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
-                      <Car className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-white font-medium block">Dedicated Fleet & Royal Chauffeur</strong>
-                        <span className="text-[11px] text-[#A1A1AA]">
-                          Assigned Mercedes-Maybach and Land Rover Defender 4WD details with direct 24/7 chauffeur dispatch.
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
-                      <Utensils className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-white font-medium block">Pre-Curated Menus & Dietary Nuances</strong>
-                        <span className="text-[11px] text-[#A1A1AA]">
-                          Pure Vegetarian, Jain, organic, and bespoke culinary profiles briefed directly to executive palace chefs.
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
-                      <FileText className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
-                      <div>
-                        <strong className="text-white font-medium block">Digital Document Vault & Tax Invoices</strong>
-                        <span className="text-[11px] text-[#A1A1AA]">
-                          Official 5% tourism GST pro-forma tax invoices and military inner-line passes secured in an encrypted vault.
-                        </span>
-                      </div>
-                    </div>
+                  <div className="grid grid-cols-2 gap-2 text-xs font-serif">
+                    {DESTINATIONS.slice(0, 6).map((d) => (
+                      <Link
+                        key={d.id}
+                        href={`/destinations/${d.slug}`}
+                        onClick={() => setMenuDrawerOpen(false)}
+                        className="p-2 bg-[#F5F2EB] hover:bg-[#EAE5D9] transition-colors rounded-lg flex items-center justify-between text-[#1A1A1A]"
+                      >
+                        <span className="truncate">{d.name}</span>
+                        <ArrowRight className="w-3 h-3 text-[#C5A880] flex-shrink-0" />
+                      </Link>
+                    ))}
                   </div>
                 </div>
               </div>
 
-              {/* Destinations Explorer Links */}
-              <div className="space-y-3 pt-2">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold block">
-                  Explore Destinations
-                </span>
-                <div className="grid grid-cols-2 gap-2 text-sm font-serif">
-                  {DESTINATIONS.map((d) => (
-                    <Link
-                      key={d.id}
-                      href={`/destinations/${d.slug}`}
-                      onClick={() => setMenuDrawerOpen(false)}
-                      className="p-2.5 bg-[#F5F2EB] hover:bg-[#EAE5D9] transition-colors rounded-lg flex items-center justify-between text-xs font-serif text-[#1A1A1A]"
-                    >
-                      <span>{d.name}</span>
-                      <ArrowRight className="w-3 h-3 text-[#C5A880]" />
-                    </Link>
-                  ))}
+              {/* 2. Portal Access Section (Second: Client Login First, Vendor Login Second) */}
+              <div className="pt-4 border-t border-[#1A1A1A]/10 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold">
+                    Portal Access
+                  </span>
+                  <span className="inline-flex items-center gap-1 text-[10px] text-emerald-600 font-mono">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                    Live 24/7
+                  </span>
                 </div>
-              </div>
 
-              {/* Quick Navigation Links */}
-              <div className="space-y-2 pt-2 border-t border-[#1A1A1A]/10">
-                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold block">
-                  Quick Navigation
-                </span>
-                <ul className="space-y-2 text-sm font-serif">
-                  <li>
+                {/* First: Client Login */}
+                <div className="p-4 bg-gradient-to-br from-[#181818] via-[#1E1E1E] to-[#141414] rounded-2xl border border-[#333333] text-[#FDFBF7] space-y-3 shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-[#C5A880]/20 text-[#DFCDAE] flex items-center justify-center border border-[#C5A880]/30">
+                        <User className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h4 className="font-serif text-sm font-medium text-white">
+                          Client Login
+                        </h4>
+                        <span className="text-[10px] text-[#A1A1AA] block">
+                          Private Member Suite
+                        </span>
+                      </div>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-mono uppercase bg-[#C5A880]/15 text-[#DFCDAE] border border-[#C5A880]/30">
+                      Guest
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
+                    Access your confirmed bespoke itineraries, 5-star palace vouchers, and dedicated concierge briefings.
+                  </p>
+
+                  <div className="flex items-center gap-2 pt-1">
                     <Link
-                      href="/itineraries"
+                      href="/client/login"
                       onClick={() => setMenuDrawerOpen(false)}
-                      className="hover:text-[#C5A880] transition-colors block py-1"
+                      className="flex-1 flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-[#C5A880] hover:bg-[#9E7E50] text-white text-xs uppercase tracking-wider font-semibold transition-all shadow-md text-center cursor-pointer"
                     >
-                      Curated Itineraries & Trip Types
+                      <User className="w-3.5 h-3.5" />
+                      <span>Client Sign In</span>
                     </Link>
-                  </li>
-                  <li>
+
                     <Link
-                      href="/about"
+                      href="/client/register"
                       onClick={() => setMenuDrawerOpen(false)}
-                      className="hover:text-[#C5A880] transition-colors block py-1"
+                      className="py-2 px-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs uppercase tracking-wider font-semibold transition-all text-center cursor-pointer"
                     >
-                      About Soulsventure & Specialists
+                      <span>Register</span>
                     </Link>
-                  </li>
-                  <li>
+                  </div>
+                </div>
+
+                {/* Second: Vendor Login */}
+                <div className="p-4 bg-gradient-to-br from-[#181818] via-[#1E1E1E] to-[#141414] rounded-2xl border border-[#333333] text-[#FDFBF7] space-y-3 shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-lg bg-[#C5A880]/20 text-[#DFCDAE] flex items-center justify-center border border-[#C5A880]/30">
+                        <Building2 className="w-3.5 h-3.5" />
+                      </div>
+                      <div>
+                        <h4 className="font-serif text-sm font-medium text-white">
+                          Vendor Login
+                        </h4>
+                        <span className="text-[10px] text-[#A1A1AA] block">
+                          B2B Partner Network
+                        </span>
+                      </div>
+                    </div>
+                    <span className="px-2 py-0.5 rounded-full text-[9px] font-mono uppercase bg-emerald-950/60 text-emerald-300 border border-emerald-800">
+                      Partners
+                    </span>
+                  </div>
+
+                  <p className="text-[11px] text-[#A1A1AA] leading-relaxed">
+                    Contracted Palace Hotels, Luxury Chauffeurs, Heritage Tour Guides, and Activity Operators.
+                  </p>
+
+                  <div className="pt-1">
                     <Link
-                      href="/journal"
+                      href="/vendor/login"
                       onClick={() => setMenuDrawerOpen(false)}
-                      className="hover:text-[#C5A880] transition-colors block py-1"
+                      className="w-full flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl bg-[#262626] hover:bg-[#333333] border border-[#C5A880]/40 text-[#DFCDAE] hover:text-white text-xs uppercase tracking-wider font-semibold transition-all shadow-md text-center cursor-pointer"
                     >
-                      The Journal & Dispatches
+                      <Building2 className="w-3.5 h-3.5 text-[#C5A880]" />
+                      <span>Vendor Sign In</span>
                     </Link>
-                  </li>
-                </ul>
+                  </div>
+                </div>
               </div>
             </div>
 
