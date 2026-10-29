@@ -277,7 +277,7 @@ export default function ClientPortalDashboard() {
     <div className="space-y-6">
       {/* Multi-Query Switcher Bar (if client has submitted multiple enquiries) */}
       {clientLeads.length > 1 && (
-        <div className="p-3 bg-[#171717] rounded-xl border border-[#282828] flex items-center justify-between gap-3 overflow-x-auto scrollbar-none">
+        <div className="p-3 bg-[#171717] rounded-xl border border-[#282828] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 overflow-x-auto scrollbar-none">
           <div className="flex items-center gap-2 flex-shrink-0">
             <span className="text-[10px] uppercase font-mono tracking-wider text-[#71717A]">
               Your Travel Queries ({clientLeads.length}):
@@ -319,7 +319,7 @@ export default function ClientPortalDashboard() {
       )}
 
       {/* Top Welcome Hero Banner */}
-      <div className="relative rounded-2xl overflow-hidden p-6 sm:p-10 border border-[#2E2E2E] bg-gradient-to-r from-[#171717] via-[#1A1A1A] to-[#141414] shadow-2xl">
+      <div className="relative rounded-2xl overflow-hidden p-4 sm:p-8 lg:p-10 border border-[#2E2E2E] bg-gradient-to-r from-[#171717] via-[#1A1A1A] to-[#141414] shadow-2xl">
         <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
           <div className="space-y-2">
             <div className="flex flex-wrap items-center gap-2">
@@ -345,7 +345,7 @@ export default function ClientPortalDashboard() {
               </span>
             </div>
 
-            <h1 className="font-serif text-2xl sm:text-4xl text-[#FDFBF7] tracking-wide">
+            <h1 className="font-serif text-xl sm:text-3xl lg:text-4xl text-[#FDFBF7] tracking-wide">
               {isDepositConfirmed ? `Welcome back, ${client.name}` : `Welcome, ${client.name}`}
             </h1>
 
@@ -377,7 +377,7 @@ export default function ClientPortalDashboard() {
           </div>
 
           {/* Quick Curator Contact Card */}
-          <div className="p-4 bg-[#1F1F1F] rounded-xl border border-[#333333] space-y-2 flex-shrink-0 lg:w-72 shadow-lg">
+          <div className="p-4 bg-[#1F1F1F] rounded-xl border border-[#333333] space-y-2 flex-shrink-0 w-full lg:w-72 shadow-lg">
             <div className="flex items-center justify-between text-xs">
               <span className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold">
                 Lead Concierge Director
@@ -426,14 +426,14 @@ export default function ClientPortalDashboard() {
 
       {/* Query Status & Deposit Pending Card (Shown prominently when deposit is not yet confirmed) */}
       {!isDepositConfirmed && activeLead && (
-        <div className="p-6 sm:p-8 bg-gradient-to-br from-[#1C1710] via-[#1A1A1A] to-[#161616] rounded-2xl border-2 border-[#C5A059]/40 space-y-6 shadow-2xl">
+        <div className="p-4 sm:p-7 bg-gradient-to-br from-[#1C1710] via-[#1A1A1A] to-[#161616] rounded-2xl border-2 border-[#C5A059]/40 space-y-5 sm:space-y-6 shadow-2xl">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#2E281F] pb-5">
             <div>
               <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-bold flex items-center gap-1.5">
                 <AlertCircle className="w-3.5 h-3.5" />
                 QUERY RECEIVED & IN PROGRESS
               </span>
-              <h2 className="font-serif text-xl sm:text-2xl text-[#FDFBF7] mt-1">
+              <h2 className="font-serif text-lg sm:text-2xl text-[#FDFBF7] mt-1">
                 Your Bespoke Journey is Awaiting Booking Deposit Confirmation
               </h2>
               <p className="text-xs text-[#A1A1AA] mt-1 max-w-2xl">
@@ -445,7 +445,7 @@ export default function ClientPortalDashboard() {
               href={whatsappConciergeUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="px-5 py-2.5 rounded-xl bg-[#C5A059] hover:bg-[#D4AF37] text-black font-serif font-bold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center gap-2 cursor-pointer flex-shrink-0"
+              className="px-5 py-2.5 rounded-xl bg-[#C5A059] hover:bg-[#D4AF37] text-black font-serif font-bold text-xs tracking-wider uppercase transition-all shadow-lg flex items-center justify-center gap-2 cursor-pointer w-full sm:w-auto flex-shrink-0"
             >
               <MessageCircle className="w-4 h-4" />
               <span>Confirm Deposit Now</span>
@@ -568,7 +568,7 @@ export default function ClientPortalDashboard() {
       )}
 
       {/* Main Tab Navigation */}
-      <div className="flex items-center gap-2 border-b border-[#242424] pb-2 overflow-x-auto scrollbar-none">
+      <div className="flex items-center gap-1.5 sm:gap-2 border-b border-[#242424] pb-2 overflow-x-auto scrollbar-none px-0.5">
         {[
           {
             id: "itinerary" as const,
@@ -599,7 +599,7 @@ export default function ClientPortalDashboard() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-xs font-serif transition-all cursor-pointer whitespace-nowrap ${
+              className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-serif transition-all cursor-pointer whitespace-nowrap ${
                 isActive
                   ? "bg-[#C5A059] text-black font-bold shadow-md shadow-[#C5A059]/20"
                   : "bg-[#181818] text-[#888888] hover:text-[#FDFBF7] hover:bg-[#202020] border border-[#262626]"
@@ -651,13 +651,13 @@ export default function ClientPortalDashboard() {
               </div>
 
               {/* Active Day Showcase Card */}
-              <div className="p-6 sm:p-8 bg-[#161616] rounded-2xl border border-[#282828] space-y-6 shadow-xl">
+              <div className="p-4 sm:p-6 lg:p-8 bg-[#161616] rounded-2xl border border-[#282828] space-y-5 sm:space-y-6 shadow-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-[#242424] pb-4">
                   <div>
                     <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-semibold">
                       Day {currentDay.dayNumber} of {tripDays.length}
                     </span>
-                    <h3 className="font-serif text-xl sm:text-2xl text-[#FDFBF7] mt-0.5">
+                    <h3 className="font-serif text-lg sm:text-2xl text-[#FDFBF7] mt-0.5">
                       {currentDay.title}
                     </h3>
                   </div>
@@ -668,7 +668,7 @@ export default function ClientPortalDashboard() {
                 </div>
 
                 {/* 3 Pillars: Stay, Fleet Vehicle, Dining */}
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4">
                   {/* Accommodation */}
                   <div className="p-4 bg-[#1B1B1B] rounded-xl border border-[#2A2A2A] space-y-2">
                     <div className="flex items-center gap-2 text-xs font-semibold text-[#C5A059]">
@@ -749,7 +749,7 @@ export default function ClientPortalDashboard() {
             </>
           ) : (
             /* LOCKED ITINERARY STATE (Awaiting Deposit Confirmation) */
-            <div className="p-8 sm:p-12 bg-[#161616] rounded-2xl border-2 border-[#2E281F] text-center space-y-6 shadow-2xl relative overflow-hidden">
+            <div className="p-5 sm:p-10 lg:p-12 bg-[#161616] rounded-2xl border-2 border-[#2E281F] text-center space-y-5 sm:space-y-6 shadow-2xl relative overflow-hidden">
               <div className="w-16 h-16 rounded-full bg-[#C5A059]/15 border border-[#C5A059]/40 flex items-center justify-center mx-auto text-[#C5A059] shadow-lg shadow-[#C5A059]/10">
                 <Lock className="w-8 h-8" />
               </div>
@@ -785,7 +785,7 @@ export default function ClientPortalDashboard() {
                 </div>
               </div>
 
-              <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+              <div className="pt-2 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-2.5 sm:gap-3 w-full sm:w-auto">
                 <a
                   href={whatsappConciergeUrl}
                   target="_blank"
@@ -872,7 +872,7 @@ export default function ClientPortalDashboard() {
             </>
           ) : (
             /* LOCKED VAULT (Awaiting Deposit Confirmation) */
-            <div className="p-8 sm:p-12 bg-[#161616] rounded-2xl border-2 border-[#2E281F] text-center space-y-6 shadow-2xl relative overflow-hidden">
+            <div className="p-5 sm:p-10 lg:p-12 bg-[#161616] rounded-2xl border-2 border-[#2E281F] text-center space-y-5 sm:space-y-6 shadow-2xl relative overflow-hidden">
               <div className="w-16 h-16 rounded-full bg-[#C5A059]/15 border border-[#C5A059]/40 flex items-center justify-center mx-auto text-[#C5A059] shadow-lg shadow-[#C5A059]/10">
                 <ShieldCheck className="w-8 h-8" />
               </div>
@@ -906,7 +906,7 @@ export default function ClientPortalDashboard() {
           {/* Document Viewer Modal */}
           {viewingDoc && (
             <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-sm animate-in fade-in">
-              <div className="w-full max-w-lg bg-[#141414] border border-[#2E2E2E] rounded-2xl p-6 sm:p-8 space-y-6 shadow-2xl">
+              <div className="w-full max-w-lg bg-[#141414] border border-[#2E2E2E] rounded-2xl p-4 sm:p-7 space-y-4 sm:space-y-6 shadow-2xl my-auto max-h-[92vh] overflow-y-auto">
                 <div className="flex items-center justify-between border-b border-[#242424] pb-4">
                   <div>
                     <span className="text-[10px] uppercase font-mono tracking-widest text-[#C5A059]">
@@ -971,7 +971,7 @@ export default function ClientPortalDashboard() {
       {/* TAB 3: VIP Preferences & Nuances (Always Open for Client Input) */}
       {activeTab === "nuances" && (
         <div className="space-y-6">
-          <div className="p-6 bg-[#161616] rounded-2xl border border-[#282828] space-y-6">
+          <div className="p-4 sm:p-6 bg-[#161616] rounded-2xl border border-[#282828] space-y-5 sm:space-y-6">
             <div>
               <div className="flex items-center justify-between">
                 <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A059] font-semibold">
@@ -1067,7 +1067,7 @@ export default function ClientPortalDashboard() {
 
       {/* TAB 4: Travel History & Milestones */}
       {activeTab === "history" && (
-        <div className="p-6 bg-[#161616] rounded-2xl border border-[#282828] space-y-4">
+        <div className="p-4 sm:p-6 bg-[#161616] rounded-2xl border border-[#282828] space-y-4">
           <h3 className="font-serif text-xl text-[#FDFBF7]">Expedition Portfolio</h3>
           <p className="text-xs text-[#888888]">
             Historical luxury journeys & registered queries with SoulsVenture Bespoke Journeys.
@@ -1076,7 +1076,7 @@ export default function ClientPortalDashboard() {
           <div className="space-y-3 pt-2">
             {/* Active / Current Query Milestone */}
             {activeLead && (
-              <div className="p-4 bg-[#1A1A1A] rounded-xl border border-[#2E281F] flex items-center justify-between text-xs">
+              <div className="p-3.5 sm:p-4 bg-[#1A1A1A] rounded-xl border border-[#2E281F] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
                 <div>
                   <span className="font-serif font-semibold text-[#FDFBF7] block">
                     {activeLead.destinationSummary} Luxury Expedition
@@ -1098,7 +1098,7 @@ export default function ClientPortalDashboard() {
             )}
 
             {/* Past Archived Sample Trip */}
-            <div className="p-4 bg-[#1A1A1A] rounded-xl border border-[#262626] flex items-center justify-between text-xs">
+            <div className="p-3.5 sm:p-4 bg-[#1A1A1A] rounded-xl border border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
               <div>
                 <span className="font-serif font-semibold text-[#FDFBF7] block">
                   Royal Rajasthan & Desert Solitude

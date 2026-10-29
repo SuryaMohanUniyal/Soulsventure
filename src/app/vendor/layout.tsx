@@ -54,32 +54,32 @@ export default function VendorPortalLayout({
   return (
     <div className="min-h-dvh bg-[#111111] text-[#FDFBF7] flex flex-col font-sans selection:bg-[#C5A059]/30 selection:text-[#FDFBF7]">
       {/* Luxury B2B Vendor Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-[#161616]/95 backdrop-blur-md border-b border-[#262626] px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[#161616]/95 backdrop-blur-md border-b border-[#262626] px-3 sm:px-8 py-3 sm:py-3.5 flex items-center justify-between">
         {/* Brand Logo & Vendor Role */}
-        <Link href="/vendor/portal" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C5A059] to-[#997A3A] flex items-center justify-center text-black font-serif font-bold text-base shadow-sm shadow-[#C5A059]/20 group-hover:scale-105 transition-transform">
+        <Link href="/vendor/portal" className="flex items-center gap-2.5 sm:gap-3 group">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-[#C5A059] to-[#997A3A] flex items-center justify-center text-black font-serif font-bold text-sm sm:text-base shadow-sm shadow-[#C5A059]/20 group-hover:scale-105 transition-transform flex-shrink-0">
             S
           </div>
           <div className="flex flex-col">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1.5 sm:gap-2">
               <span className="font-serif text-sm tracking-wider text-[#FDFBF7] font-semibold">
                 SoulsVenture
               </span>
-              <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30">
-                B2B Partner Portal
+              <span className="text-[9px] sm:text-[10px] font-mono px-1.5 py-0.2 rounded bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30">
+                B2B Partner
               </span>
             </div>
-            <span className="text-[10px] text-[#888888] font-mono">
+            <span className="text-[9px] sm:text-[10px] text-[#888888] font-mono">
               Bespoke Concierge & Dispatch OS
             </span>
           </div>
         </Link>
 
         {/* Right Action Strip */}
-        <div className="flex items-center gap-3 sm:gap-4 text-xs">
+        <div className="flex items-center gap-2 sm:gap-4 text-xs">
           {partner ? (
-            <div className="flex items-center gap-3">
-              {/* Role Badge */}
+            <div className="flex items-center gap-2 sm:gap-3">
+              {/* Desktop / Tablet Role Badge */}
               <div className="hidden sm:flex items-center gap-2 px-3 py-1 rounded-full bg-[#1F1F1F] border border-[#333333]">
                 {partner.role === "hotel" && <Hotel className="w-3.5 h-3.5 text-[#C5A059]" />}
                 {partner.role === "driver" && <Car className="w-3.5 h-3.5 text-sky-400" />}
@@ -93,7 +93,18 @@ export default function VendorPortalLayout({
                 </span>
               </div>
 
-              {/* 24/7 Operations Hotline */}
+              {/* Mobile Compact Role Indicator */}
+              <div className="flex sm:hidden items-center gap-1 px-2 py-1 rounded-lg bg-[#1F1F1F] border border-[#333333]">
+                {partner.role === "hotel" && <Hotel className="w-3.5 h-3.5 text-[#C5A059]" />}
+                {partner.role === "driver" && <Car className="w-3.5 h-3.5 text-sky-400" />}
+                {partner.role === "guide" && <Compass className="w-3.5 h-3.5 text-emerald-400" />}
+                {partner.role === "activity" && <Plane className="w-3.5 h-3.5 text-purple-400" />}
+                <span className="text-[10px] font-mono uppercase text-[#C5A059] font-semibold">
+                  {partner.role}
+                </span>
+              </div>
+
+              {/* 24/7 Operations Hotline (Desktop) */}
               <a
                 href={opsHotline}
                 target="_blank"
@@ -105,10 +116,21 @@ export default function VendorPortalLayout({
                 <span>24/7 Ops Hotline</span>
               </a>
 
+              {/* 24/7 Operations Hotline (Mobile) */}
+              <a
+                href={opsHotline}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex md:hidden p-2 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-800/60 text-emerald-300 transition-colors"
+                title="Direct Ops WhatsApp Hotline"
+              >
+                <MessageCircle className="w-4 h-4" />
+              </a>
+
               {/* Logout */}
               <button
                 onClick={handleLogout}
-                className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#A1A1AA] hover:text-[#FDFBF7] border border-[#333333] transition-colors cursor-pointer text-xs"
+                className="inline-flex items-center gap-1.5 p-2 sm:px-3 sm:py-1.5 rounded-lg bg-[#222222] hover:bg-[#2A2A2A] text-[#A1A1AA] hover:text-[#FDFBF7] border border-[#333333] transition-colors cursor-pointer text-xs"
                 title="Log Out of Vendor Portal"
               >
                 <LogOut className="w-3.5 h-3.5" />
@@ -119,14 +141,14 @@ export default function VendorPortalLayout({
             <div className="flex items-center gap-2">
               <a
                 href="/admin"
-                className="text-xs text-[#888888] hover:text-[#C5A059] transition-colors font-mono"
+                className="text-xs text-[#888888] hover:text-[#C5A059] transition-colors font-mono hidden sm:inline"
               >
                 Admin OS
               </a>
-              <span className="text-[#333]">•</span>
+              <span className="text-[#333] hidden sm:inline">•</span>
               <Link
                 href="/vendor/login"
-                className="px-3.5 py-1.5 rounded-lg bg-[#C5A059] hover:bg-[#D4AF37] text-black font-semibold text-xs font-serif transition-colors"
+                className="px-3 sm:px-3.5 py-1.5 rounded-lg bg-[#C5A059] hover:bg-[#D4AF37] text-black font-semibold text-xs font-serif transition-colors"
               >
                 Partner Login
               </Link>
@@ -136,7 +158,7 @@ export default function VendorPortalLayout({
       </header>
 
       {/* Page Body */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 md:p-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 md:p-8">
         {children}
       </main>
 

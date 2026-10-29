@@ -52,25 +52,25 @@ export default function ClientPortalLayout({
   return (
     <div className="min-h-dvh bg-[#111111] text-[#FDFBF7] flex flex-col font-sans selection:bg-[#C5A059]/30 selection:text-[#FDFBF7]">
       {/* Luxury Client Navigation Bar */}
-      <header className="sticky top-0 z-40 bg-[#161616]/95 backdrop-blur-md border-b border-[#262626] px-4 sm:px-8 py-3.5 flex items-center justify-between">
+      <header className="sticky top-0 z-40 bg-[#161616]/95 backdrop-blur-md border-b border-[#262626] px-3 sm:px-8 py-3 sm:py-3.5 flex items-center justify-between">
         {/* Brand Logo & Tag */}
-        <Link href="/client/portal" className="flex items-center gap-3 group">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-[#C5A059] to-[#997A3A] flex items-center justify-center text-black font-serif font-bold text-base shadow-sm shadow-[#C5A059]/20 group-hover:scale-105 transition-transform">
+        <Link href="/client/portal" className="flex items-center gap-2.5 sm:gap-3 group">
+          <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-lg bg-gradient-to-br from-[#C5A059] to-[#997A3A] flex items-center justify-center text-black font-serif font-bold text-sm sm:text-base shadow-sm shadow-[#C5A059]/20 group-hover:scale-105 transition-transform flex-shrink-0">
             S
           </div>
           <div className="flex flex-col">
-            <span className="font-serif text-lg tracking-wider font-semibold text-[#FDFBF7] group-hover:text-[#C5A059] transition-colors">
+            <span className="font-serif text-base sm:text-lg tracking-wider font-semibold text-[#FDFBF7] group-hover:text-[#C5A059] transition-colors leading-none">
               SOULSVENTURE
             </span>
-            <span className="text-[9px] uppercase tracking-[0.25em] text-[#C5A059]">
+            <span className="text-[8px] sm:text-[9px] uppercase tracking-[0.2em] sm:tracking-[0.25em] text-[#C5A059] mt-0.5">
               Private Member Portal
             </span>
           </div>
         </Link>
 
         {/* Right Action Channels */}
-        <div className="flex items-center gap-3 sm:gap-4">
-          {/* Direct 24/7 Concierge Hotline */}
+        <div className="flex items-center gap-2 sm:gap-4">
+          {/* Direct 24/7 Concierge Hotline (Desktop & Tablet) */}
           <a
             href={conciergeWhatsApp}
             target="_blank"
@@ -81,9 +81,20 @@ export default function ClientPortalLayout({
             <span>24/7 VIP Concierge Desk</span>
           </a>
 
+          {/* Mobile Direct Concierge Quick Button */}
+          <a
+            href={conciergeWhatsApp}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex sm:hidden p-2 rounded-lg bg-emerald-950/80 hover:bg-emerald-900 border border-emerald-800/60 text-emerald-300 text-xs transition-colors"
+            title="Chat with 24/7 Concierge Desk"
+          >
+            <MessageCircle className="w-4 h-4" />
+          </a>
+
           {/* User Profile / Status */}
           {client ? (
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-2 sm:gap-2.5">
               <div className="text-right hidden sm:block">
                 <span className="text-xs font-serif font-medium text-[#FDFBF7] block">
                   {client.name}
@@ -104,16 +115,16 @@ export default function ClientPortalLayout({
           ) : (
             <Link
               href="/client/login"
-              className="px-4 py-1.5 rounded-lg bg-[#C5A059] text-black text-xs font-semibold hover:bg-[#D4AF37] transition-colors"
+              className="px-3 sm:px-4 py-1.5 rounded-lg bg-[#C5A059] text-black text-xs font-semibold hover:bg-[#D4AF37] transition-colors"
             >
-              Member Sign In
+              Sign In
             </Link>
           )}
         </div>
       </header>
 
       {/* Main Content Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8">
+      <main className="flex-1 max-w-7xl w-full mx-auto p-3 sm:p-6 lg:p-8">
         {children}
       </main>
 

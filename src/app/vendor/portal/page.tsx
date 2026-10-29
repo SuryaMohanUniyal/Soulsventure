@@ -460,12 +460,12 @@ export default function VendorPortalPage() {
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
       {/* Top Welcome Banner */}
-      <div className="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-[#1C1C1C] via-[#161616] to-[#121212] border border-[#2D2D2D] relative overflow-hidden shadow-xl">
+      <div className="p-4 sm:p-6 lg:p-8 rounded-2xl bg-gradient-to-br from-[#1C1C1C] via-[#161616] to-[#121212] border border-[#2D2D2D] relative overflow-hidden shadow-xl">
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#C5A059]/5 rounded-full blur-3xl pointer-events-none" />
 
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 relative z-10">
           <div className="space-y-2">
-            <div className="flex items-center gap-2">
+            <div className="grid grid-cols-2 sm:flex sm:items-center gap-2 w-full sm:w-auto">
               <span className="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full text-xs font-mono uppercase bg-[#C5A059]/15 text-[#C5A059] border border-[#C5A059]/30">
                 {partner.role === "hotel" && <Hotel className="w-3.5 h-3.5" />}
                 {partner.role === "driver" && <Car className="w-3.5 h-3.5 text-sky-400" />}
@@ -486,7 +486,7 @@ export default function VendorPortalPage() {
               </span>
             </div>
 
-            <h1 className="font-serif text-2xl sm:text-3xl text-[#FDFBF7]">
+            <h1 className="font-serif text-xl sm:text-2xl lg:text-3xl text-[#FDFBF7]">
               Welcome, {partner.contactPerson} ({partner.name})
             </h1>
             <p className="text-xs sm:text-sm text-[#A0A0A0] max-w-2xl">
@@ -494,7 +494,7 @@ export default function VendorPortalPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-wrap items-stretch sm:items-center gap-2 sm:gap-2.5">
             <button
               onClick={() => loadLeads(partner)}
               className="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl bg-[#222222] hover:bg-[#2A2A2A] text-[#D4D4D8] border border-[#333333] text-xs font-mono transition-colors cursor-pointer"
@@ -539,7 +539,7 @@ export default function VendorPortalPage() {
 
       {/* Role-Specific Metrics Grid */}
       {partner.role === "driver" && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Assigned Routes</span>
             <div className="text-2xl font-serif text-[#FDFBF7] mt-1">{filteredLeads.length} Bookings</div>
@@ -564,7 +564,7 @@ export default function VendorPortalPage() {
       )}
 
       {partner.role === "hotel" && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Assigned Guests</span>
             <div className="text-2xl font-serif text-[#FDFBF7] mt-1">
@@ -607,7 +607,7 @@ export default function VendorPortalPage() {
       )}
 
       {partner.role === "guide" && (
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4">
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Assigned Tours</span>
             <div className="text-2xl font-serif text-[#FDFBF7] mt-1">{filteredLeads.length} Excursions</div>
@@ -632,10 +632,10 @@ export default function VendorPortalPage() {
       )}
 
       {/* Main Operations Control: Mode Switcher, Month Toggle & Search */}
-      <div className="p-5 rounded-2xl bg-[#161616] border border-[#262626] space-y-4">
+      <div className="p-3.5 sm:p-5 rounded-2xl bg-[#161616] border border-[#262626] space-y-4">
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3">
           {/* View Mode Toggle Buttons */}
-          <div className="flex items-center gap-1.5 p-1 bg-[#101010] border border-[#2A2A2A] rounded-xl">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:flex items-center gap-1.5 p-1 bg-[#101010] border border-[#2A2A2A] rounded-xl w-full md:w-auto">
             <button
               onClick={() => setViewMode("calendar")}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-mono font-medium transition-all cursor-pointer ${
@@ -665,8 +665,8 @@ export default function VendorPortalPage() {
           </div>
 
           {/* Month Switcher & Search */}
-          <div className="flex items-center gap-2.5">
-            <div className="flex items-center bg-[#101010] border border-[#2A2A2A] rounded-xl p-1 text-xs font-mono">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
+            <div className="flex items-center justify-center bg-[#101010] border border-[#2A2A2A] rounded-xl p-1 text-xs font-mono w-full sm:w-auto">
               <button
                 onClick={() => {
                   setSelectedMonth("2026-11");
@@ -702,7 +702,7 @@ export default function VendorPortalPage() {
                 placeholder="Filter bookings..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="bg-[#101010] border border-[#2A2A2A] rounded-xl pl-9 pr-3 py-1.5 text-xs text-[#FDFBF7] font-mono placeholder-[#555] focus:outline-none focus:border-[#C5A059] w-36 sm:w-48"
+                className="bg-[#101010] border border-[#2A2A2A] rounded-xl pl-9 pr-3 py-1.5 text-xs text-[#FDFBF7] font-mono placeholder-[#555] focus:outline-none focus:border-[#C5A059] w-full sm:w-48"
               />
             </div>
           </div>
@@ -729,7 +729,7 @@ export default function VendorPortalPage() {
                 </p>
               </div>
 
-              <div className="flex items-center gap-2 text-[11px] font-mono">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 text-[10px] sm:text-[11px] font-mono">
                 <span className="flex items-center gap-1.5 text-[#C5A059]">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#C5A059]" />
                   Arrival
@@ -757,8 +757,17 @@ export default function VendorPortalPage() {
               </div>
             </div>
 
-            {/* Weekdays Header */}
-            <div className="grid grid-cols-7 gap-1.5 sm:gap-2 text-center text-[10px] sm:text-xs font-mono font-bold text-[#71717A] uppercase tracking-wider py-1 border-b border-[#222]">
+            {/* Mobile Swipe Hint */}
+            <div className="sm:hidden flex items-center justify-between text-[10px] font-mono text-[#A1A1AA] pt-1">
+              <span>↔ Swipe horizontally for 7-day view</span>
+              <span>Tap date for details</span>
+            </div>
+
+            {/* Responsive Calendar Scroller */}
+            <div className="overflow-x-auto scrollbar-thin pb-2 -mx-2 px-2 sm:mx-0 sm:px-0">
+              <div className="min-w-[580px] sm:min-w-0">
+                {/* Weekdays Header */}
+                <div className="grid grid-cols-7 gap-1.5 sm:gap-2 text-center text-[10px] sm:text-xs font-mono font-bold text-[#71717A] uppercase tracking-wider py-1 border-b border-[#222]">
               <div>Sun</div>
               <div>Mon</div>
               <div>Tue</div>
@@ -843,11 +852,13 @@ export default function VendorPortalPage() {
                   </button>
                 );
               })}
+                </div>
+              </div>
             </div>
           </div>
 
           {/* Selected Date Operations Briefing */}
-          <div className="p-6 sm:p-8 rounded-2xl bg-[#181818] border border-[#2D2D2D] shadow-2xl space-y-6 relative overflow-hidden">
+          <div className="p-4 sm:p-6 lg:p-8 rounded-2xl bg-[#181818] border border-[#2D2D2D] shadow-2xl space-y-5 sm:space-y-6 relative overflow-hidden">
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#282828] pb-4">
               <div>
                 <div className="flex items-center gap-2">
@@ -858,7 +869,7 @@ export default function VendorPortalPage() {
                     {selectedDateBookings.length} Active Booking(s) on this date
                   </span>
                 </div>
-                <h3 className="font-serif text-2xl sm:text-3xl text-[#FDFBF7] mt-1">
+                <h3 className="font-serif text-xl sm:text-2xl lg:text-3xl text-[#FDFBF7] mt-1">
                   Schedule for:{" "}
                   <span className="text-[#C5A059]">
                     {new Date(selectedDate).toLocaleDateString("en-US", {
@@ -917,7 +928,7 @@ export default function VendorPortalPage() {
                   return (
                     <div
                       key={lead.id}
-                      className="p-5 sm:p-6 rounded-2xl bg-[#131313] border border-[#2B2B2B] hover:border-[#C5A059]/50 transition-all space-y-5 shadow-lg"
+                      className="p-4 sm:p-6 rounded-2xl bg-[#131313] border border-[#2B2B2B] hover:border-[#C5A059]/50 transition-all space-y-4 sm:space-y-5 shadow-lg"
                     >
                       {/* Booking Dossier Header with Privacy Notice */}
                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 border-b border-[#242424] pb-4">
@@ -2168,7 +2179,7 @@ export default function VendorPortalPage() {
                       )}
 
                       {/* Card Footer: Partner Notes & Sync */}
-                      <div className="pt-3 border-t border-[#242424] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-3 text-xs">
+                      <div className="pt-3 border-t border-[#242424] flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 sm:gap-3 text-xs">
                         <div className="flex-1">
                           <input
                             type="text"
@@ -2274,7 +2285,7 @@ export default function VendorPortalPage() {
               return (
                 <div
                   key={lead.id}
-                  className={`p-6 sm:p-7 rounded-2xl border transition-all ${
+                  className={`p-4 sm:p-6 lg:p-7 rounded-2xl border transition-all ${
                     isDirectlyAssigned
                       ? "bg-[#181818] border-[#C5A059]/50 shadow-2xl"
                       : "bg-[#141414] border-[#292929]"

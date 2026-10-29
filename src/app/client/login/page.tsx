@@ -62,8 +62,8 @@ export default function ClientLoginPage() {
   };
 
   return (
-    <div className="min-h-[80vh] flex flex-col justify-center items-center py-10 px-4">
-      <div className="w-full max-w-md bg-[#161616] border border-[#2A2A2A] rounded-2xl p-6 sm:p-8 shadow-2xl space-y-6">
+    <div className="min-h-[80vh] flex flex-col justify-center items-center py-6 sm:py-10 px-3 sm:px-4">
+      <div className="w-full max-w-md bg-[#161616] border border-[#2A2A2A] rounded-2xl p-4 sm:p-8 shadow-2xl space-y-5 sm:space-y-6">
         {/* Brand Crest */}
         <div className="text-center space-y-2">
           <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-[#C5A059] to-[#997A3A] text-black font-serif font-bold text-2xl flex items-center justify-center mx-auto shadow-md shadow-[#C5A059]/20">

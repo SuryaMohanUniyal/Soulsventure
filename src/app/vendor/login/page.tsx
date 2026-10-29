@@ -69,7 +69,7 @@ export default function VendorLoginPage() {
   };
 
   return (
-    <div className="max-w-xl mx-auto py-8 sm:py-14 space-y-8 animate-in fade-in duration-300">
+    <div className="max-w-xl mx-auto py-6 sm:py-12 px-3 sm:px-4 space-y-6 sm:space-y-8 animate-in fade-in duration-300">
       {/* Header Banner */}
       <div className="text-center space-y-2">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#C5A059]/10 text-[#C5A059] border border-[#C5A059]/30 text-xs font-mono uppercase tracking-wider">
@@ -85,7 +85,7 @@ export default function VendorLoginPage() {
       </div>
 
       {/* Main Login Card */}
-      <div className="p-6 sm:p-8 bg-[#181818] border border-[#2B2B2B] rounded-2xl shadow-2xl space-y-6 relative">
+      <div className="p-4 sm:p-8 bg-[#181818] border border-[#2B2B2B] rounded-2xl shadow-2xl space-y-5 sm:space-y-6 relative">
         <div className="absolute top-0 right-8 -translate-y-1/2 px-3 py-0.5 rounded-full bg-[#C5A059] text-black font-mono font-bold text-[10px] uppercase tracking-wider shadow-sm">
           Encrypted Session
         </div>
@@ -156,7 +156,7 @@ export default function VendorLoginPage() {
       </div>
 
       {/* Quick 1-Click Role-Based Demo Logins */}
-      <div className="p-5 bg-[#141414] border border-[#262626] rounded-2xl space-y-3.5">
+      <div className="p-4 sm:p-5 bg-[#141414] border border-[#262626] rounded-2xl space-y-3 sm:space-y-3.5">
         <div className="flex items-center justify-between">
           <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-semibold flex items-center gap-1.5">
             <Sparkles className="w-3.5 h-3.5" />
