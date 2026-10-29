@@ -1171,6 +1171,77 @@ gourmetMenuPlan: [
           "Rabari pastoral settlement cultural walkthrough"
         ],
         chauffeurDirectives: "Coordinate with 4x4 safari team. Keep cold drinks, mineral water, and binoculars accessible."
+      },
+      {
+        dayNumber: 3,
+        date: "2026-11-20",
+        dayTitle: "Devgiri Cave Temple & Granite Hills Exploration",
+        reportingTime: "06:00 IST",
+        releaseTime: "19:30 IST",
+        startLocation: "SUJÁN JAWAI Camp Base",
+        endLocation: "SUJÁN JAWAI Camp Base",
+        routeOverview: "Camp ➔ Devgiri Granite Caves ➔ Hilltop Shrine ➔ Wilderness Pastures ➔ Camp",
+        distanceKm: 36,
+        travelDuration: "Half Day Disposal + Sunset Drive",
+        sightseeingVisits: [
+          "Ancient Devgiri cave temple perched atop monolith rocks",
+          "Wild leopard habitat tracking on granite boulders",
+          "Sunset high-tea setup at escarpment summit"
+        ],
+        chauffeurDirectives: "Standby at camp gate. Assist guests during rocky ascents and maintain chilled beverages in vehicle."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-11-21",
+        dayTitle: "Jawai Dam Reservoir & Migratory Flamingo Safari",
+        reportingTime: "06:15 IST",
+        releaseTime: "19:00 IST",
+        startLocation: "SUJÁN JAWAI Camp Base",
+        endLocation: "SUJÁN JAWAI Camp Base",
+        routeOverview: "Camp ➔ Jawai Bandh Sluice Gates ➔ Marshland Overlook ➔ Local Artisan Pottery ➔ Camp",
+        distanceKm: 48,
+        travelDuration: "Full Day Wetland Excursion",
+        sightseeingVisits: [
+          "Jawai Dam reservoir & marsh crocodile observation points",
+          "Migratory flamingo, crane and pelican colonies with Swarovski optics",
+          "Pottery demonstration with rural village master artisans"
+        ],
+        chauffeurDirectives: "Keep dust covers on luggage. Coordinate timing with Naturalist Salim for ideal wetland lighting."
+      },
+      {
+        dayNumber: 5,
+        date: "2026-11-22",
+        dayTitle: "Granite Wilderness Sundowner & Astronomy Night",
+        reportingTime: "08:00 IST",
+        releaseTime: "21:30 IST",
+        startLocation: "SUJÁN JAWAI Camp Base",
+        endLocation: "SUJÁN JAWAI Camp Base",
+        routeOverview: "Camp ➔ Southern Koppies Track ➔ Bush Dining Glade ➔ Stargazing Ridge ➔ Camp",
+        distanceKm: 32,
+        travelDuration: "Afternoon & Stargazing Disposal",
+        sightseeingVisits: [
+          "Leisurely bush trail drive exploring indigenous flora & fauna",
+          "Campfire sundowner on scenic granite ridge",
+          "Telescope stargazing session under clear desert skies"
+        ],
+        chauffeurDirectives: "Pre-warm cabin with fleece blankets for night return transfer. Flashlights on standby."
+      },
+      {
+        dayNumber: 6,
+        date: "2026-11-23",
+        dayTitle: "Intercity Highway Departure to Udaipur Airport",
+        reportingTime: "07:30 IST",
+        releaseTime: "11:30 IST (Trip Sign-Off)",
+        startLocation: "SUJÁN JAWAI Camp Porch",
+        endLocation: "Udaipur Airport (UDR) Terminal 1 Gate 1",
+        routeOverview: "Jawai Bandh ➔ Pindwara ➔ Gogunda Mountain Pass ➔ NH-27 Expressway ➔ Udaipur Airport",
+        distanceKm: 145,
+        travelDuration: "3 hours 15 mins",
+        sightseeingVisits: [
+          "Scenic morning drive through southern Aravalli hills",
+          "VIP airport express transfer to Departure Gate 1"
+        ],
+        chauffeurDirectives: "Check tyre pressure and fuel at 07:00 IST. Assist with luggage handover at airport VIP check-in."
       }
     ],
         campSchedule: [
@@ -1649,6 +1720,59 @@ gourmetMenuPlan: [
           "Sunset drive along Fatehsagar Lake in Vintage 1947 Cadillac"
         ],
         chauffeurDirectives: "Ensure Vintage Cadillac is prepped and polished for afternoon 16:30 IST lakeside promenade drive."
+      },
+      {
+        dayNumber: 3,
+        date: "2026-12-04",
+        dayTitle: "Kumbhalgarh Fort Great Wall & Mountain Excursion",
+        reportingTime: "08:30 IST",
+        releaseTime: "18:30 IST",
+        startLocation: "The Oberoi Udaivilas",
+        endLocation: "The Oberoi Udaivilas",
+        routeOverview: "Udaivilas ➔ NH-58 Hill Corridor ➔ Kumbhalgarh Forest Range ➔ Badal Mahal ➔ Return",
+        distanceKm: 98,
+        travelDuration: "Full Day Mountain Excursion (2h 15m each way)",
+        sightseeingVisits: [
+          "The Great Wall of India (second longest continuous wall in the world)",
+          "Cloud Palace (Badal Mahal) birthplace of Maharana Pratap",
+          "Scenic mountain pass vistas of the Aravalli range"
+        ],
+        chauffeurDirectives: "Smooth hill driving with gentle acceleration. Maintain 21°C cabin temperature. Assist Countess during steep fortress walks."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-12-05",
+        dayTitle: "Shilpgram Artisan Village & Lake Badi Sunset Loop",
+        reportingTime: "09:30 IST",
+        releaseTime: "19:30 IST",
+        startLocation: "The Oberoi Udaivilas",
+        endLocation: "The Oberoi Udaivilas",
+        routeOverview: "Udaivilas ➔ Shilpgram Rural Arts Complex ➔ Lake Badi (Tiger Lake) ➔ Bahubali Hill ➔ Udaivilas",
+        distanceKm: 34,
+        travelDuration: "Heritage Leisure Disposal",
+        sightseeingVisits: [
+          "Shilpgram traditional folk art and terracotta craft pavilion",
+          "Lake Badi tranquil mountain-surrounded waters",
+          "Sunset viewpoint at Bahubali Hill overview"
+        ],
+        chauffeurDirectives: "Station vehicle in shade at Shilpgram VIP parking. Assist with delicate artisan pottery purchases."
+      },
+      {
+        dayNumber: 5,
+        date: "2026-12-06",
+        dayTitle: "Final VIP Airport Express Departure",
+        reportingTime: "12:00 IST",
+        releaseTime: "14:30 IST (Trip Sign-Off)",
+        startLocation: "The Oberoi Udaivilas Main Lobby",
+        endLocation: "Udaipur Airport VIP Lounge Exit Gate 1",
+        routeOverview: "The Oberoi Udaivilas ➔ Fatehsagar Promenade ➔ NH-48 Expressway ➔ Udaipur Airport VIP Lounge",
+        distanceKm: 24,
+        travelDuration: "35 mins",
+        sightseeingVisits: [
+          "Farewell lakeside drive",
+          "VIP tarmac lounge drop-off"
+        ],
+        chauffeurDirectives: "Report at 12:00 IST sharp. Transfer 5 VIP bags with white-glove protocol to airport airline concierge."
       }
     ],
         guideSchedule: [
@@ -1870,6 +1994,77 @@ gourmetMenuPlan: [
           "Ceremonial lakeside escort into The Oberoi Udaivilas"
         ],
         chauffeurDirectives: "Both Defenders in tandem formation with luggage van behind. Presidential protocol in place."
+      },
+      {
+        dayNumber: 2,
+        date: "2026-12-11",
+        dayTitle: "Bilateral Clean Energy Summit & Zenana Mahal Escort",
+        reportingTime: "08:30 IST",
+        releaseTime: "21:30 IST",
+        startLocation: "The Oberoi Udaivilas Presidential Wing",
+        endLocation: "The Oberoi Udaivilas Presidential Wing",
+        routeOverview: "Udaivilas ➔ Private Jetty ➔ City Palace Badi Pol ➔ Zenana Mahal Executive Chamber ➔ Return Convoy",
+        distanceKm: 18,
+        travelDuration: "Full Day VIP Security Protocol",
+        sightseeingVisits: [
+          "VIP delegation motorcade to City Palace",
+          "Bilateral Clean Energy Summit in Zenana Mahal",
+          "Private lakeside escort and evening gala dinner"
+        ],
+        chauffeurDirectives: "Both Defenders maintain tandem spacing with lead protocol. Standby at City Palace VIP portico."
+      },
+      {
+        dayNumber: 3,
+        date: "2026-12-12",
+        dayTitle: "Eklingji & Nagda 10th-Century Temple Complex Convoy",
+        reportingTime: "09:00 IST",
+        releaseTime: "18:30 IST",
+        startLocation: "The Oberoi Udaivilas Presidential Wing",
+        endLocation: "The Oberoi Udaivilas Presidential Wing",
+        routeOverview: "Udaivilas ➔ NH-58 North Expressway ➔ Kailashpuri Eklingji Temple ➔ Sas-Bahu Nagda Temples ➔ Udaivilas",
+        distanceKm: 46,
+        travelDuration: "Half Day Temple Convoy Excursion",
+        sightseeingVisits: [
+          "Eklingji Temple (guardian deity of the House of Mewar with 108 shrines)",
+          "10th-century Sas-Bahu twin temples in ancient Nagda",
+          "Private temple blessing by Chief Priest"
+        ],
+        chauffeurDirectives: "Highway convoy cruising. Ensure security clearance at temple VIP gate. Keep bottled spring water chilled."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-12-13",
+        dayTitle: "Jagmandir Island Palace Gala Dinner Security Escort",
+        reportingTime: "10:00 IST",
+        releaseTime: "23:00 IST",
+        startLocation: "The Oberoi Udaivilas Presidential Wing",
+        endLocation: "The Oberoi Udaivilas Presidential Wing",
+        routeOverview: "Udaivilas ➔ Waterfront Promenade ➔ Badi Pal Jetty (Boat Transfer) ➔ Jagmandir Island ➔ Return Escort",
+        distanceKm: 14,
+        travelDuration: "Executive Leisure & Evening Island Gala",
+        sightseeingVisits: [
+          "Executive delegation shopping at Mewar Art Gallery",
+          "Sunset royal boat transfer across Lake Pichola",
+          "Jagmandir Island Palace celebratory gala dinner"
+        ],
+        chauffeurDirectives: "Station vehicles at Badi Pal jetty parking. Remain on active radio standby until final return boat docks."
+      },
+      {
+        dayNumber: 5,
+        date: "2026-12-14",
+        dayTitle: "Presidential Convoy Departure Transfer",
+        reportingTime: "10:30 IST",
+        releaseTime: "12:30 IST (Trip Sign-Off)",
+        startLocation: "The Oberoi Udaivilas Presidential Wing",
+        endLocation: "General Aviation VIP Terminal, Udaipur Airport",
+        routeOverview: "Udaivilas ➔ Express Corridor ➔ Airport Bypass ➔ General Aviation VIP Terminal",
+        distanceKm: 26,
+        travelDuration: "35 mins",
+        sightseeingVisits: [
+          "Presidential motorcade farewell transfer",
+          "Direct tarmac escort to private jet steps"
+        ],
+        chauffeurDirectives: "Full ceremonial departure formation. Transfer all delegation luggage directly to aircraft hold."
       }
     ],
         guideSchedule: [
