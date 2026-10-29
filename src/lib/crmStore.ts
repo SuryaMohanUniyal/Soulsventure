@@ -193,6 +193,47 @@ export interface GourmetDayPlan {
   dietaryNotes: string;
 }
 
+export interface DailyCampAdventureSchedule {
+  dayNumber: number;
+  date: string;
+  dayTitle: string;
+  campTheme: string;
+  tentAccommodation: {
+    tentNumber: string;               // e.g. "Royal Tented Pavilion #03"
+    tentType: string;                 // "Luxury Canvas Suite with Private Veranda & Plunge Pool"
+    viewOrientation: string;          // "Facing Granite Escarpment & Acacia Wilderness"
+    bedConfiguration: string;         // "King Featherbed with heated organic cotton linens"
+    climateControl: string;           // "Silent inverter AC & evening woodstove burner"
+    butlerAssigned: string;           // "Private Butler Kalu Singh (24/7 dedicated service)"
+    checkInStatus: string;            // "17:30 IST Check-in / Rabari ceremonial welcome"
+  };
+  adventureAndSafaris: Array<{
+    activityName: string;
+    timeSlot: string;
+    leadTracker: string;
+    vehicleFleet: string;
+    equipmentProvided: string;
+    activityDescription: string;
+    terrainAndIntensity: "Gentle 4x4 Drive" | "Moderate Rock Scramble" | "Leisurely Cultural Walk" | "Campfire Evening";
+  }>;
+  campGamesAndLeisure: Array<{
+    gameName: string;
+    timing: string;
+    venue: string;
+    description: string;
+  }>;
+  bushDiningAndMenu: {
+    dawnRefreshment: string;
+    breakfast: string;
+    lunch: string;
+    sundownerHighTea: string;
+    bushDinner: string;
+    dietaryDirectives: string;
+  };
+  fieldGearChecklist: string[];
+  seniorNaturalistNotes: string;
+}
+
 export interface DailyGuideSchedule {
   dayNumber: number;
   date: string;
@@ -271,6 +312,7 @@ export interface CRMLead {
   arrivalDetails?: ArrivalAndDepartureDetails;
   routeSchedule?: DailyRouteSchedule[];
   guideSchedule?: DailyGuideSchedule[];
+  campSchedule?: DailyCampAdventureSchedule[];
   gourmetMenuPlan?: GourmetDayPlan[];
   milestones: {
     inquiryLogged: boolean;
@@ -842,6 +884,118 @@ export const INITIAL_LEADS: CRMLead[] = [
         asiPermitNumber: "ASI-DEPART-CLEAR-09"
       }
     ],
+    campSchedule: [
+      {
+        dayNumber: 3,
+        date: "2026-11-16",
+        dayTitle: "Jawai Arrival, Tent Allocation & Sunset Leopard Sundowner",
+        campTheme: "Wilderness Welcome & Granite Koppie Orientation",
+        tentAccommodation: {
+          tentNumber: "Royal Tented Pavilion #04 (Family Suite)",
+          tentType: "Luxury Two-Bedroom Canvas Suite with Private Veranda",
+          viewOrientation: "Facing Granite Monoliths & Camel Pastures",
+          bedConfiguration: "1x King Featherbed for Mr. & Mrs. Sharma + 2x Twin Beds for Teenagers",
+          climateControl: "Dual inverter AC and evening wood-burning stoves",
+          butlerAssigned: "Private Butler Vikram Rathore (24/7 dedicated service)",
+          checkInStatus: "14:00 IST Check-in / Traditional Rajasthani floral welcome"
+        },
+        adventureAndSafaris: [
+          {
+            activityName: "Sunset Leopard Escarpment Drive",
+            timeSlot: "16:30 – 18:45 IST",
+            leadTracker: "Senior Naturalist Salim & Spotter Bhawani",
+            vehicleFleet: "Custom 4x4 Open Safari Jeep #01",
+            equipmentProvided: "4x Swarovski 8x42 HD Binoculars & heavy fleece blankets",
+            activityDescription: "Scenic late-afternoon 4x4 drive navigating granite boulders to spot wild leopards sunning on rocks before evening hunt.",
+            terrainAndIntensity: "Gentle 4x4 Drive"
+          }
+        ],
+        campGamesAndLeisure: [
+          {
+            gameName: "Granite Koppie Archery & Traditional Gulli Danda",
+            timing: "15:30 – 16:30 IST",
+            venue: "Camp Clearing Pitch",
+            description: "Traditional archery lessons for the family and teenagers with light recurve bows."
+          },
+          {
+            gameName: "High-Powered Bush Stargazing",
+            timing: "20:30 – 21:30 IST",
+            venue: "Campfire Observation Deck",
+            description: "Viewing planets and lunar craters through the camp computerized Celestron telescope."
+          }
+        ],
+        bushDiningAndMenu: {
+          dawnRefreshment: "Morning detox at Udaivilas",
+          breakfast: "Ayurvedic breakfast at Udaivilas",
+          lunch: "Granite Koppie Bush Picnic: Spiced cumin potatoes, roomali rotis, roasted buttermilk, gatte ki subzi",
+          sundownerHighTea: "Hilltop Sunset Tea (17:30 IST): Masala chai brewed over acacia embers, cardamom cookies, samosas",
+          bushDinner: "Lantern-Lit Campfire Feast: 100% Pure Vegetarian Rajasthani khichdi with Gir cow ghee, smoked baingan bharta, warm almond halwa",
+          dietaryDirectives: "Strictly 100% Pure Vegetarian. Dedicated Jain dishes without onion, garlic, or root vegetables prepared for Mrs. Sharma."
+        },
+        fieldGearChecklist: [
+          "4x Swarovski 8x42 HD Binoculars assigned to Sharma family",
+          "Fleece ponchos and warm blankets in Safari Jeep #01",
+          "Organic mosquito repellent and chilled water bottles"
+        ],
+        seniorNaturalistNotes: "Sharma family with two teenagers. Emphasize thrilling wildlife sightings, predator biology, and campfire constellations."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-11-17",
+        dayTitle: "Dawn Leopard Tracking Safari & Kumbhalgarh Excursion",
+        campTheme: "Dawn Big Cat Tracking & Great Wall History",
+        tentAccommodation: {
+          tentNumber: "Royal Tented Pavilion #04",
+          tentType: "Luxury Two-Bedroom Canvas Suite",
+          viewOrientation: "Facing Granite Monoliths",
+          bedConfiguration: "Turn-down service with hot water bottles",
+          climateControl: "Heated stoves in early morning",
+          butlerAssigned: "Butler Vikram Rathore",
+          checkInStatus: "In-House Resident VIP"
+        },
+        adventureAndSafaris: [
+          {
+            activityName: "Dawn Wilderness Leopard Tracking Safari",
+            timeSlot: "06:00 – 09:00 IST",
+            leadTracker: "Senior Naturalist Salim",
+            vehicleFleet: "Custom 4x4 Open Safari Jeep #01",
+            equipmentProvided: "Swarovski HD Binoculars & camera mounts",
+            activityDescription: "Early-morning tracking of leopard family along riverbed sand banks and rocky caves.",
+            terrainAndIntensity: "Gentle 4x4 Drive"
+          },
+          {
+            activityName: "Kumbhalgarh Fort Excursion & Rock Walk",
+            timeSlot: "11:30 – 15:30 IST",
+            leadTracker: "Salim & Guide Dr. Mathur",
+            vehicleFleet: "Defender 110 & Safari Escort",
+            equipmentProvided: "Walking sticks, hydration backpacks",
+            activityDescription: "Walk along the 36-km fortified perimeter wall of Kumbhalgarh Citadel.",
+            terrainAndIntensity: "Moderate Rock Scramble"
+          }
+        ],
+        campGamesAndLeisure: [
+          {
+            gameName: "Campfire Folk Music & Sarangi Night",
+            timing: "20:00 – 21:30 IST",
+            venue: "Central Campfire Boma",
+            description: "Live performance by Manganiyar folk musicians around the acacia wood fire."
+          }
+        ],
+        bushDiningAndMenu: {
+          dawnRefreshment: "05:45 IST: Steaming ginger chai, warm milk, and freshly baked cookies",
+          breakfast: "Bush Safari Dawn Breakfast (09:15 IST): Paneer scramble, warm butter croissants, fresh orange juice",
+          lunch: "Fort View Courtyard Lunch: Smoked baingan bharta, phulkas with churned white butter, cucumber soup",
+          sundownerHighTea: "Village Hearth Tea: Spiced tea brewed over embers with sesame seed laddoos",
+          bushDinner: "Private Terrace Candlelit Feast: Mughlai paneer lababdar, 24-hr slow-cooked dal makhani, laccha paratha, kesar pista kulfi",
+          dietaryDirectives: "Mild spices for teenagers. 100% Pure vegetarian and Jain courses."
+        },
+        fieldGearChecklist: [
+          "Check tire pressure and hydraulic camera arms on Jeep #01",
+          "Stock thermal blankets for 06:00 dawn safari"
+        ],
+        seniorNaturalistNotes: "Coordinate departure handover for Nov 18 morning return to Udaipur."
+      }
+    ],
 gourmetMenuPlan: [
       {
         dayNumber: 1,
@@ -1019,7 +1173,334 @@ gourmetMenuPlan: [
         chauffeurDirectives: "Coordinate with 4x4 safari team. Keep cold drinks, mineral water, and binoculars accessible."
       }
     ],
-    gourmetMenuPlan: [
+        campSchedule: [
+      {
+        dayNumber: 1,
+        date: "2026-11-18",
+        dayTitle: "Wilderness Arrival, Tent Allocation & Lantern-Lit Welcome",
+        campTheme: "Introduction to the Jawai Granite Sanctuary & Camp Orientation",
+        tentAccommodation: {
+          tentNumber: "Royal Tented Pavilion #03 (Escarpment View)",
+          tentType: "Luxury Canvas Suite with Private Veranda & Heated Plunge Pool",
+          viewOrientation: "Facing Granite Koppies & Acacia Woodland",
+          bedConfiguration: "King Featherbed with 400-thread organic cotton linens & hot water bottles",
+          climateControl: "Silent climate-controlled AC and evening wood-burning stove",
+          butlerAssigned: "Private Butler Kalu Singh (Dedicated 24/7 call)",
+          checkInStatus: "17:30 IST Check-in / Chilled pomegranate-mint welcome infusion"
+        },
+        adventureAndSafaris: [
+          {
+            activityName: "Sunset Camp Perimeter Walk & Wilderness Acclimatization",
+            timeSlot: "17:45 – 18:45 IST",
+            leadTracker: "Senior Naturalist Salim",
+            vehicleFleet: "On Foot Escort & Camp 4x4",
+            equipmentProvided: "Swarovski 8x42 HD Binoculars & LED flashlights",
+            activityDescription: "Gentle sunset walk around camp perimeter to inspect fresh leopard pugmarks and listen to evening alarm calls of spotted deer.",
+            terrainAndIntensity: "Leisurely Cultural Walk"
+          }
+        ],
+        campGamesAndLeisure: [
+          {
+            gameName: "Granite Koppie Archery & Traditional Gulli Danda",
+            timing: "17:00 – 17:45 IST",
+            venue: "Sandy Camp Clearing Lawn",
+            description: "Traditional Rajasthani recurve bow archery target practice under master archer supervision."
+          },
+          {
+            gameName: "High-Powered Bush Astronomy & Stargazing",
+            timing: "21:00 – 22:00 IST",
+            venue: "Camp Observation Deck",
+            description: "Computerized Celestron telescope setup to view Jupiter moons, Saturn rings, and the Orion nebula under crystal desert skies."
+          }
+        ],
+        bushDiningAndMenu: {
+          dawnRefreshment: "N/A (Arrival Day)",
+          breakfast: "In-flight selection",
+          lunch: "Chauffeured Luxury Picnic: Smoked chicken breast with Dijon mustard, gluten-free seed crackers, chilled organic grape spritzer",
+          sundownerHighTea: "Jawai Escarpment Sunset Tea (17:45 IST): Herbal rooibos tea, roasted spiced almonds, gluten-free lemon cookies",
+          bushDinner: "Lantern-Lit Bush Dinner: Slow-braised Rajasthani Laal Maas (spiced tender mutton), chargrilled paneer skewers, millet rotis, warm date & fig pudding",
+          dietaryDirectives: "Lady Eleanor Vance is strictly Celiac (Gluten-Free). Dedicated sterilized cookware. Dr. Vance: Low sodium."
+        },
+        fieldGearChecklist: [
+          "2x Swarovski 8x42 HD Binoculars calibrated and placed in Pavilion #03",
+          "DSLR Telephoto lens beanbags mounted on Safari Jeep #02",
+          "Heavy wool fleece blankets and hot water bottles placed on veranda loungers",
+          "Natural organic citronella mosquito repellent and hydration flasks provided"
+        ],
+        seniorNaturalistNotes: "Dr. Vance is a Fellow of the Royal Geographical Society. Brief him on local raptor nesting sites and camera blind locations."
+      },
+      {
+        dayNumber: 2,
+        date: "2026-11-19",
+        dayTitle: "Dawn Leopard Tracking Safari & Jawai Dam Birding Expedition",
+        campTheme: "Leopard Territory Navigation & Wetland Avian Survey",
+        tentAccommodation: {
+          tentNumber: "Royal Tented Pavilion #03",
+          tentType: "Luxury Canvas Suite with Private Veranda",
+          viewOrientation: "Escarpment Sunrise View",
+          bedConfiguration: "King Featherbed (Fresh turn-down service with lavender mist)",
+          climateControl: "Pre-dawn heater warmup at 05:30 IST; AC during midday heat",
+          butlerAssigned: "Butler Kalu Singh (Dawn knock & pre-safari service at 05:45 IST)",
+          checkInStatus: "In-House Resident VIP"
+        },
+        adventureAndSafaris: [
+          {
+            activityName: "Dawn Leopard Tracking Game Drive",
+            timeSlot: "06:00 – 09:00 IST",
+            leadTracker: "Senior Naturalist Salim & Master Spotter Bhawani",
+            vehicleFleet: "Custom 4x4 Open Safari Jeep #02 (Hydraulic camera mounts)",
+            equipmentProvided: "Swarovski 8x42 HD Binoculars, heavy fleece ponchos, photography beanbags",
+            activityDescription: "Tracking resident female leopard 'Neelam' and her sub-adult cub across granite kopjes. Observing territorial markings and morning sunning on high rocks.",
+            terrainAndIntensity: "Gentle 4x4 Drive"
+          },
+          {
+            activityName: "Jawai Dam Wetland Birding & Marsh Crocodile Safari",
+            timeSlot: "16:00 – 18:30 IST",
+            leadTracker: "Senior Naturalist Salim",
+            vehicleFleet: "Custom 4x4 Open Safari Jeep #02",
+            equipmentProvided: "Swarovski Spotting Scope 20-60x85, field guide to Indian birds",
+            activityDescription: "Expedition to Jawai Bandh reservoir to photograph flamingos, demoiselle cranes, bar-headed geese, and basking marsh crocodiles.",
+            terrainAndIntensity: "Moderate Rock Scramble"
+          }
+        ],
+        campGamesAndLeisure: [
+          {
+            gameName: "Wilderness Croquet & Backgammon",
+            timing: "14:00 – 15:30 IST",
+            venue: "Camp Boma Shaded Veranda",
+            description: "Vintage brass croquet on sandy lawn, hand-carved camel-bone backgammon and chess under tented shade."
+          },
+          {
+            gameName: "Campfire Storytelling with Rabari Village Elders",
+            timing: "20:00 – 21:00 IST",
+            venue: "Central Campfire Hearth",
+            description: "Centuries-old oral folklore of peaceful coexistence between the red-turbaned pastoralists and wild leopards."
+          }
+        ],
+        bushDiningAndMenu: {
+          dawnRefreshment: "05:45 IST pre-drive in tent: Freshly brewed Blue Tokai French press coffee, ginger-lemon infusion & gluten-free oat biscuits",
+          breakfast: "Bush Breakfast under Acacia Trees (09:15 IST): Farm-fresh eggs florentine on gluten-free buckwheat bread, wild berry compote, cold-pressed orange juice",
+          lunch: "Organic Garden Shaded Picnic (13:30 IST): Chargrilled seasonal asparagus, roasted cumin baby potatoes, cucumber mint gazpacho",
+          sundownerHighTea: "Granite Hilltop Sundowner (18:00 IST): G&T bar with Fever-Tree tonic, single-estate Assam tea, gluten-free savory tarts",
+          bushDinner: "Under-Canvas Camp Fire Barbecue: Herb-crusted tender lamb cutlets, flame-roasted portobello mushrooms, saffron cardamom kheer",
+          dietaryDirectives: "Lady Eleanor: Strictly Gluten-Free (certified dedicated pans). Dr. Vance: Low sodium."
+        },
+        fieldGearChecklist: [
+          "Clean lens cloths and dustproof bags for photography gear",
+          "High-power spotting scope mounted on tripod in Jeep #02",
+          "Thermal fleece lap blankets for dawn 14°C temperature"
+        ],
+        seniorNaturalistNotes: "Lady Eleanor is keen on telephoto bird photography. Position Jeep #02 with morning sun at 45 degrees angle along water edge."
+      },
+      {
+        dayNumber: 3,
+        date: "2026-11-20",
+        dayTitle: "Cave Dweller Leopard Tracking & Granite Koppie Scramble",
+        campTheme: "Apex Predator Tracking & Geological Formations",
+        tentAccommodation: {
+          tentNumber: "Royal Tented Pavilion #03",
+          tentType: "Luxury Canvas Suite with Private Veranda",
+          viewOrientation: "Escarpment View",
+          bedConfiguration: "King Featherbed",
+          climateControl: "Heated woodstove burner in evening",
+          butlerAssigned: "Butler Kalu Singh",
+          checkInStatus: "In-House Resident VIP (Oxford Retirement Celebration Day)"
+        },
+        adventureAndSafaris: [
+          {
+            activityName: "Granite Cave Leopard Tracking Safari",
+            timeSlot: "06:15 – 09:30 IST",
+            leadTracker: "Senior Naturalist Salim",
+            vehicleFleet: "Custom 4x4 Open Safari Jeep #02",
+            equipmentProvided: "Swarovski 8x42 HD Binoculars, heavy fleece ponchos",
+            activityDescription: "Navigating deep into Devgiri hill cave systems to track alpha male leopard resting on boulder ledge.",
+            terrainAndIntensity: "Moderate Rock Scramble"
+          },
+          {
+            activityName: "Rabari Pastoral Village Walking Safari & Camel Escort",
+            timeSlot: "16:30 – 18:30 IST",
+            leadTracker: "Salim & Rabari Elder Hira Ram",
+            vehicleFleet: "Gentle Camel Cart & Walking Escort",
+            equipmentProvided: "Walking sticks, hydration packs",
+            activityDescription: "Visit to traditional Rabari family compound, meeting herders, witnessing evening livestock gathering into thorn corrals.",
+            terrainAndIntensity: "Leisurely Cultural Walk"
+          }
+        ],
+        campGamesAndLeisure: [
+          {
+            gameName: "Traditional Rajasthani Gulli Danda & Archery",
+            timing: "15:00 – 16:15 IST",
+            venue: "Camp Clearing",
+            description: "Traditional folk game played with village youths and camp trackers."
+          },
+          {
+            gameName: "Private Stargazing Milestone Toast",
+            timing: "21:30 – 22:30 IST",
+            venue: "Pavilion #03 Private Veranda Deck",
+            description: "Champagne toast under star canopy celebrating Dr. Vance retirement from Oxford Chair."
+          }
+        ],
+        bushDiningAndMenu: {
+          dawnRefreshment: "05:45 IST: Masala spiced tea & gluten-free almond biscotti",
+          breakfast: "Bush Safari Picnic on Granite Plateau: Organic poached eggs, avocado tartine on gluten-free toast, fresh papaya juice",
+          lunch: "Farmhouse Lunch: Slow-cooked yellow lentils, steamed basmati, charred cottage cheese skewers, fresh mint salad",
+          sundownerHighTea: "Rabari Village Tea: Clay kulhad tea brewed over wild acacia embers",
+          bushDinner: "Milestone Celebration Banquet: Chargrilled quail (or organic chicken), saffron infused rice, caramelized pear tart (gluten-free)",
+          dietaryDirectives: "Custom gluten-free Oxford celebration cake presented at 21:00 IST."
+        },
+        fieldGearChecklist: [
+          "2x Walking sticks and grip boots for granite scrambling",
+          "Camera rain/dust protective sleeves",
+          "Thermos with hot spiced water in vehicle"
+        ],
+        seniorNaturalistNotes: "Dr. Vance Oxford retirement milestone! Have camp team sing traditional blessing song at dinner."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-11-21",
+        dayTitle: "Full Day Wilderness Immersion & Deep Valley Drive",
+        campTheme: "Wilderness Flora, Fauna & Raptor Photography",
+        tentAccommodation: {
+          tentNumber: "Royal Tented Pavilion #03",
+          tentType: "Luxury Canvas Suite with Private Veranda",
+          viewOrientation: "Escarpment View",
+          bedConfiguration: "King Featherbed",
+          climateControl: "Climate-controlled AC / Stove",
+          butlerAssigned: "Butler Kalu Singh",
+          checkInStatus: "In-House Resident VIP"
+        },
+        adventureAndSafaris: [
+          {
+            activityName: "Dawn Leopard & Striped Hyena Safari",
+            timeSlot: "06:00 – 09:00 IST",
+            leadTracker: "Senior Naturalist Salim",
+            vehicleFleet: "Custom 4x4 Safari Jeep #02",
+            equipmentProvided: "Swarovski HD Binoculars & beanbags",
+            activityDescription: "Tracking early-morning nocturnal wanderers including Indian striped hyena, desert fox, and leopards returning to dens.",
+            terrainAndIntensity: "Gentle 4x4 Drive"
+          },
+          {
+            activityName: "Sunset Escarpment 4x4 Summit Drive",
+            timeSlot: "16:45 – 19:00 IST",
+            leadTracker: "Salim",
+            vehicleFleet: "Custom 4x4 Safari Jeep #02",
+            equipmentProvided: "Swarovski Binoculars, fleece blankets",
+            activityDescription: "High-angle panoramic ascent to top of Jawai granite monolith for 360-degree sunset over Aravalli ridges.",
+            terrainAndIntensity: "Moderate Rock Scramble"
+          }
+        ],
+        campGamesAndLeisure: [
+          {
+            gameName: "Wildlife Sketching & Photography Masterclass",
+            timing: "14:30 – 16:00 IST",
+            venue: "Camp Library Pavilion",
+            description: "Reviewing day digital RAW photo captures with Salim, camera sensor cleaning, composition pointers."
+          }
+        ],
+        bushDiningAndMenu: {
+          dawnRefreshment: "French press coffee and cold-pressed apple-ginger juice",
+          breakfast: "Organic bush breakfast with chia bowls and gluten-free crepes",
+          lunch: "Shaded koppie picnic with roasted root vegetables and grilled fish",
+          sundownerHighTea: "Hilltop sundowner with Châteauneuf-du-Pape and artisanal cheeses",
+          bushDinner: "Campfire Lantern Barbecue: Grilled lamb steaks, roasted sweet potatoes, warm honey almond halwa",
+          dietaryDirectives: "100% Gluten-free certified."
+        },
+        fieldGearChecklist: [
+          "High-capacity power banks for camera recharging in field",
+          "Dust brushes for telephoto lenses",
+          "Fleece jackets in jeep"
+        ],
+        seniorNaturalistNotes: "Check raptor roosts on west cliff face."
+      },
+      {
+        dayNumber: 5,
+        date: "2026-11-22",
+        dayTitle: "Farewell Wilderness Drive & Night Sky Stargazing",
+        campTheme: "Final Tracking Highlights & Farewell Bush Banquet",
+        tentAccommodation: {
+          tentNumber: "Royal Tented Pavilion #03",
+          tentType: "Luxury Canvas Suite with Private Veranda",
+          viewOrientation: "Escarpment View",
+          bedConfiguration: "King Featherbed",
+          climateControl: "Heated woodstove burner",
+          butlerAssigned: "Butler Kalu Singh",
+          checkInStatus: "In-House Resident VIP"
+        },
+        adventureAndSafaris: [
+          {
+            activityName: "Dawn Leopard Farewell Safari",
+            timeSlot: "06:00 – 09:00 IST",
+            leadTracker: "Senior Naturalist Salim",
+            vehicleFleet: "Custom 4x4 Safari Jeep #02",
+            equipmentProvided: "Swarovski 8x42 HD Binoculars",
+            activityDescription: "Final morning tracking drive through southern gorges and sandy riverbeds.",
+            terrainAndIntensity: "Gentle 4x4 Drive"
+          }
+        ],
+        campGamesAndLeisure: [
+          {
+            gameName: "Camp Archery Tournament",
+            timing: "16:00 – 17:00 IST",
+            venue: "Camp Clearing",
+            description: "Friendly archery competition with traditional recurve bows."
+          }
+        ],
+        bushDiningAndMenu: {
+          dawnRefreshment: "Fresh coffee and ginger biscuits",
+          breakfast: "Farewell bush breakfast on terrace",
+          lunch: "Light farm salad and gluten-free risotto",
+          sundownerHighTea: "Escarpment sundowner overlooking leopard rocks",
+          bushDinner: "Grand 7-Course Farewell Bush Banquet under stars with live folk sarangi",
+          dietaryDirectives: "Strictly Gluten-Free."
+        },
+        fieldGearChecklist: [
+          "Check and pack all field binoculars and photography mounts",
+          "Prepare SoulsVenture wildlife trip certificate"
+        ],
+        seniorNaturalistNotes: "Present Dr. Vance with the framed pugmark cast of leopard 'Neelam'."
+      },
+      {
+        dayNumber: 6,
+        date: "2026-11-23",
+        dayTitle: "Camp Farewell, Luggage Handover & Airport Departure",
+        campTheme: "Final Morning Tea & VIP Airport Transfer",
+        tentAccommodation: {
+          tentNumber: "Royal Tented Pavilion #03 (Check-out 11:00 IST)",
+          tentType: "Luxury Canvas Suite",
+          viewOrientation: "Escarpment View",
+          bedConfiguration: "Check-out completed by 11:00 IST",
+          climateControl: "N/A",
+          butlerAssigned: "Butler Kalu Singh (Luggage assist into Maybach)",
+          checkInStatus: "Check-out 11:00 IST"
+        },
+        adventureAndSafaris: [
+          {
+            activityName: "Camp Veranda Dawn Birding & Coffee",
+            timeSlot: "07:30 – 08:30 IST",
+            leadTracker: "Naturalist Salim",
+            vehicleFleet: "Camp Veranda Deck",
+            equipmentProvided: "Swarovski Binoculars",
+            activityDescription: "Final dawn bird count from tent private veranda overlooking watering hole.",
+            terrainAndIntensity: "Campfire Evening"
+          }
+        ],
+        campGamesAndLeisure: [],
+        bushDiningAndMenu: {
+          dawnRefreshment: "Morning tea in bed",
+          breakfast: "Farewell terrace breakfast with organic farm fruits",
+          lunch: "In-flight selection",
+          sundownerHighTea: "N/A",
+          bushDinner: "N/A",
+          dietaryDirectives: "Travel snack box with gluten-free dried fruits and nuts provided for drive."
+        },
+        fieldGearChecklist: [
+          "Assist with loading all photography gear into Mercedes-Maybach",
+          "Provide cold towels and chilled mineral water bottles for airport transit"
+        ],
+        seniorNaturalistNotes: "Warm departure farewell with Rabari elders and camp team."
+      }
+    ],
+gourmetMenuPlan: [
       {
         dayNumber: 1,
         date: "2026-11-18",
@@ -1978,6 +2459,7 @@ export function getStoredLeads(): CRMLead[] {
           arrivalDetails: { ...base.arrivalDetails, ...(item.arrivalDetails || {}) },
           routeSchedule: base.routeSchedule,
           guideSchedule: base.guideSchedule,
+          campSchedule: base.campSchedule,
           gourmetMenuPlan: base.gourmetMenuPlan,
           vendorAssignments: {
             ...base.vendorAssignments,

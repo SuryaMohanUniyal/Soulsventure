@@ -6,6 +6,12 @@ import Link from "next/link";
 import {
   Building2,
   Hotel,
+  Tent,
+  Flame,
+  Target,
+  Sunrise,
+  Sunset,
+  Moon,
   Car,
   Compass,
   Plane,
@@ -57,6 +63,7 @@ import {
   INITIAL_LEADS,
   DailyRouteSchedule,
   DailyGuideSchedule,
+  DailyCampAdventureSchedule,
 } from "@/lib/crmStore";
 
 export default function VendorPortalPage() {
@@ -83,6 +90,10 @@ export default function VendorPortalPage() {
     "lead-vance-2026": 1,
     "lead-rohan-2026": 2,
     "lead-singhania-2026": 2,
+  });
+  const [activeCampDayNumber, setActiveCampDayNumber] = useState<Record<string, number>>({
+    "lead-vance-2026": 1,
+    "lead-sharma-2026": 3,
   });
 
   // Local state for vendor edits on lead cards
@@ -231,7 +242,7 @@ export default function VendorPortalPage() {
 
   // Map of date string -> operational events for this partner
   const dateEventsMap = useMemo(() => {
-    const map: Record<string, Array<{ lead: CRMLead; type: "arrival" | "stay" | "departure" | "tour" | "route"; label: string; time?: string }>> = {};
+    const map: Record<string, Array<{ lead: CRMLead; type: "arrival" | "stay" | "departure" | "tour" | "route" | "safari"; label: string; time?: string }>> = {};
 
     filteredLeads.forEach((lead) => {
       const arrDate = lead.arrivalDetails?.arrivalDate;
@@ -258,6 +269,21 @@ export default function VendorPortalPage() {
           time: lead.arrivalDetails?.finalDropoffTime || lead.arrivalDetails?.checkOutTime,
         });
       }
+
+      // Camp & Safari days (for SUJÁN JAWAI & Wilderness Adventure Partners)
+      lead.campSchedule?.forEach((c) => {
+        if (c.date) {
+          if (!map[c.date]) map[c.date] = [];
+          if (!map[c.date].some((m) => m.type === "safari" && m.lead.id === lead.id)) {
+            map[c.date].push({
+              lead,
+              type: "safari",
+              label: `Safari: ${c.dayTitle.substring(0, 22)}...`,
+              time: c.adventureAndSafaris[0]?.timeSlot?.split("–")[0]?.trim() || "06:00 IST",
+            });
+          }
+        }
+      });
 
       // Tour Guide schedule days
       lead.guideSchedule?.forEach((g) => {
@@ -312,8 +338,9 @@ export default function VendorPortalPage() {
       const dep = lead.arrivalDetails?.checkOutDate;
       const inRoute = lead.routeSchedule?.some((r) => r.date === selectedDate);
       const inGuide = lead.guideSchedule?.some((g) => g.date === selectedDate);
+      const inCamp = lead.campSchedule?.some((c) => c.date === selectedDate);
       const inMenu = lead.gourmetMenuPlan?.some((m) => m.date === selectedDate);
-      return arr === selectedDate || dep === selectedDate || inRoute || inGuide || inMenu;
+      return arr === selectedDate || dep === selectedDate || inRoute || inGuide || inCamp || inMenu;
     });
   }, [filteredLeads, selectedDate]);
 
@@ -327,6 +354,13 @@ export default function VendorPortalPage() {
   }
 
   const partnerRole = partner.role as "hotel" | "driver" | "guide" | "activity";
+  const isCampPartner =
+    partnerRole === "activity" ||
+    partner.name.toLowerCase().includes("camp") ||
+    partner.name.toLowerCase().includes("jawai") ||
+    partner.name.toLowerCase().includes("suján") ||
+    (partner.serviceOrAssets || "").toLowerCase().includes("safari") ||
+    (partner.serviceOrAssets || "").toLowerCase().includes("tented");
   const assignedLeads = filteredLeads.filter((lead) => {
     const assignment = lead.vendorAssignments?.[partnerRole as "hotel" | "driver" | "guide"];
     return assignment && (assignment.partnerId === partner.id || assignment.partnerName === partner.name);
@@ -442,21 +476,39 @@ export default function VendorPortalPage() {
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Assigned Guests</span>
-            <div className="text-2xl font-serif text-[#FDFBF7] mt-1">{filteredLeads.length} Stays</div>
-            <span className="text-[10px] text-[#C5A059] font-mono mt-0.5 block">Active Room Allocations</span>
+            <div className="text-2xl font-serif text-[#FDFBF7] mt-1">
+              {isCampPartner ? `${filteredLeads.length} Wilderness Safaris` : `${filteredLeads.length} Stays`}
+            </div>
+            <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">
+              {isCampPartner ? "Active Camp & Safari Stays" : "Active Room Allocations"}
+            </span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
-            <span className="text-[10px] font-mono uppercase text-[#71717A] block">Suite Tier</span>
-            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">Kohinoor & Royal Palace</div>
-            <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">High Floor Lake Sanctuary</span>
+            <span className="text-[10px] font-mono uppercase text-[#71717A] block">
+              {isCampPartner ? "Accommodation Tier" : "Suite Tier"}
+            </span>
+            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">
+              {isCampPartner ? "Royal Tented Pavilions" : "Kohinoor & Royal Palace"}
+            </div>
+            <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">
+              {isCampPartner ? "Escarpment View & Private Plunge Pool" : "High Floor Lake Sanctuary"}
+            </span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
-            <span className="text-[10px] font-mono uppercase text-[#71717A] block">Dietary Alerts</span>
-            <div className="text-2xl font-serif text-[#FDFBF7] mt-1">100% Pure Veg & Jain</div>
-            <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">Chef's Menu Cards Active</span>
+            <span className="text-[10px] font-mono uppercase text-[#71717A] block">
+              {isCampPartner ? "Safaris & Activities" : "Dietary Alerts"}
+            </span>
+            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">
+              {isCampPartner ? "Dawn Leopard Safaris & Archery" : "100% Pure Veg & Jain"}
+            </div>
+            <span className="text-[10px] text-amber-300 font-mono mt-0.5 block">
+              {isCampPartner ? "Naturalist Salim & 4x4 Fleet" : "Chef's Menu Cards Active"}
+            </span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
-            <span className="text-[10px] font-mono uppercase text-[#71717A] block">Contract Settlement</span>
+            <span className="text-[10px] font-mono uppercase text-[#71717A] block">
+              {isCampPartner ? "Camp Contract Rate" : "Contract Settlement"}
+            </span>
             <div className="text-sm font-serif text-[#C5A059] mt-2 font-mono">{partner.negotiatedTariff}</div>
             <span className="text-[10px] text-[#888] font-mono mt-0.5 block">{partner.paymentTerms}</span>
           </div>
@@ -591,6 +643,10 @@ export default function VendorPortalPage() {
                   <span className="w-2.5 h-2.5 rounded-full bg-[#C5A059]" />
                   Arrival
                 </span>
+                <span className="flex items-center gap-1.5 text-emerald-400 ml-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
+                  Camp Safari & Adventure
+                </span>
                 <span className="flex items-center gap-1.5 text-amber-400 ml-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-amber-500" />
                   Tour Walkthrough
@@ -667,7 +723,9 @@ export default function VendorPortalPage() {
                         <div
                           key={i}
                           className={`text-[9px] font-mono px-1.5 py-0.5 rounded truncate border leading-tight ${
-                            ev.type === "tour"
+                            ev.type === "safari"
+                              ? "bg-emerald-950/90 text-emerald-300 border-emerald-700 font-semibold"
+                              : ev.type === "tour"
                               ? "bg-amber-950/80 text-amber-300 border-amber-800 font-semibold"
                               : ev.type === "arrival"
                               ? "bg-[#C5A059]/20 text-[#C5A059] border-[#C5A059]/40 font-semibold"
@@ -747,6 +805,7 @@ export default function VendorPortalPage() {
                   const isDepartureDay = arr?.checkOutDate === selectedDate;
                   const routeDay = lead.routeSchedule?.find((r) => r.date === selectedDate);
                   const guideDay = lead.guideSchedule?.find((g) => g.date === selectedDate);
+                  const campDay = lead.campSchedule?.find((c) => c.date === selectedDate);
                   const menuDay = lead.gourmetMenuPlan?.find((m) => m.date === selectedDate);
                   const assignment = lead.vendorAssignments?.[partnerRole as "hotel" | "driver" | "guide"];
                   const currentStatus =
@@ -786,6 +845,12 @@ export default function VendorPortalPage() {
                                 🛫 FINAL DEPARTURE DROP
                               </span>
                             )}
+                            {campDay && (
+                              <span className="px-2 py-0.5 rounded text-[10px] bg-emerald-950 text-emerald-300 border border-emerald-800 font-mono font-bold uppercase flex items-center gap-1">
+                                <Tent className="w-3 h-3 text-emerald-400" />
+                                WILDERNESS SAFARI DAY
+                              </span>
+                            )}
                           </div>
 
                           <h4 className="font-serif text-xl sm:text-2xl text-[#FDFBF7]">
@@ -812,14 +877,25 @@ export default function VendorPortalPage() {
                             className="text-xs font-mono font-semibold rounded-lg px-3 py-1.5 bg-[#1F1F1F] text-[#C5A059] border border-[#C5A059]/50 focus:outline-none cursor-pointer"
                           >
                             {partner.role === "hotel" && (
-                              <>
-                                <option value="Pending Confirmation">Pending Confirmation</option>
-                                <option value="Accepted">Accepted by Reservations</option>
-                                <option value="Room Suite Reserved">Room Suite Reserved</option>
-                                <option value="VIP Welcome Ready">VIP Welcome Ready</option>
-                                <option value="Checked-In">Guest Checked-In</option>
-                                <option value="Checked-Out">Guest Checked-Out</option>
-                              </>
+                              isCampPartner ? (
+                                <>
+                                  <option value="Tent Suite Prepped & Inspected">Tent Suite Prepped & Inspected</option>
+                                  <option value="Safari Jeep Ready & Trackers Briefed">Safari Jeep Ready & Trackers Briefed</option>
+                                  <option value="Guests In Camp / Checked-In">Guests In Camp / Checked-In</option>
+                                  <option value="On Leopard Safari Drive">On Leopard Safari Drive</option>
+                                  <option value="Bush Dinner In Progress">Bush Dinner In Progress</option>
+                                  <option value="Check-Out / Departure Handover">Check-Out / Departure Handover</option>
+                                </>
+                              ) : (
+                                <>
+                                  <option value="Pending Confirmation">Pending Confirmation</option>
+                                  <option value="Accepted">Accepted by Reservations</option>
+                                  <option value="Room Suite Reserved">Room Suite Reserved</option>
+                                  <option value="VIP Welcome Ready">VIP Welcome Ready</option>
+                                  <option value="Checked-In">Guest Checked-In</option>
+                                  <option value="Checked-Out">Guest Checked-Out</option>
+                                </>
+                              )
                             )}
                             {partner.role === "driver" && (
                               <>
@@ -1109,6 +1185,254 @@ export default function VendorPortalPage() {
                             </div>
                           )}
                         </div>
+                      ) : isCampPartner ? (
+                        <div className="space-y-4">
+                          {/* 1. Camp Logistics Ribbon */}
+                          <div className="p-4 rounded-xl bg-[#161616] border border-emerald-900/50 space-y-2.5">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#252525] pb-2">
+                              <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5">
+                                <Tent className="w-3.5 h-3.5 text-emerald-400" />
+                                Wilderness Camp & Safari Operational Manifest ({selectedDate})
+                              </span>
+                              <div className="flex items-center gap-2">
+                                <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-700/60 font-semibold">
+                                  Tent: {campDay?.tentAccommodation.tentNumber || "Royal Tented Pavilion #03"}
+                                </span>
+                                <span className="text-[10px] font-mono text-[#D4D4D8] bg-[#222] px-2 py-0.5 rounded border border-[#333]">
+                                  {arr?.totalDays || lead.duration}
+                                </span>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                              <div>
+                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Game Drive Window</span>
+                                <span className="font-mono text-emerald-300 font-bold text-sm block">
+                                  {campDay?.adventureAndSafaris[0]?.timeSlot || "06:00 – 09:00 IST"}
+                                </span>
+                                <span className="text-[9px] text-[#888] font-mono block">Dawn & Sunset Drives</span>
+                              </div>
+                              <div>
+                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Assigned Naturalist</span>
+                                <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                                  {campDay?.adventureAndSafaris[0]?.leadTracker || "Senior Naturalist Salim"}
+                                </span>
+                                <span className="text-[9px] text-emerald-400/80 font-mono block">Senior Big Cat Specialist</span>
+                              </div>
+                              <div>
+                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Dedicated Private Butler</span>
+                                <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                                  {campDay?.tentAccommodation.butlerAssigned || "Butler Kalu Singh (24/7)"}
+                                </span>
+                                <span className="text-[9px] text-amber-300 font-mono block">Personal Pavilion Care</span>
+                              </div>
+                              <div>
+                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Safari 4x4 Fleet</span>
+                                <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                                  {campDay?.adventureAndSafaris[0]?.vehicleFleet || "Custom 4x4 Open Safari Jeep #02"}
+                                </span>
+                                <span className="text-[9px] text-sky-400 font-mono block">Hydraulic Camera Arms</span>
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 2. Luxury Tents & Accommodation Setup ("Kya kya tents etc dena hai") */}
+                          {campDay?.tentAccommodation && (
+                            <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-[#2B2B2B] space-y-3">
+                              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
+                                <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+                                  <Tent className="w-3.5 h-3.5 text-emerald-400" />
+                                  Luxury Tents & Pavilion Setup (Kya kya tents & bedding dena hai)
+                                </span>
+                                <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950 px-2.5 py-0.5 rounded border border-emerald-800">
+                                  {campDay.tentAccommodation.checkInStatus}
+                                </span>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                    Tent Suite & Location
+                                  </span>
+                                  <p className="font-serif text-[#FDFBF7] font-semibold text-sm">{campDay.tentAccommodation.tentNumber}</p>
+                                  <p className="text-[11px] text-[#A1A1AA]">{campDay.tentAccommodation.tentType}</p>
+                                  <span className="text-[9px] text-emerald-400 font-mono block mt-1">{campDay.tentAccommodation.viewOrientation}</span>
+                                </div>
+
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                    Bedding & Turn-down
+                                  </span>
+                                  <p className="text-[#D4D4D8] leading-relaxed text-xs">{campDay.tentAccommodation.bedConfiguration}</p>
+                                  <span className="text-[9px] text-[#888] font-mono block mt-1">Evening hot water bottle protocol</span>
+                                </div>
+
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                    Climate & Personal Service
+                                  </span>
+                                  <p className="text-[#D4D4D8] text-xs">{campDay.tentAccommodation.climateControl}</p>
+                                  <p className="text-[#C5A059] font-mono text-[11px] mt-1">{campDay.tentAccommodation.butlerAssigned}</p>
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 3. Adventure, Safaris & Field Excursions ("Kya kya adventure dena hai") */}
+                          <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-[#2B2B2B] space-y-3.5">
+                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
+                              <div>
+                                <span className="text-[10px] font-mono uppercase text-emerald-400 block font-semibold">
+                                  Day {campDay?.dayNumber || 1} Theme: {campDay?.campTheme || "Leopard Tracking & Koppie Wilderness"}
+                                </span>
+                                <h5 className="font-serif text-lg text-[#FDFBF7] font-semibold">
+                                  {campDay?.dayTitle || "Wilderness Safaris & Outdoor Excursions"}
+                                </h5>
+                              </div>
+                              <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-800">
+                                {campDay?.adventureAndSafaris.length || 0} Safaris / Field Drives
+                              </span>
+                            </div>
+
+                            <div className="space-y-2.5">
+                              <span className="text-[10px] font-mono uppercase text-[#71717A] block">
+                                Scheduled Safari Drives & Field Activities:
+                              </span>
+                              <div className="grid grid-cols-1 gap-2.5">
+                                {(campDay?.adventureAndSafaris || []).map((adv, i) => (
+                                  <div
+                                    key={i}
+                                    className="p-3.5 rounded-xl bg-[#121212] border border-[#262626] space-y-1.5 text-xs"
+                                  >
+                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
+                                      <div className="flex items-center gap-2">
+                                        <span className="w-5 h-5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold">
+                                          {i + 1}
+                                        </span>
+                                        <span className="font-serif text-sm text-[#FDFBF7] font-semibold">
+                                          {adv.activityName}
+                                        </span>
+                                        <span className="text-[10px] font-mono text-emerald-300 px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/80">
+                                          {adv.terrainAndIntensity}
+                                        </span>
+                                      </div>
+                                      <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1F1F1F] text-[#C5A059] border border-[#333]">
+                                        Slot: {adv.timeSlot}
+                                      </span>
+                                    </div>
+                                    <p className="text-[#A1A1AA] leading-relaxed text-xs pl-7">
+                                      {adv.activityDescription}
+                                    </p>
+                                    <div className="pl-7 pt-1 flex flex-wrap items-center gap-3 text-[10px] font-mono text-[#888]">
+                                      <span>Tracker: <strong className="text-[#D4D4D8]">{adv.leadTracker}</strong></span>
+                                      <span>•</span>
+                                      <span>Fleet: <strong className="text-sky-300">{adv.vehicleFleet}</strong></span>
+                                      <span>•</span>
+                                      <span>Gear: <strong className="text-amber-300/90">{adv.equipmentProvided}</strong></span>
+                                    </div>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          </div>
+
+                          {/* 4. Camp Games & Leisure ("Kya kya games dena hai") */}
+                          {campDay?.campGamesAndLeisure && campDay.campGamesAndLeisure.length > 0 && (
+                            <div className="p-4 rounded-xl bg-[#161616] border border-[#282828] space-y-2.5 text-xs">
+                              <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5 border-b border-[#222] pb-2">
+                                <Target className="w-3.5 h-3.5 text-amber-400" />
+                                Camp Games, Archery & Leisure (Kya kya games & activities dena hai)
+                              </span>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                                {campDay.campGamesAndLeisure.map((game, i) => (
+                                  <div key={i} className="p-3 rounded-lg bg-[#111111] border border-[#222] space-y-1">
+                                    <div className="flex items-center justify-between">
+                                      <span className="font-serif text-[#FDFBF7] font-semibold text-xs">{game.gameName}</span>
+                                      <span className="text-[10px] font-mono text-[#C5A059]">{game.timing}</span>
+                                    </div>
+                                    <p className="text-[11px] text-[#A1A1AA] leading-snug">{game.description}</p>
+                                    <span className="text-[9px] font-mono text-emerald-400 block pt-0.5">Venue: {game.venue}</span>
+                                  </div>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 5. Bush Dining & Menus ("Kya menu hai food ka") */}
+                          {campDay?.bushDiningAndMenu && (
+                            <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-[#2B2B2B] space-y-3 text-xs">
+                              <div className="flex items-center justify-between border-b border-[#242424] pb-2">
+                                <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-bold flex items-center gap-1.5">
+                                  <Flame className="w-3.5 h-3.5 text-amber-400" />
+                                  Bush Gastronomy & Wilderness Camp Menus (Kya menu hai food ka)
+                                </span>
+                                <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+                                  Farm-to-Table Prepared
+                                </span>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-2.5">
+                                <div className="p-2.5 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                    ☕ Dawn Pre-Safari
+                                  </span>
+                                  <p className="text-[#D4D4D8] text-[11px] leading-relaxed">{campDay.bushDiningAndMenu.dawnRefreshment}</p>
+                                </div>
+                                <div className="p-2.5 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                    🍳 Bush Breakfast
+                                  </span>
+                                  <p className="text-[#D4D4D8] text-[11px] leading-relaxed">{campDay.bushDiningAndMenu.breakfast}</p>
+                                </div>
+                                <div className="p-2.5 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                    🌅 Escarpment Sundowner
+                                  </span>
+                                  <p className="text-[#D4D4D8] text-[11px] leading-relaxed">{campDay.bushDiningAndMenu.sundownerHighTea}</p>
+                                </div>
+                                <div className="p-2.5 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                    🌙 Campfire Bush Dinner
+                                  </span>
+                                  <p className="text-[#D4D4D8] text-[11px] leading-relaxed">{campDay.bushDiningAndMenu.bushDinner}</p>
+                                </div>
+                              </div>
+
+                              <div className="p-2.5 rounded-lg bg-[#121212] border border-amber-900/40 text-xs text-amber-300 font-mono">
+                                <strong>Strict Dietary & Allergy Directives:</strong> {campDay.bushDiningAndMenu.dietaryDirectives}
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 6. Expedition Equipment & Senior Naturalist Directives */}
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            {campDay?.fieldGearChecklist && (
+                              <div className="p-3.5 rounded-xl bg-[#161616] border border-[#262626] space-y-1.5">
+                                <span className="text-[10px] font-mono uppercase text-sky-400 font-semibold block">
+                                  🎒 Field Gear & Expedition Checklist Provided:
+                                </span>
+                                <ul className="space-y-1 text-[#A1A1AA] text-[11px]">
+                                  {campDay.fieldGearChecklist.map((item, i) => (
+                                    <li key={i} className="flex items-start gap-1.5">
+                                      <Check className="w-3 h-3 text-emerald-400 flex-shrink-0 mt-0.5" />
+                                      <span>{item}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            {campDay?.seniorNaturalistNotes && (
+                              <div className="p-3.5 rounded-xl bg-[#161616] border border-amber-900/30 text-xs text-[#A1A1AA] italic space-y-1">
+                                <strong className="text-amber-300 font-mono uppercase not-italic text-[10px] block mb-0.5">
+                                  Senior Naturalist Briefing:
+                                </strong>
+                                "{campDay.seniorNaturalistNotes}"
+                              </div>
+                            )}
+                          </div>
+                        </div>
                       ) : (
                         <div className="space-y-4">
                           {/* 1. Core Logistics Box: Reporting, Start/End, Pickup & Drop Points */}
@@ -1341,10 +1665,14 @@ export default function VendorPortalPage() {
                   ? "Chauffeur Route Dispatches, Pickup/Drop & Excursions"
                   : partner.role === "guide"
                   ? "Tour Guide Excursions, Monument Permits & Itinerary Allocations"
+                  : isCampPartner
+                  ? "Wilderness Camp Bookings, Tents, Safaris & Adventure Manifests"
                   : "Master Booking Dossiers & Itinerary Allocations"}
               </h2>
               <p className="text-xs text-[#888888] mt-0.5">
-                Review assigned VIP guests, scheduled travel dates, exact airport arrival times, and day-by-day fine dining gourmet menus.
+                {isCampPartner
+                  ? "Review assigned VIP guests, luxury tented pavilions, dawn leopard safaris, camp games, and farm-to-table bush menus."
+                  : "Review assigned VIP guests, scheduled travel dates, exact airport arrival times, and day-by-day fine dining gourmet menus."}
               </p>
             </div>
             <span className="text-xs font-mono text-[#C5A059]">
@@ -1365,12 +1693,18 @@ export default function VendorPortalPage() {
                   ? "Vehicle Prepped & Fueled"
                   : "Accepted by Tour Guide");
               const currentNotes = notesDrafts[lead.id] ?? (assignment?.notes || "");
-              const isDirectlyAssigned = assignment?.partnerId === partner.id;
+              const isDirectlyAssigned =
+                assignment?.partnerId === partner.id ||
+                (isCampPartner &&
+                  (lead.destinationSummary.toLowerCase().includes("jawai") ||
+                    lead.destinations.some((d) => d.toLowerCase().includes("jawai"))));
               const isMenuExpanded = expandedMenuLeadId === lead.id;
               const activeDayNum = activeRouteDayNumber[lead.id] || 1;
               const currentRouteDay = lead.routeSchedule?.find((r) => r.dayNumber === activeDayNum) || lead.routeSchedule?.[0];
               const activeGuideDayNum = activeGuideDayNumber[lead.id] || (lead.guideSchedule?.[0]?.dayNumber || 1);
               const currentGuideDay = lead.guideSchedule?.find((g) => g.dayNumber === activeGuideDayNum) || lead.guideSchedule?.[0];
+              const activeCampDayNum = activeCampDayNumber[lead.id] || (lead.campSchedule?.[0]?.dayNumber || 1);
+              const currentCampDay = lead.campSchedule?.find((c) => c.dayNumber === activeCampDayNum) || lead.campSchedule?.[0];
 
               return (
                 <div
@@ -1437,14 +1771,25 @@ export default function VendorPortalPage() {
                         className="text-xs font-mono font-semibold rounded-lg px-3 py-1.5 bg-[#1F1F1F] text-[#C5A059] border border-[#C5A059]/40 focus:outline-none cursor-pointer"
                       >
                         {partner.role === "hotel" && (
-                          <>
-                            <option value="Pending Confirmation">Pending Confirmation</option>
-                            <option value="Accepted">Accepted by Reservations</option>
-                            <option value="Room Suite Reserved">Room Suite Reserved</option>
-                            <option value="VIP Welcome Ready">VIP Welcome Ready</option>
-                            <option value="Checked-In">Checked-In</option>
-                            <option value="Checked-Out">Checked-Out</option>
-                          </>
+                          isCampPartner ? (
+                            <>
+                              <option value="Tent Suite Prepped & Inspected">Tent Suite Prepped & Inspected</option>
+                              <option value="Safari Jeep Ready & Trackers Briefed">Safari Jeep Ready & Trackers Briefed</option>
+                              <option value="Guests In Camp / Checked-In">Guests In Camp / Checked-In</option>
+                              <option value="On Leopard Safari Drive">On Leopard Safari Drive</option>
+                              <option value="Bush Dinner In Progress">Bush Dinner In Progress</option>
+                              <option value="Check-Out / Departure Handover">Check-Out / Departure Handover</option>
+                            </>
+                          ) : (
+                            <>
+                              <option value="Pending Confirmation">Pending Confirmation</option>
+                              <option value="Accepted">Accepted by Reservations</option>
+                              <option value="Room Suite Reserved">Room Suite Reserved</option>
+                              <option value="VIP Welcome Ready">VIP Welcome Ready</option>
+                              <option value="Checked-In">Checked-In</option>
+                              <option value="Checked-Out">Checked-Out</option>
+                            </>
+                          )
                         )}
                         {partner.role === "driver" && (
                           <>
@@ -1714,6 +2059,248 @@ export default function VendorPortalPage() {
                                   "{currentGuideDay.specialGuideNotes}"
                                 </div>
                               )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  ) : isCampPartner ? (
+                    <div className="space-y-4 my-3">
+                      {/* Camp Key Logistics Ribbon */}
+                      <div className="p-4 rounded-xl bg-[#161616] border border-emerald-900/50 space-y-2.5">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#252525] pb-2">
+                          <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5">
+                            <Tent className="w-3.5 h-3.5 text-emerald-400" />
+                            Wilderness Camp, Tented Pavilions & Safari Manifest ({arr?.totalDays || lead.duration})
+                          </span>
+                          <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-700/60 font-semibold">
+                            Tent Allocation: {currentCampDay?.tentAccommodation.tentNumber || "Royal Tented Pavilion #03"}
+                          </span>
+                        </div>
+
+                        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
+                          <div>
+                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Game Drive Hours</span>
+                            <span className="font-mono text-emerald-300 font-bold text-sm block">
+                              {currentCampDay?.adventureAndSafaris[0]?.timeSlot || "06:00 – 09:00 IST"}
+                            </span>
+                            <span className="text-[9px] text-[#888] font-mono block">Dawn & Sunset Safaris</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Assigned Naturalist</span>
+                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                              {currentCampDay?.adventureAndSafaris[0]?.leadTracker || "Senior Naturalist Salim"}
+                            </span>
+                            <span className="text-[9px] text-emerald-400/80 font-mono block">Head Wilderness Tracker</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Dedicated Private Butler</span>
+                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                              {currentCampDay?.tentAccommodation.butlerAssigned || "Butler Kalu Singh (24/7)"}
+                            </span>
+                            <span className="text-[9px] text-amber-300 font-mono block">Pavilion Room Service</span>
+                          </div>
+                          <div>
+                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Safari 4x4 Fleet</span>
+                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                              {currentCampDay?.adventureAndSafaris[0]?.vehicleFleet || "Custom 4x4 Open Safari Jeep #02"}
+                            </span>
+                            <span className="text-[9px] text-sky-400 font-mono block">Hydraulic Camera Mounts</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Day-by-Day Wilderness & Safari Tabs */}
+                      {lead.campSchedule && lead.campSchedule.length > 0 && (
+                        <div className="p-4 sm:p-5 rounded-xl bg-[#161616] border border-[#2B2B2B] space-y-4">
+                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
+                            <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-300 font-bold flex items-center gap-1.5">
+                              <Tent className="w-3.5 h-3.5 text-emerald-400" />
+                              Day-by-Day Wilderness Itinerary (Tents, Safaris, Camp Games & Bush Menus)
+                            </span>
+                            <span className="text-[10px] font-mono text-[#888]">
+                              Select camp day to view details:
+                            </span>
+                          </div>
+
+                          {/* Day Selector Pills */}
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            {lead.campSchedule.map((c) => (
+                              <button
+                                key={c.dayNumber}
+                                type="button"
+                                onClick={() =>
+                                  setActiveCampDayNumber((prev) => ({ ...prev, [lead.id]: c.dayNumber }))
+                                }
+                                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                                  activeCampDayNum === c.dayNumber
+                                    ? "bg-emerald-950 text-emerald-200 border border-emerald-600 font-bold shadow-sm"
+                                    : "bg-[#1E1E1E] text-[#888] hover:text-[#D4D4D8] border border-[#333]"
+                                }`}
+                              >
+                                Day {c.dayNumber} ({c.date.slice(5)})
+                              </button>
+                            ))}
+                          </div>
+
+                          {/* Active Camp Day Card */}
+                          {currentCampDay && (
+                            <div className="p-4 sm:p-5 rounded-xl bg-[#121212] border border-[#242424] space-y-4 text-xs">
+                              {/* Day Header */}
+                              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#222] pb-3">
+                                <div>
+                                  <span className="text-[10px] font-mono uppercase text-emerald-400 block font-semibold">
+                                    Day {currentCampDay.dayNumber}: {currentCampDay.campTheme}
+                                  </span>
+                                  <h5 className="font-serif text-lg text-[#FDFBF7] font-semibold mt-0.5">
+                                    {currentCampDay.dayTitle}
+                                  </h5>
+                                </div>
+                                <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-800">
+                                  {currentCampDay.adventureAndSafaris.length} Adventure Excursions
+                                </span>
+                              </div>
+
+                              {/* 1. Tents & Pavilion Accommodation ("Kya kya tents etc dena hai") */}
+                              <div className="p-3.5 rounded-xl bg-[#161616] border border-[#262626] space-y-2">
+                                <span className="text-[10px] font-mono uppercase text-emerald-400 font-semibold block flex items-center gap-1.5">
+                                  <Tent className="w-3.5 h-3.5" />
+                                  ⛺ Luxury Tents & Accommodation Setup (Kya kya tents & bedding dena hai):
+                                </span>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
+                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Tent Suite</span>
+                                    <p className="font-serif text-[#FDFBF7] font-semibold mt-0.5">{currentCampDay.tentAccommodation.tentNumber}</p>
+                                    <span className="text-[9px] text-emerald-400 font-mono">{currentCampDay.tentAccommodation.viewOrientation}</span>
+                                  </div>
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
+                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Bedding Setup</span>
+                                    <p className="font-serif text-[#D4D4D8] text-[11px] leading-snug mt-0.5">{currentCampDay.tentAccommodation.bedConfiguration}</p>
+                                  </div>
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
+                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Personal Butler & Climate</span>
+                                    <p className="font-serif text-[#C5A059] text-[11px] mt-0.5">{currentCampDay.tentAccommodation.butlerAssigned}</p>
+                                    <span className="text-[9px] text-[#888] font-mono block">{currentCampDay.tentAccommodation.climateControl}</span>
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* 2. Adventure & Safaris ("Kya kya adventure dena hai") */}
+                              <div className="space-y-2">
+                                <span className="text-[10px] font-mono uppercase text-emerald-400 block font-semibold">
+                                  🐆 Adventure & Safaris to Provide (Kya kya adventure karwana hai):
+                                </span>
+                                <div className="grid grid-cols-1 gap-2.5">
+                                  {currentCampDay.adventureAndSafaris.map((adv, i) => (
+                                    <div
+                                      key={i}
+                                      className="p-3 rounded-xl bg-[#171717] border border-[#262626] space-y-1.5"
+                                    >
+                                      <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1">
+                                        <div className="flex items-center gap-2">
+                                          <span className="w-5 h-5 rounded-full bg-emerald-950 text-emerald-300 border border-emerald-800 flex items-center justify-center text-[10px] font-mono font-bold">
+                                            {i + 1}
+                                          </span>
+                                          <span className="font-serif text-sm text-[#FDFBF7] font-semibold">
+                                            {adv.activityName}
+                                          </span>
+                                          <span className="text-[10px] font-mono text-emerald-300 px-2 py-0.5 rounded bg-emerald-950/60 border border-emerald-800/80">
+                                            {adv.terrainAndIntensity}
+                                          </span>
+                                        </div>
+                                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1F1F1F] text-[#C5A059] border border-[#333]">
+                                          Slot: {adv.timeSlot}
+                                        </span>
+                                      </div>
+                                      <p className="text-[#A1A1AA] text-xs pl-7 leading-relaxed">
+                                        {adv.activityDescription}
+                                      </p>
+                                      <div className="pl-7 pt-1 flex flex-wrap items-center gap-3 text-[10px] font-mono text-[#888]">
+                                        <span>Tracker: <strong className="text-[#D4D4D8]">{adv.leadTracker}</strong></span>
+                                        <span>•</span>
+                                        <span>Fleet: <strong className="text-sky-300">{adv.vehicleFleet}</strong></span>
+                                        <span>•</span>
+                                        <span>Gear: <strong className="text-amber-300/90">{adv.equipmentProvided}</strong></span>
+                                      </div>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+
+                              {/* 3. Camp Games & Leisure ("Kya kya games dena hai") */}
+                              {currentCampDay.campGamesAndLeisure && currentCampDay.campGamesAndLeisure.length > 0 && (
+                                <div className="p-3.5 rounded-xl bg-[#161616] border border-[#262626] space-y-2">
+                                  <span className="text-[10px] font-mono uppercase text-amber-300 font-semibold block flex items-center gap-1.5">
+                                    <Target className="w-3.5 h-3.5" />
+                                    🏹 Camp Games, Archery & Leisure (Kya kya games & activities dena hai):
+                                  </span>
+                                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs">
+                                    {currentCampDay.campGamesAndLeisure.map((game, i) => (
+                                      <div key={i} className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-0.5">
+                                        <div className="flex items-center justify-between">
+                                          <span className="font-serif text-[#FDFBF7] font-semibold text-xs">{game.gameName}</span>
+                                          <span className="text-[10px] font-mono text-[#C5A059]">{game.timing}</span>
+                                        </div>
+                                        <p className="text-[11px] text-[#A1A1AA]">{game.description}</p>
+                                        <span className="text-[9px] font-mono text-emerald-400 block pt-0.5">Venue: {game.venue}</span>
+                                      </div>
+                                    ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* 4. Bush Dining & Menus ("Kya menu hai food ka") */}
+                              <div className="p-3.5 rounded-xl bg-[#161616] border border-[#262626] space-y-2">
+                                <span className="text-[10px] font-mono uppercase text-[#C5A059] font-semibold block flex items-center gap-1.5">
+                                  <Flame className="w-3.5 h-3.5" />
+                                  🔥 Bush Gastronomy & Dining Menus (Kya menu hai food ka):
+                                </span>
+                                <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
+                                  <div className="p-2 rounded-lg bg-[#111111] border border-[#222]">
+                                    <span className="text-[9px] font-mono uppercase text-[#C5A059] block">Dawn Pre-Safari</span>
+                                    <p className="text-[#D4D4D8] text-[11px] leading-relaxed mt-0.5">{currentCampDay.bushDiningAndMenu.dawnRefreshment}</p>
+                                  </div>
+                                  <div className="p-2 rounded-lg bg-[#111111] border border-[#222]">
+                                    <span className="text-[9px] font-mono uppercase text-[#C5A059] block">Bush Breakfast</span>
+                                    <p className="text-[#D4D4D8] text-[11px] leading-relaxed mt-0.5">{currentCampDay.bushDiningAndMenu.breakfast}</p>
+                                  </div>
+                                  <div className="p-2 rounded-lg bg-[#111111] border border-[#222]">
+                                    <span className="text-[9px] font-mono uppercase text-[#C5A059] block">Sunset Sundowner</span>
+                                    <p className="text-[#D4D4D8] text-[11px] leading-relaxed mt-0.5">{currentCampDay.bushDiningAndMenu.sundownerHighTea}</p>
+                                  </div>
+                                  <div className="p-2 rounded-lg bg-[#111111] border border-[#222]">
+                                    <span className="text-[9px] font-mono uppercase text-[#C5A059] block">Campfire Dinner</span>
+                                    <p className="text-[#D4D4D8] text-[11px] leading-relaxed mt-0.5">{currentCampDay.bushDiningAndMenu.bushDinner}</p>
+                                  </div>
+                                </div>
+                                <div className="text-[10px] font-mono text-amber-300 bg-amber-950/40 px-2.5 py-1 rounded border border-amber-900/40">
+                                  <strong>Strict Dietary Directives:</strong> {currentCampDay.bushDiningAndMenu.dietaryDirectives}
+                                </div>
+                              </div>
+
+                              {/* 5. Field Gear Checklist & Naturalist Notes */}
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#222] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-sky-400 font-semibold block">
+                                    🎒 Field Gear & Expedition Checklist:
+                                  </span>
+                                  <ul className="space-y-0.5 text-[11px] text-[#A1A1AA]">
+                                    {currentCampDay.fieldGearChecklist.map((item, i) => (
+                                      <li key={i} className="flex items-start gap-1">
+                                        <Check className="w-3 h-3 text-emerald-400 flex-shrink-0 mt-0.5" />
+                                        <span>{item}</span>
+                                      </li>
+                                    ))}
+                                  </ul>
+                                </div>
+
+                                <div className="p-3 rounded-lg bg-[#111111] border border-amber-900/30 text-xs text-[#A1A1AA] italic space-y-1">
+                                  <strong className="text-amber-300 font-mono uppercase not-italic text-[10px] block mb-0.5">
+                                    Senior Naturalist Briefing:
+                                  </strong>
+                                  "{currentCampDay.seniorNaturalistNotes}"
+                                </div>
+                              </div>
                             </div>
                           )}
                         </div>
