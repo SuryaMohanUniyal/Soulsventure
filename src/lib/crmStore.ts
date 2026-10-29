@@ -152,12 +152,33 @@ export interface ArrivalAndDepartureDetails {
   arrivalTime: string;        // "14:00 IST"
   flightOrTrain?: string;     // "Air India AI-471 (DEL → UDR)"
   terminalGate?: string;      // "Udaipur Airport Gate 2 VIP Lounge Exit"
-  pickupReportingTime?: string; // "13:30 IST"
+  pickupLocation?: string;    // "Udaipur Airport Terminal 1, Gate 2"
+  dropoffLocation?: string;   // "The Oberoi Udaivilas Badi Pal Jetty"
+  pickupReportingTime?: string; // "13:15 IST (30 mins before AI-471 touchdown)"
   checkInTime: string;        // "14:00 IST"
   checkOutDate: string;       // "2026-11-19"
   checkOutTime: string;       // "12:00 IST"
+  finalDropoffTime?: string;  // "10:30 IST at Udaipur Airport Gate 1"
+  totalDays?: string;         // "6 Days / 5 Nights"
   transferVehicle?: string;   // "Land Rover Defender 110 4WD"
+  licensePlate?: string;      // "RJ 27 EA 0001"
+  chauffeurUniform?: string;  // "White Bandhgala with White Gloves"
   transferProtocol?: string;  // "Private Shikara boat across Lake Pichola"
+}
+
+export interface DailyRouteSchedule {
+  dayNumber: number;
+  date: string;
+  dayTitle: string;
+  reportingTime: string;      // e.g. "13:15 IST"
+  releaseTime: string;        // e.g. "20:30 IST"
+  startLocation: string;      // "Udaipur Airport Gate 2"
+  endLocation: string;        // "The Oberoi Udaivilas Badi Pal Jetty"
+  routeOverview: string;      // "Airport ➔ NH-48 Expressway ➔ Fatehsagar Lake Boulevard ➔ Badi Pal Jetty"
+  distanceKm: number;         // 24
+  travelDuration: string;     // "42 mins"
+  sightseeingVisits: string[]; // ["Fatehsagar Lakeside Drive", "Lake Pichola Private Shikara Dock"]
+  chauffeurDirectives: string; // "Hold name placard 'Mr. Rajesh Sharma & Family'. Cold towels and chilled mineral water ready."
 }
 
 export interface GourmetDayPlan {
@@ -204,6 +225,7 @@ export interface CRMLead {
   assignedChauffeur?: string;
   proposalDays?: BespokeItineraryDay[];
   arrivalDetails?: ArrivalAndDepartureDetails;
+  routeSchedule?: DailyRouteSchedule[];
   gourmetMenuPlan?: GourmetDayPlan[];
   milestones: {
     inquiryLogged: boolean;
@@ -337,13 +359,130 @@ export const INITIAL_LEADS: CRMLead[] = [
       arrivalTime: "14:00 IST (Jetty Check-in)",
       flightOrTrain: "Air India AI-471 (DEL → UDR)",
       terminalGate: "Udaipur Airport Gate 2 VIP Lounge Exit",
-      pickupReportingTime: "13:15 IST (Flight lands 13:15)",
+      pickupLocation: "Udaipur Maharana Pratap Airport (UDR), Terminal 1 - Gate 2 (VIP Arrivals)",
+      dropoffLocation: "The Oberoi Udaivilas Badi Pal Private Boat Jetty",
+      pickupReportingTime: "13:15 IST (30 mins before AI-471 touchdown)",
       checkInTime: "14:00 IST",
       checkOutDate: "2026-11-19",
       checkOutTime: "12:00 IST",
-      transferVehicle: "Land Rover Defender 110 4WD",
+      finalDropoffTime: "10:30 IST on Nov 19, 2026 at Udaipur Airport Departure Gate 1",
+      totalDays: "6 Days / 5 Nights Booking (Nov 14 – Nov 19, 2026)",
+      transferVehicle: "Land Rover Defender 110 4WD (Black Luxury Edition)",
+      licensePlate: "RJ 27 EA 0001 (VIP Luxury Commercial)",
+      chauffeurUniform: "Formal White Bandhgala Livery with White Gloves",
       transferProtocol: "Private Shikara boat across Lake Pichola with rose petal shower and cold towels",
     },
+    routeSchedule: [
+      {
+        dayNumber: 1,
+        date: "2026-11-14",
+        dayTitle: "Airport Arrival & Lake Pichola Sanctuary Transfer",
+        reportingTime: "13:15 IST (30 mins prior to AI-471 landing)",
+        releaseTime: "20:30 IST",
+        startLocation: "Udaipur Airport (UDR) Terminal 1 Gate 2",
+        endLocation: "The Oberoi Udaivilas Badi Pal Jetty",
+        routeOverview: "Udaipur Airport ➔ NH-48 Expressway ➔ Sukher Circle ➔ Fatehsagar Lake Promenade ➔ Badi Pal Jetty",
+        distanceKm: 24,
+        travelDuration: "42 mins",
+        sightseeingVisits: [
+          "Scenic arrival transit via Fatehsagar Lake promenade",
+          "Private royal Shikara boat welcome across Lake Pichola",
+          "Udaivilas lakeside domes & evening sunset reflection"
+        ],
+        chauffeurDirectives: "Hold black leather name placard 'Mr. Rajesh Sharma & Family' at Gate 2. Assist with 4 VIP bags. Offer cold jasmine-scented towels and chilled mineral water bottles. Set AC to 21°C."
+      },
+      {
+        dayNumber: 2,
+        date: "2026-11-15",
+        dayTitle: "City Palace Heritage Walk & Sunset Hilltop Drive",
+        reportingTime: "09:15 IST",
+        releaseTime: "20:00 IST",
+        startLocation: "The Oberoi Udaivilas Private Boat Dock",
+        endLocation: "The Oberoi Udaivilas Lobby",
+        routeOverview: "Udaivilas ➔ Old City Royal Gate ➔ City Palace Badi Pol ➔ Jagdish Temple ➔ Saheliyon-ki-Bari ➔ Monsoon Palace (Sajjangarh) Hilltop ➔ Udaivilas",
+        distanceKm: 32,
+        travelDuration: "Full Day Disposal (11 Hours)",
+        sightseeingVisits: [
+          "City Palace Museum, Zenana Mahal & Crystal Gallery (accompanied by Dr. Mathur)",
+          "17th Century Jagdish Temple carvings",
+          "Saheliyon-ki-Bari Royal Fountains & Lotus Gardens",
+          "Monsoon Palace (Sajjangarh) sunset panoramic view atop Aravalli hills"
+        ],
+        chauffeurDirectives: "Station vehicle at City Palace VIP Car Park. Maintain cabin temperature during monument visits. Standby with umbrella and wet wipes for guests."
+      },
+      {
+        dayNumber: 3,
+        date: "2026-11-16",
+        dayTitle: "Intercity Scenic Transfer to Jawai Hills via Ranakpur",
+        reportingTime: "08:30 IST",
+        releaseTime: "18:30 IST",
+        startLocation: "The Oberoi Udaivilas Main Porch",
+        endLocation: "SUJÁN JAWAI Luxury Camp Gate",
+        routeOverview: "Udaipur City ➔ NH-27 Four-Lane Expressway ➔ Ranakpur Ghat Mountain Pass ➔ Jawai Bandh Granite Escarpment",
+        distanceKm: 145,
+        travelDuration: "3 hours 20 mins drive",
+        sightseeingVisits: [
+          "Scenic mountain pass transit through lush Aravalli range",
+          "Ranakpur Jain Marble Temple (1,444 uniquely carved pillars)",
+          "King's Abode garden halt",
+          "Jawai granite wilderness & flamingo reservoir view"
+        ],
+        chauffeurDirectives: "Perform complete tyre pressure and fuel check prior to departure. Drive smoothly through the mountain curves. Transfer luggage seamlessly to SUJÁN JAWAI open-top 4x4 safari team."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-11-17",
+        dayTitle: "Jawai Leopard Country & Rabari Village Trail",
+        reportingTime: "05:45 IST",
+        releaseTime: "18:00 IST",
+        startLocation: "SUJÁN JAWAI Camp Base",
+        endLocation: "SUJÁN JAWAI Camp Base",
+        routeOverview: "Camp ➔ Granite Koppies Leopard Trail ➔ Jawai Bandh Dam ➔ Rabari Pastoral Hamlet ➔ Camp",
+        distanceKm: 38,
+        travelDuration: "Local Wildlife & Cultural Excursion",
+        sightseeingVisits: [
+          "Wild leopard tracking on ancient granite rocks",
+          "Jawai Dam reservoir & migratory bird watching",
+          "Rabari shepherd village heritage visit"
+        ],
+        chauffeurDirectives: "Coordinate with Camp Lead Naturalist Salim. Keep emergency first aid & binoculars on board."
+      },
+      {
+        dayNumber: 5,
+        date: "2026-11-18",
+        dayTitle: "Return Transfer to Udaipur & Evening Leisure",
+        reportingTime: "09:00 IST",
+        releaseTime: "19:30 IST",
+        startLocation: "SUJÁN JAWAI Camp Porch",
+        endLocation: "The Oberoi Udaivilas",
+        routeOverview: "Jawai ➔ NH-27 Express ➔ Udaipur Lake District",
+        distanceKm: 145,
+        travelDuration: "3 hours 15 mins",
+        sightseeingVisits: [
+          "Scenic highway transit",
+          "Traditional Rajasthani handicraft boutique visit",
+          "Sunset leisure cruise on Lake Pichola"
+        ],
+        chauffeurDirectives: "Ensure luggage is safely stowed. Smooth highway cruising."
+      },
+      {
+        dayNumber: 6,
+        date: "2026-11-19",
+        dayTitle: "Final Departure Airport Drop",
+        reportingTime: "09:45 IST",
+        releaseTime: "11:15 IST (Trip Sign-Off)",
+        startLocation: "The Oberoi Udaivilas Jetty",
+        endLocation: "Udaipur Airport (UDR) - Terminal 1 Departure Gate 1",
+        routeOverview: "Udaivilas ➔ Fatehsagar Promenade ➔ NH-48 Expressway ➔ Udaipur Airport",
+        distanceKm: 24,
+        travelDuration: "40 mins",
+        sightseeingVisits: [
+          "Final morning view of Lake Pichola",
+          "Direct VIP airport express transit"
+        ],
+        chauffeurDirectives: "Report 15 minutes early at 09:45 IST. Assist with luggage unloading onto airline VIP trolley at Gate 1. Provide warm departure namaste."
+      }
+    ],
     gourmetMenuPlan: [
       {
         dayNumber: 1,
@@ -470,13 +609,57 @@ export const INITIAL_LEADS: CRMLead[] = [
       arrivalTime: "15:30 IST (Flight Landing) / 17:30 IST (Camp Check-in)",
       flightOrTrain: "IndiGo 6E-2051 (BOM → UDR)",
       terminalGate: "Udaipur Airport Gate 1",
-      pickupReportingTime: "15:00 IST",
+      pickupLocation: "Udaipur Maharana Pratap Airport (UDR), Terminal 1 Gate 1",
+      dropoffLocation: "SUJÁN JAWAI Luxury Camp Base (Jawai Escarpment)",
+      pickupReportingTime: "15:00 IST (30 mins before 6E-2051 landing)",
       checkInTime: "17:30 IST (Royal Tented Pavilion)",
       checkOutDate: "2026-11-23",
       checkOutTime: "11:00 IST",
-      transferVehicle: "Mercedes-Maybach S-Class",
+      finalDropoffTime: "11:00 IST on Nov 23, 2026 at Udaipur Airport",
+      totalDays: "6 Days / 5 Nights Booking (Nov 18 – Nov 23, 2026)",
+      transferVehicle: "Mercedes-Maybach S-Class (Chauffeured VIP Edition)",
+      licensePlate: "RJ 27 EA 0002",
+      chauffeurUniform: "Formal Black Suit with White Gloves",
       transferProtocol: "Cold towels, chilled mineral water, and Rabari ceremonial welcome at campsite gate",
     },
+    routeSchedule: [
+      {
+        dayNumber: 1,
+        date: "2026-11-18",
+        dayTitle: "Airport Arrival & Scenic Highway Transfer to Jawai Hills",
+        reportingTime: "15:00 IST",
+        releaseTime: "20:00 IST",
+        startLocation: "Udaipur Airport (UDR) Gate 1",
+        endLocation: "SUJÁN JAWAI Luxury Camp Porch",
+        routeOverview: "Udaipur Airport ➔ NH-27 Expressway ➔ Gogunda Pass ➔ Pindwara ➔ Jawai Bandh Wilderness Gate",
+        distanceKm: 145,
+        travelDuration: "3 hours 20 mins",
+        sightseeingVisits: [
+          "Scenic transit through southern Aravalli valleys",
+          "Sunset view of granite hills and shepherd pastures",
+          "Lantern-lit camp gate welcome by Rabari turbaned escorts"
+        ],
+        chauffeurDirectives: "Hold placard 'Dr. Alistair & Lady Eleanor Vance' at Gate 1. Assist with luggage. Maintain smooth expressway cruising at 80 km/h max."
+      },
+      {
+        dayNumber: 2,
+        date: "2026-11-19",
+        dayTitle: "Dawn Leopard Safari & Dam Wilderness Trail",
+        reportingTime: "05:30 IST",
+        releaseTime: "18:30 IST",
+        startLocation: "SUJÁN JAWAI Camp",
+        endLocation: "SUJÁN JAWAI Camp",
+        routeOverview: "Camp ➔ Jawai Granite Koppies ➔ Dam Embankment ➔ Local Village ➔ Camp",
+        distanceKm: 42,
+        travelDuration: "Full Day Safari Disposal",
+        sightseeingVisits: [
+          "Dawn leopard tracking with Naturalist Salim",
+          "Birdwatching at Jawai reservoir (spotting migratory flamingos & pelicans)",
+          "Rabari pastoral settlement cultural walkthrough"
+        ],
+        chauffeurDirectives: "Coordinate with 4x4 safari team. Keep cold drinks, mineral water, and binoculars accessible."
+      }
+    ],
     gourmetMenuPlan: [
       {
         dayNumber: 1,
@@ -578,13 +761,56 @@ export const INITIAL_LEADS: CRMLead[] = [
       arrivalTime: "11:45 IST",
       flightOrTrain: "Air India AI-473 (DEL → UDR)",
       terminalGate: "VIP Tarmac Lounge Exit",
+      pickupLocation: "Udaipur Airport VIP Lounge Exit",
+      dropoffLocation: "The Oberoi Udaivilas Lakeside Dock",
       pickupReportingTime: "11:15 IST",
       checkInTime: "12:30 IST",
       checkOutDate: "2026-12-06",
       checkOutTime: "14:00 IST",
-      transferVehicle: "Mercedes-Maybach S-Class",
+      finalDropoffTime: "14:00 IST on Dec 06 at Udaipur Airport",
+      totalDays: "5 Days / 4 Nights Booking (Dec 02 – Dec 06, 2026)",
+      transferVehicle: "Mercedes-Maybach S-Class & Vintage 1947 Cadillac",
+      licensePlate: "RJ 27 EA 0003",
+      chauffeurUniform: "Formal Black Bandhgala Livery",
       transferProtocol: "Rose garland ceremony and private Shehnai musicians at lakeside entrance",
     },
+    routeSchedule: [
+      {
+        dayNumber: 1,
+        date: "2026-12-02",
+        dayTitle: "VIP Airport Arrival & Royal Lakeside Transfer",
+        reportingTime: "11:15 IST",
+        releaseTime: "19:00 IST",
+        startLocation: "Udaipur Airport VIP Lounge Exit",
+        endLocation: "The Oberoi Udaivilas",
+        routeOverview: "Airport ➔ NH-48 Express ➔ Fatehsagar Promenade ➔ The Oberoi Udaivilas",
+        distanceKm: 24,
+        travelDuration: "40 mins",
+        sightseeingVisits: [
+          "Scenic arrival transit with lake views",
+          "Private vintage shikara welcome on Lake Pichola"
+        ],
+        chauffeurDirectives: "Hold placard 'Countess Sophie De Rohan'. Provide French greeting 'Bienvenue à Udaipur'. Cold jasmine towels ready."
+      },
+      {
+        dayNumber: 2,
+        date: "2026-12-03",
+        dayTitle: "City Palace Heritage & Vintage Cadillac Drive",
+        reportingTime: "09:30 IST",
+        releaseTime: "20:00 IST",
+        startLocation: "The Oberoi Udaivilas",
+        endLocation: "The Oberoi Udaivilas",
+        routeOverview: "Udaivilas ➔ Old City Gates ➔ City Palace Complex ➔ Vintage Car Museum ➔ Fatehsagar Sunset Loop ➔ Return",
+        distanceKm: 28,
+        travelDuration: "Full Day Heritage Disposal",
+        sightseeingVisits: [
+          "City Palace Museum & Zenana Mahal with Senior Historian Dr. Mathur",
+          "Vintage Car Museum visit",
+          "Sunset drive along Fatehsagar Lake in Vintage 1947 Cadillac"
+        ],
+        chauffeurDirectives: "Ensure Vintage Cadillac is prepped and polished for afternoon 16:30 IST lakeside promenade drive."
+      }
+    ],
     gourmetMenuPlan: [
       {
         dayNumber: 1,
@@ -675,13 +901,38 @@ export const INITIAL_LEADS: CRMLead[] = [
       arrivalTime: "13:00 IST",
       flightOrTrain: "Private Aviation Flight (JAI → UDR)",
       terminalGate: "General Aviation VIP Terminal",
+      pickupLocation: "General Aviation VIP Terminal, Udaipur Airport",
+      dropoffLocation: "The Oberoi Udaivilas Presidential Suite Block",
       pickupReportingTime: "12:30 IST",
       checkInTime: "13:00 IST",
       checkOutDate: "2026-12-14",
       checkOutTime: "12:00 IST",
-      transferVehicle: "Convoy of 2x Land Rover Defender 110",
+      finalDropoffTime: "12:00 IST on Dec 14 at VIP Terminal",
+      totalDays: "5 Days / 4 Nights Booking (Dec 10 – Dec 14, 2026)",
+      transferVehicle: "Convoy of 2x Land Rover Defender 110 + Luggage Innova",
+      licensePlate: "RJ 27 EA 0004 & RJ 27 EA 0005",
+      chauffeurUniform: "Ceremonial White Livery",
       transferProtocol: "Ceremonial royal welcome at private jetty with floral rangoli and guard salute",
     },
+    routeSchedule: [
+      {
+        dayNumber: 1,
+        date: "2026-12-10",
+        dayTitle: "VIP Aviation Arrival & Presidential Convoy Transfer",
+        reportingTime: "12:15 IST",
+        releaseTime: "21:00 IST",
+        startLocation: "General Aviation VIP Terminal",
+        endLocation: "The Oberoi Udaivilas Presidential Wing",
+        routeOverview: "VIP Terminal ➔ Express Corridor ➔ City Bypass ➔ Private Udaipur Jetty",
+        distanceKm: 26,
+        travelDuration: "35 mins",
+        sightseeingVisits: [
+          "Private aviation arrival greeting",
+          "Ceremonial lakeside escort into The Oberoi Udaivilas"
+        ],
+        chauffeurDirectives: "Both Defenders in tandem formation with luggage van behind. Presidential protocol in place."
+      }
+    ],
     gourmetMenuPlan: [
       {
         dayNumber: 1,
@@ -1167,11 +1418,12 @@ export function getStoredLeads(): CRMLead[] {
         leadMap.set(item.referenceCode || item.id, {
           ...base,
           ...item,
-          arrivalDetails: item.arrivalDetails || base.arrivalDetails,
-          gourmetMenuPlan: item.gourmetMenuPlan || base.gourmetMenuPlan,
+          arrivalDetails: { ...base.arrivalDetails, ...(item.arrivalDetails || {}) },
+          routeSchedule: base.routeSchedule,
+          gourmetMenuPlan: base.gourmetMenuPlan,
           vendorAssignments: {
             ...base.vendorAssignments,
-            ...item.vendorAssignments,
+            ...(item.vendorAssignments || {}),
           },
         });
       } else {
