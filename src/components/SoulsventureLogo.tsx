@@ -142,15 +142,15 @@ export default function SoulsventureLogo({
   };
 
   const titleSizes = {
-    sm: "text-base sm:text-lg tracking-[0.24em]",
-    md: "text-lg sm:text-xl lg:text-2xl tracking-[0.26em]",
+    sm: "text-sm sm:text-base tracking-[0.22em]",
+    md: "text-base sm:text-lg lg:text-xl tracking-[0.24em]",
     lg: "text-2xl sm:text-3xl lg:text-4xl tracking-[0.28em]",
   };
 
   const sloganSizes = {
-    sm: "text-[8px] sm:text-[9px] tracking-[0.3em]",
-    md: "text-[9px] sm:text-[10px] tracking-[0.32em]",
-    lg: "text-[11px] sm:text-[12px] tracking-[0.35em]",
+    sm: "text-[7px] sm:text-[8px] tracking-[0.28em]",
+    md: "text-[8px] sm:text-[9px] tracking-[0.3em]",
+    lg: "text-[10px] sm:text-[11px] tracking-[0.35em]",
   };
 
   if (variant === "icon-only") {
@@ -166,7 +166,7 @@ export default function SoulsventureLogo({
         />
         <div className="flex items-center gap-1.5">
           <span
-            className={`font-serif font-light uppercase ${titleSizes[size]} transition-colors whitespace-nowrap ${
+            className={`font-serif font-light uppercase ${titleSizes[size]} transition-colors whitespace-nowrap leading-none ${
               isScrolled ? "text-[#1A1A1A]" : "text-white"
             }`}
           >
@@ -174,7 +174,7 @@ export default function SoulsventureLogo({
           </span>
         </div>
         <span
-          className={`font-sans uppercase font-medium ${sloganSizes[size]} mt-1 transition-colors ${
+          className={`font-sans uppercase font-medium ${sloganSizes[size]} mt-1 transition-colors leading-none ${
             isScrolled ? "text-[#C5A880]" : "text-[#DFCDAE]"
           }`}
         >
@@ -184,20 +184,20 @@ export default function SoulsventureLogo({
     );
   }
 
-  // Horizontal Lockup: [LOGO] + VENTURE | BESPOKE JOURNEYS
+  // Horizontal Lockup: [LOGO] on Left + VENTURE with BESPOKE JOURNEYS underneath on Right
   return (
-    <div className={`flex items-center gap-3.5 sm:gap-4 group cursor-pointer ${className}`}>
+    <div className={`flex items-center gap-2.5 sm:gap-3 group cursor-pointer ${className}`}>
       {/* 1. Creative Soul & Compass Emblem */}
       <CreativeSoulMark
         className={`${iconSizes[size]} flex-shrink-0 group-hover:scale-105 group-hover:rotate-6 transition-all duration-500`}
         isScrolled={isScrolled}
       />
 
-      {/* 2. Text Lockup: VENTURE | BESPOKE JOURNEYS */}
-      <div className="flex items-center gap-3.5 sm:gap-4 leading-none">
+      {/* 2. Text Lockup: VENTURE on top line & BESPOKE JOURNEYS directly underneath */}
+      <div className="flex flex-col justify-center leading-none">
         {/* Brand Main Wordmark */}
         <span
-          className={`font-serif font-light uppercase ${titleSizes[size]} transition-colors ${
+          className={`font-serif font-light uppercase ${titleSizes[size]} transition-colors leading-tight ${
             isScrolled
               ? "text-[#1A1A1A] group-hover:text-[#C5A880]"
               : "text-white group-hover:text-[#DFCDAE]"
@@ -206,20 +206,14 @@ export default function SoulsventureLogo({
           {textVariant === "venture" ? "VENTURE" : "SOULSVENTURE"}
         </span>
 
-        {/* Vertical Divider & Tagline */}
-        <div
-          className={`hidden sm:inline-flex items-center pl-3.5 sm:pl-4 border-l transition-colors ${
-            isScrolled ? "border-[#1A1A1A]/20" : "border-white/20"
+        {/* Tagline directly underneath VENTURE */}
+        <span
+          className={`font-sans uppercase font-medium ${sloganSizes[size]} mt-1 transition-colors whitespace-nowrap leading-none ${
+            isScrolled ? "text-[#C5A880]" : "text-[#DFCDAE]/90"
           }`}
         >
-          <span
-            className={`font-sans uppercase font-medium ${sloganSizes[size]} transition-colors whitespace-nowrap ${
-              isScrolled ? "text-[#1A1A1A]/60" : "text-white/70"
-            }`}
-          >
-            BESPOKE JOURNEYS
-          </span>
-        </div>
+          BESPOKE JOURNEYS
+        </span>
       </div>
     </div>
   );
