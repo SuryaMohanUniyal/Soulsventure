@@ -71,14 +71,14 @@ export default function Navbar() {
             : "bg-gradient-to-b from-black/60 via-black/20 to-transparent py-5 text-white"
         }`}
       >
-        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between gap-6 lg:gap-10">
+        <div className="max-w-7xl mx-auto px-6 sm:px-8 flex items-center justify-between">
           {/* Brand Logo with Custom Soul Mascot */}
-          <Link href="/" aria-label="Soulsventure Home" className="flex-shrink-0 mr-6 sm:mr-8 lg:mr-12 xl:mr-16">
+          <Link href="/" aria-label="Soulsventure Home" className="flex-shrink-0">
             <SoulsventureLogo isScrolled={isScrolled} />
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-7 xl:space-x-8 text-xs uppercase tracking-[0.18em] font-medium">
+          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs uppercase tracking-[0.16em] font-medium whitespace-nowrap">
             {/* Destinations Mega Menu */}
             <div
               className="relative"
@@ -91,7 +91,7 @@ export default function Navbar() {
                   isScrolled ? "text-[#1A1A1A] hover:text-[#C5A880]" : "text-white hover:text-[#DFCDAE]"
                 }`}
               >
-                Destinations <ChevronDown className="w-3.5 h-3.5" />
+                <span className="whitespace-nowrap">Destinations</span> <ChevronDown className="w-3.5 h-3.5" />
               </Link>
 
               {/* Mega Menu Dropdown */}
@@ -171,7 +171,7 @@ export default function Navbar() {
                   isScrolled ? "text-[#1A1A1A] hover:text-[#C5A880]" : "text-white hover:text-[#DFCDAE]"
                 }`}
               >
-                Trip Types <ChevronDown className="w-3.5 h-3.5" />
+                <span className="whitespace-nowrap">Trip Types</span> <ChevronDown className="w-3.5 h-3.5" />
               </Link>
 
               {activeDropdown === "styles" && (
@@ -205,7 +205,7 @@ export default function Navbar() {
 
             <Link
               href="/about"
-              className={`py-2 transition-colors ${
+              className={`py-2 whitespace-nowrap transition-colors ${
                 isScrolled ? "text-[#1A1A1A] hover:text-[#C5A880]" : "text-white hover:text-[#DFCDAE]"
               }`}
             >
@@ -214,7 +214,7 @@ export default function Navbar() {
 
             <Link
               href="/journal"
-              className={`py-2 transition-colors ${
+              className={`py-2 whitespace-nowrap transition-colors ${
                 isScrolled ? "text-[#1A1A1A] hover:text-[#C5A880]" : "text-white hover:text-[#DFCDAE]"
               }`}
             >
@@ -223,7 +223,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4">
+          <div className="hidden lg:flex items-center gap-3 xl:gap-3.5 flex-shrink-0 whitespace-nowrap">
             {/* Search Popover Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -240,7 +240,7 @@ export default function Navbar() {
             {/* Primary Enquire CTA */}
             <Link
               href="/enquire"
-              className="px-5 py-2.5 rounded-full text-xs uppercase tracking-[0.2em] font-semibold transition-all duration-300 bg-[#C5A880] hover:bg-[#9E7E50] text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+              className="px-5 py-2.5 rounded-full text-xs uppercase tracking-[0.18em] font-semibold whitespace-nowrap transition-all duration-300 bg-[#C5A880] hover:bg-[#9E7E50] text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             >
               Enquire Now
             </Link>
