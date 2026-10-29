@@ -193,6 +193,50 @@ export interface GourmetDayPlan {
   dietaryNotes: string;
 }
 
+export interface DailyGuideSchedule {
+  dayNumber: number;
+  date: string;
+  dayTitle: string;
+  tourTheme: string;              // e.g. "Mewar Royal Dynastic History & Armoury Walkthrough"
+  reportingTime: string;          // e.g. "09:15 IST"
+  tourStartTime: string;          // e.g. "09:30 IST"
+  tourEndTime: string;            // e.g. "18:00 IST"
+  meetingPoint: string;           // "The Oberoi Udaivilas Private Boat Dock / Lobby"
+  monumentVisits: Array<{
+    siteName: string;
+    duration: string;
+    highlights: string;
+    accessType: "Standard VIP" | "After-Hours Private Access" | "Curator Special Permit";
+    entrySlot: string;
+  }>;
+  transportCoordination: {
+    vehicleModel: string;
+    licensePlate: string;
+    chauffeurName: string;
+    routeDescription: string;
+    dropoffPoint: string;
+  };
+  stayHotel: {
+    hotelName: string;
+    roomType: string;
+    checkInTime: string;
+    checkOutTime: string;
+    conciergeContact: string;
+  };
+  diningBriefing: {
+    breakfast: string;
+    lunchVenue: string;
+    lunchMenu: string;
+    highTeaVenue: string;
+    highTeaMenu: string;
+    dinnerVenue: string;
+    dinnerMenu: string;
+    dietaryRestrictions: string;
+  };
+  specialGuideNotes: string;
+  asiPermitNumber?: string;
+}
+
 export interface CRMLead {
   id: string;
   referenceCode: string;
@@ -226,6 +270,7 @@ export interface CRMLead {
   proposalDays?: BespokeItineraryDay[];
   arrivalDetails?: ArrivalAndDepartureDetails;
   routeSchedule?: DailyRouteSchedule[];
+  guideSchedule?: DailyGuideSchedule[];
   gourmetMenuPlan?: GourmetDayPlan[];
   milestones: {
     inquiryLogged: boolean;
@@ -483,7 +528,321 @@ export const INITIAL_LEADS: CRMLead[] = [
         chauffeurDirectives: "Report 15 minutes early at 09:45 IST. Assist with luggage unloading onto airline VIP trolley at Gate 1. Provide warm departure namaste."
       }
     ],
-    gourmetMenuPlan: [
+        guideSchedule: [
+      {
+        dayNumber: 1,
+        date: "2026-11-14",
+        dayTitle: "Royal Arrival & Lake Pichola Welcome Excursion",
+        tourTheme: "Rajput Maritime Heritage & Lake Pichola Royal Architecture",
+        reportingTime: "13:30 IST",
+        tourStartTime: "14:00 IST",
+        tourEndTime: "19:00 IST",
+        meetingPoint: "The Oberoi Udaivilas Private Boat Dock / Grand Lobby Front Desk",
+        monumentVisits: [
+          {
+            siteName: "Lake Pichola Private Royal Shikara Waterways & Jag Mandir Island",
+            duration: "2 hours",
+            highlights: "Private sunset shikara cruise circling 17th-century Jag Mandir Island Palace, Lake Palace history, and royal pleasure pavilions",
+            accessType: "Curator Special Permit",
+            entrySlot: "16:00 – 18:00 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Land Rover Defender 110 4WD (Black Luxury Edition)",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet - Contact via Curator)",
+          routeDescription: "Udaipur Airport ➔ NH-48 Express ➔ Fatehsagar Lake Promenade ➔ Badi Pal Jetty ➔ The Oberoi Udaivilas",
+          dropoffPoint: "The Oberoi Udaivilas Badi Pal Private Boat Jetty"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          roomType: "Kohinoor Lake View Suite #204 & Luxury Pool Rooms",
+          checkInTime: "14:00 IST (Private Shikara check-in)",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Chief Concierge Desk (+91 294 243 3300 - Extension 204)"
+        },
+        diningBriefing: {
+          breakfast: "Welcome detox on tarmac: Fresh tender coconut water & pomegranate-mint cooler",
+          lunchVenue: "The Oberoi Udaivilas Lake Promenade",
+          lunchMenu: "Truffle asparagus risotto, heirloom burrata salad, warm artisanal herb focaccia",
+          highTeaVenue: "Sunset High Tea at Udaivilas Lakeside Domes (17:30 IST)",
+          highTeaMenu: "Kashmiri saffron kahwa, pistachio baklava, artisanal cucumber sandwiches",
+          dinnerVenue: "Lakeside Royal Mewari Pavilion (20:00 IST)",
+          dinnerMenu: "7-Course Royal Mewari Banquet: Smoked Ker Sangri, Dal Baati Churma cooked in Gir cow ghee, Paneer Kundan Kaliyan, Saffron Shahi Tukda (100% Pure Veg)",
+          dietaryRestrictions: "Strictly 100% Pure Vegetarian. Separate Jain course (no onion/garlic) prepared exclusively for Mrs. Sharma."
+        },
+        specialGuideNotes: "Welcome greeting at boat dock. Present silk welcome stoles and provide Lake Pichola historical overview.",
+        asiPermitNumber: "ASI-ROYAL-MWR-782"
+      },
+      {
+        dayNumber: 2,
+        date: "2026-11-15",
+        dayTitle: "City Palace Private Royal Armoury, Jagdish Temple & Sajjangarh Sunset",
+        tourTheme: "Mewar Royal Dynastic History, Weapons of Maharana Pratap & Hilltop Citadel",
+        reportingTime: "09:15 IST",
+        tourStartTime: "09:30 IST",
+        tourEndTime: "18:30 IST",
+        meetingPoint: "The Oberoi Udaivilas Main Porch (Vehicle Departure)",
+        monumentVisits: [
+          {
+            siteName: "City Palace Private Royal Armoury & Private Archives (Zenana Mahal)",
+            duration: "2 hours 30 mins",
+            highlights: "Exclusive after-hours walkthrough of 400-year-old Mewar royal weaponry, Maharana Pratap personal 25kg armour, heirloom katar daggers, and illuminated court manuscripts",
+            accessType: "After-Hours Private Access",
+            entrySlot: "10:00 – 12:30 IST (Special ASI Clearance Permit #ASI-ROYAL-MWR-782)"
+          },
+          {
+            siteName: "Jagdish Temple (1651 AD Indo-Aryan Stone Architecture)",
+            duration: "1 hour",
+            highlights: "Hand-carved pillars, continuous friezes of Vishnu avatars, living Vedic chants and sacred architecture",
+            accessType: "Standard VIP",
+            entrySlot: "12:45 – 13:45 IST"
+          },
+          {
+            siteName: "Saheliyon-ki-Bari (Courtyard of Maidens)",
+            duration: "1 hour",
+            highlights: "Marble elephants, gravitational natural rain fountains, lotus pools built by Maharana Sangram Singh II",
+            accessType: "Standard VIP",
+            entrySlot: "15:30 – 16:30 IST"
+          },
+          {
+            siteName: "Monsoon Palace (Sajjangarh Fort Hilltop)",
+            duration: "1 hour 30 mins",
+            highlights: "Sunset panoramic vistas over Udaipur lakes and Aravalli mountain range; royal monsoon astronomical history",
+            accessType: "Curator Special Permit",
+            entrySlot: "17:00 – 18:30 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Land Rover Defender 110 4WD (Black Luxury Edition)",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet - Contact via Curator)",
+          routeDescription: "The Oberoi Udaivilas ➔ Old City Royal Gate ➔ City Palace Badi Pol ➔ Jagdish Temple ➔ Saheliyon-ki-Bari ➔ Monsoon Palace Sajjangarh Hilltop ➔ Udaivilas Porte-Cochère",
+          dropoffPoint: "The Oberoi Udaivilas Lobby Porte-Cochère"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          roomType: "Kohinoor Lake View Suite #204 & Luxury Pool Rooms",
+          checkInTime: "14:00 IST",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Chief Concierge Desk (+91 294 243 3300 - Extension 204)"
+        },
+        diningBriefing: {
+          breakfast: "Champagne Breakfast on Lake Pichola Terrace (08:00 – 09:15 IST): Organic berries, fresh dosas, Belgian waffles, French pressed Blue Tokai coffee",
+          lunchVenue: "Palace Garden Courtyard (13:45 IST)",
+          lunchMenu: "Stuffed Rajasthani Mirchi Vada (mild), yellow moong dal tadka, steamed fragrant basmati, pomegranate raita, warm phulkas",
+          highTeaVenue: "Royal Armoury High-Tea at Zenana Mahal (17:00 IST)",
+          highTeaMenu: "Handcrafted masala chai in clay kulhads, cardamom shortbread, savory samosas",
+          dinnerVenue: "20th Anniversary Candlelit Poolside Dinner at Udaivilas (20:30 IST)",
+          dinnerMenu: "Wild morel mushroom pulao, lotus root kofta, warm gulab jamun with saffron rabri, custom 20th anniversary eggless cake",
+          dietaryRestrictions: "Strictly 100% Pure Vegetarian. Separate Jain course without onion/garlic. Eggless 20th Anniversary Cake to be presented at 21:00 IST."
+        },
+        specialGuideNotes: "VIP 20th Wedding Anniversary Day! Congratulate Mr. & Mrs. Sharma. Present the hand-lettered Mewari blessing calligraphy scroll. Ensure pace is leisurely.",
+        asiPermitNumber: "ASI-ROYAL-MWR-782"
+      },
+      {
+        dayNumber: 3,
+        date: "2026-11-16",
+        dayTitle: "Jawai Wilderness Transit & Ranakpur Marble Temple Excursion",
+        tourTheme: "15th Century Jain Architectural Mastery & Granite Koppie Wilderness",
+        reportingTime: "08:30 IST",
+        tourStartTime: "09:00 IST",
+        tourEndTime: "18:00 IST",
+        meetingPoint: "The Oberoi Udaivilas Lobby Porte-Cochère (Departure to Jawai)",
+        monumentVisits: [
+          {
+            siteName: "Ranakpur Jain Temple (1,444 Carved Marble Pillars)",
+            duration: "2 hours",
+            highlights: "En-route stop at Ranakpur: 1,444 uniquely carved marble pillars where no two are alike; Adinatha sanctum and intricate dome ceilings",
+            accessType: "Curator Special Permit",
+            entrySlot: "11:00 – 13:00 IST"
+          },
+          {
+            siteName: "Rabari Pastoral Village Heritage Walk",
+            duration: "1 hour 30 mins",
+            highlights: "Meeting village elders, red-turbaned pastoralists, traditional camel and cattle herding traditions, and coexistence folklore",
+            accessType: "Standard VIP",
+            entrySlot: "16:00 – 17:30 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Land Rover Defender 110 4WD (Transit to SUJÁN JAWAI Camp)",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet - Contact via Curator)",
+          routeDescription: "Udaivilas ➔ NH-27 Express ➔ Ranakpur Valley Pass ➔ Jawai Granite Koppies ➔ SUJÁN JAWAI Camp",
+          dropoffPoint: "SUJÁN JAWAI Camp Main Pavilion"
+        },
+        stayHotel: {
+          hotelName: "SUJÁN JAWAI Luxury Camp",
+          roomType: "Royal Tented Suite #04",
+          checkInTime: "14:00 IST",
+          checkOutTime: "11:00 IST",
+          conciergeContact: "Camp Manager Desk (+91 293 325 3500)"
+        },
+        diningBriefing: {
+          breakfast: "Ayurvedic Morning Wellness at Udaivilas (07:30 IST): Steamed poha, cold-pressed green elixirs, chia-almond bowl",
+          lunchVenue: "Granite Koppie Scenic Bush Picnic (13:30 IST)",
+          lunchMenu: "Roasted cumin potatoes, fresh roomali rotis, spiced roasted buttermilk, local Rajasthani gatte",
+          highTeaVenue: "Safari Sunset Hilltop Tea (17:30 IST)",
+          highTeaMenu: "Ginger-lemon honey tea served atop private granite hill overlooking leopard terrain",
+          dinnerVenue: "Lantern-Lit Bush Dinner under Stars at SUJÁN JAWAI",
+          dinnerMenu: "Charcoal roasted sweet corn, Rajasthani khichdi with spiced curd, warm almond halwa",
+          dietaryRestrictions: "Nut-allergy certified. Campfire setup with warm fleece blankets."
+        },
+        specialGuideNotes: "Ranakpur temple requires head coverings and no leather goods. Brief guests before arrival.",
+        asiPermitNumber: "ASI-RNK-JAIN-104"
+      },
+      {
+        dayNumber: 4,
+        date: "2026-11-17",
+        dayTitle: "Dawn Leopard Safari & Kumbhalgarh Great Wall Excursion",
+        tourTheme: "Wildlife Tracking & The Great Wall of Kumbhalgarh (World 2nd Longest Wall)",
+        reportingTime: "06:00 IST",
+        tourStartTime: "06:15 IST",
+        tourEndTime: "18:30 IST",
+        meetingPoint: "SUJÁN JAWAI Camp Fireplace",
+        monumentVisits: [
+          {
+            siteName: "Kumbhalgarh Fort Citadel & 36km Perimeter Wall",
+            duration: "2 hours 30 mins",
+            highlights: "Walkthrough of the impenetrable Mewar hill fortress, Badal Mahal (Cloud Palace), and the birthplace of Maharana Pratap",
+            accessType: "Curator Special Permit",
+            entrySlot: "11:30 – 14:00 IST"
+          },
+          {
+            siteName: "Granite Cave Leopard Territory Excursion",
+            duration: "2 hours",
+            highlights: "Coordinated sunset drive with camp tracker to observe wild Indian leopards on ancient granite rocks",
+            accessType: "Standard VIP",
+            entrySlot: "16:30 – 18:30 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "SUJÁN Open-Top Safari 4x4 & Defender 110",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet - Contact via Curator)",
+          routeDescription: "Camp ➔ Kumbhalgarh Ridge Pass ➔ Leopard Escarpments ➔ Return Camp",
+          dropoffPoint: "SUJÁN JAWAI Camp Porch"
+        },
+        stayHotel: {
+          hotelName: "SUJÁN JAWAI Luxury Camp",
+          roomType: "Royal Tented Suite #04",
+          checkInTime: "14:00 IST",
+          checkOutTime: "11:00 IST",
+          conciergeContact: "Camp Manager Desk (+91 293 325 3500)"
+        },
+        diningBriefing: {
+          breakfast: "Bush Safari Dawn Breakfast (08:30 IST): Masala omelettes (or paneer scramble), warm croissants, valencia orange juice",
+          lunchVenue: "Fort View Courtyard (13:30 IST)",
+          lunchMenu: "Smoked baingan bharta, phulkas with churned white butter, cucumber mint soup",
+          highTeaVenue: "Village Hearth Tea (17:00 IST)",
+          highTeaMenu: "Spiced chai brewed over acacia embers, sesame seed laddoos",
+          dinnerVenue: "Private Terrace Candlelit Feast (20:00 IST)",
+          dinnerMenu: "Mughlai paneer lababdar, dal makhani slow cooked for 24 hours, laccha paratha, kesar pista kulfi",
+          dietaryRestrictions: "Mild spice levels for teenagers. 100% Pure vegetarian."
+        },
+        specialGuideNotes: "Explain the architectural defense design of Kumbhalgarh 36km wall, designed to withstand multi-year sieges.",
+        asiPermitNumber: "ASI-KMB-WALL-211"
+      },
+      {
+        dayNumber: 5,
+        date: "2026-11-18",
+        dayTitle: "Return to Lake Pichola & Bagore Ki Haveli Folk Traditions",
+        tourTheme: "Udaipur Living Heritage, Mewari Puppetry & Sunset Lake Cruise",
+        reportingTime: "09:30 IST",
+        tourStartTime: "10:00 IST",
+        tourEndTime: "19:30 IST",
+        meetingPoint: "SUJÁN JAWAI Main Camp Porch (Transit Return to Udaipur)",
+        monumentVisits: [
+          {
+            siteName: "Bagore Ki Haveli Waterfront Mansion & Turbans Museum",
+            duration: "1 hour 30 mins",
+            highlights: "18th-century royal haveli on Gangaur Ghat, world largest turban exhibit, glass mosaic courtyards, and Mewari folk puppetry demonstration",
+            accessType: "Standard VIP",
+            entrySlot: "15:00 – 16:30 IST"
+          },
+          {
+            siteName: "Private Imperial Shikara Sunset Cruise around Lake Pichola",
+            duration: "1 hour 30 mins",
+            highlights: "Private Shikara boat with live sarangi musician circling the illuminated water palaces of Udaipur",
+            accessType: "Curator Special Permit",
+            entrySlot: "17:00 – 18:30 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Land Rover Defender 110 4WD (Black Luxury Edition)",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet - Contact via Curator)",
+          routeDescription: "Jawai ➔ NH-27 Express ➔ Udaipur Lake District ➔ The Oberoi Udaivilas",
+          dropoffPoint: "The Oberoi Udaivilas Jetty"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          roomType: "Kohinoor Lake View Suite #204 & Luxury Pool Rooms",
+          checkInTime: "14:00 IST",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Chief Concierge Desk (+91 294 243 3300 - Extension 204)"
+        },
+        diningBriefing: {
+          breakfast: "Royal Buffet Breakfast at SUJÁN JAWAI: Artisanal cheeses, fresh fruit platters, idli-vada with coconut chutney",
+          lunchVenue: "Lakeside Trattoria at Udaivilas (13:30 IST)",
+          lunchMenu: "Woodfired margherita pizza with fresh basil, hand-rolled penne all arrabbiata",
+          highTeaVenue: "Private Shikara Afternoon Tea (16:30 IST)",
+          highTeaMenu: "Darjeeling First Flush with lemon tarts & walnut brownies served on the lake",
+          dinnerVenue: "Farewell Royal Marwari Thali at Udaivilas (20:30 IST)",
+          dinnerMenu: "11 traditional bowls including gatte ki kadhi, churma variations, rabdi jalebi",
+          dietaryRestrictions: "Farewell personalized menu card printed on handmade paper."
+        },
+        specialGuideNotes: "Relaxed pace for farewell evening. Ensure private boat is ready at 17:00 IST with musician on board.",
+        asiPermitNumber: "ASI-ROYAL-MWR-782"
+      },
+      {
+        dayNumber: 6,
+        date: "2026-11-19",
+        dayTitle: "Farewell Udaipur & VIP Airport Departure Escort",
+        tourTheme: "Final Farewell, Memento Presentation & VIP Airport Departure",
+        reportingTime: "09:30 IST",
+        tourStartTime: "09:45 IST",
+        tourEndTime: "11:30 IST",
+        meetingPoint: "The Oberoi Udaivilas Jetty & Lobby",
+        monumentVisits: [
+          {
+            siteName: "Lake Pichola Morning Vista & Old City Memorial Gate",
+            duration: "45 mins",
+            highlights: "Final panoramic view of Lake Pichola and photo opportunity at historic Badi Pol Gate",
+            accessType: "Standard VIP",
+            entrySlot: "10:00 – 10:45 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Land Rover Defender 110 4WD (Black Luxury Edition)",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet - Contact via Curator)",
+          routeDescription: "Udaivilas ➔ Fatehsagar Promenade ➔ NH-48 Express ➔ Udaipur Airport Gate 1",
+          dropoffPoint: "Udaipur Airport (UDR) Terminal 1 Departure Gate 1"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          roomType: "Kohinoor Lake View Suite #204 (Check-out completed by 10:00 IST)",
+          checkInTime: "14:00 IST",
+          checkOutTime: "10:00 IST (Departure)",
+          conciergeContact: "Chief Concierge Desk (+91 294 243 3300 - Extension 204)"
+        },
+        diningBriefing: {
+          breakfast: "Farewell Champagne Breakfast at Udaivilas Terrace (08:00 – 09:30 IST)",
+          lunchVenue: "Airport VIP Executive Lounge Access",
+          lunchMenu: "Light gourmet refreshments & artisanal herbal teas",
+          highTeaVenue: "In-Flight",
+          highTeaMenu: "N/A",
+          dinnerVenue: "Arrival in New Delhi",
+          dinnerMenu: "N/A",
+          dietaryRestrictions: "Farewell gift box of royal saffron dry fruits presented to each family member."
+        },
+        specialGuideNotes: "Present the framed SoulsVenture commemorative trip certificate and escort family to VIP security queue at Gate 1.",
+        asiPermitNumber: "ASI-DEPART-CLEAR-09"
+      }
+    ],
+gourmetMenuPlan: [
       {
         dayNumber: 1,
         date: "2026-11-14",
@@ -811,7 +1170,106 @@ export const INITIAL_LEADS: CRMLead[] = [
         chauffeurDirectives: "Ensure Vintage Cadillac is prepped and polished for afternoon 16:30 IST lakeside promenade drive."
       }
     ],
-    gourmetMenuPlan: [
+        guideSchedule: [
+      {
+        dayNumber: 1,
+        date: "2026-12-02",
+        dayTitle: "Countess Royal Arrival & Lake Pichola Welcome",
+        tourTheme: "French-Rajput Diplomatic Ties & Lake Pichola Architecture",
+        reportingTime: "11:30 IST",
+        tourStartTime: "12:00 IST",
+        tourEndTime: "18:00 IST",
+        meetingPoint: "The Oberoi Udaivilas Lakeside Dock & Lobby",
+        monumentVisits: [
+          {
+            siteName: "Lake Pichola Private Royal Shikara Welcome",
+            duration: "1 hour 30 mins",
+            highlights: "Private shikara boat with traditional Shehnai welcoming Countess Sophie De Rohan to Udaipur",
+            accessType: "Curator Special Permit",
+            entrySlot: "12:30 – 14:00 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Mercedes-Maybach S-Class",
+          licensePlate: "RJ 27 EA 0003",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet)",
+          routeDescription: "Airport ➔ NH-48 Express ➔ Fatehsagar Promenade ➔ The Oberoi Udaivilas",
+          dropoffPoint: "The Oberoi Udaivilas Lakeside Dock"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          roomType: "Premier Pool Suite #112",
+          checkInTime: "12:30 IST",
+          checkOutTime: "14:00 IST",
+          conciergeContact: "French Guest Relations Desk (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Welcome detox on arrival",
+          lunchVenue: "Lakeside Courtyard",
+          lunchMenu: "Light European-Rajasthani fusion luncheon",
+          highTeaVenue: "Udaivilas Domes (17:00 IST)",
+          highTeaMenu: "Darjeeling First Flush & French macarons",
+          dinnerVenue: "Private Poolside Candlelit Pavilion",
+          dinnerMenu: "Sous-vide sea bass (or organic paneer) with saffron risotto",
+          dietaryRestrictions: "Prefers organic produce and refined French wine pairings."
+        },
+        specialGuideNotes: "Conduct tour briefings in fluent French. Countess is an art historian and patron of European decorative arts.",
+        asiPermitNumber: "ASI-ROYAL-ARCH-409"
+      },
+      {
+        dayNumber: 2,
+        date: "2026-12-03",
+        dayTitle: "City Palace Zenana Mahal Archives & Vintage Cadillac Drive",
+        tourTheme: "Royal Miniature Paintings, Zenana Architecture & Classic Automotive Heritage",
+        reportingTime: "09:30 IST",
+        tourStartTime: "10:00 IST",
+        tourEndTime: "18:30 IST",
+        meetingPoint: "The Oberoi Udaivilas Lobby",
+        monumentVisits: [
+          {
+            siteName: "City Palace Zenana Mahal & Royal Miniature Archives",
+            duration: "3 hours",
+            highlights: "Curator-guided private viewing of 17th-century Mewari court miniature paintings, ivory doors, and stained glass chambers",
+            accessType: "After-Hours Private Access",
+            entrySlot: "10:00 – 13:00 IST (Permit #ASI-ROYAL-ARCH-409)"
+          },
+          {
+            siteName: "Mewar Royal Vintage Car Collection",
+            duration: "1 hour 30 mins",
+            highlights: "Private inspection of Maharana heritage fleet including 1934 Rolls-Royce Phantom II and 1947 Cadillac",
+            accessType: "Standard VIP",
+            entrySlot: "15:00 – 16:30 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Vintage 1947 Cadillac Series 62",
+          licensePlate: "RJ 27 EA 0003",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet)",
+          routeDescription: "Udaivilas ➔ Old City Gates ➔ City Palace Complex ➔ Vintage Car Museum ➔ Fatehsagar Sunset Loop ➔ Return",
+          dropoffPoint: "The Oberoi Udaivilas Lobby"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          roomType: "Premier Pool Suite #112",
+          checkInTime: "12:30 IST",
+          checkOutTime: "14:00 IST",
+          conciergeContact: "Chief Concierge Desk (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Continental Buffet on Lake Terrace",
+          lunchVenue: "Zenana Mahal Courtyard",
+          lunchMenu: "Royal Mewari Thali with French Champagne",
+          highTeaVenue: "Vintage Pavilion (16:30 IST)",
+          highTeaMenu: "Artisanal teas and pastries",
+          dinnerVenue: "Lakeside Candlelit Terrace",
+          dinnerMenu: "Tasting menu featuring slow cooked Mewari delicacies",
+          dietaryRestrictions: "Strict hygiene and bottled mineral water exclusively."
+        },
+        specialGuideNotes: "Dr. Mathur will lead the private archives session. Emphasize Mewar court school art history.",
+        asiPermitNumber: "ASI-ROYAL-ARCH-409"
+      }
+    ],
+gourmetMenuPlan: [
       {
         dayNumber: 1,
         date: "2026-12-02",
@@ -933,7 +1391,106 @@ export const INITIAL_LEADS: CRMLead[] = [
         chauffeurDirectives: "Both Defenders in tandem formation with luggage van behind. Presidential protocol in place."
       }
     ],
-    gourmetMenuPlan: [
+        guideSchedule: [
+      {
+        dayNumber: 1,
+        date: "2026-12-10",
+        dayTitle: "VIP Aviation Arrival & Presidential Welcome",
+        tourTheme: "Udaipur Architectural Landscape & Royal Lineage",
+        reportingTime: "12:30 IST",
+        tourStartTime: "13:00 IST",
+        tourEndTime: "18:00 IST",
+        meetingPoint: "General Aviation VIP Terminal / The Oberoi Udaivilas Presidential Wing",
+        monumentVisits: [
+          {
+            siteName: "Lake Pichola Royal Waterfront & Presidential Jetty",
+            duration: "1 hour 30 mins",
+            highlights: "Ceremonial lakeside escort into The Oberoi Udaivilas Presidential Suite block with Shehnai musicians",
+            accessType: "Curator Special Permit",
+            entrySlot: "13:30 – 15:00 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Convoy of 2x Land Rover Defender 110",
+          licensePlate: "RJ 27 EA 0004 & RJ 27 EA 0005",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet)",
+          routeDescription: "VIP Terminal ➔ Express Corridor ➔ City Bypass ➔ Private Udaipur Jetty",
+          dropoffPoint: "The Oberoi Udaivilas Presidential Suite Block"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          roomType: "Presidential Block Suites #201-#204",
+          checkInTime: "13:00 IST",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Presidential Concierge (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Executive breakfast on private terrace",
+          lunchVenue: "Boardroom Royal Thali",
+          lunchMenu: "Gatte ki subzi, papad mangodi, smoked baati, churma trio",
+          highTeaVenue: "Executive Tea Pavilion (17:00 IST)",
+          highTeaMenu: "Single estate Assam tea, almond biscotti, savory samosas",
+          dinnerVenue: "Royal Grand Banquet",
+          dinnerMenu: "9-Course Marwari & Mughlai feast with live classical recital",
+          dietaryRestrictions: "100% Pure Vegetarian Marwari cuisine cooked in Gir cow ghee."
+        },
+        specialGuideNotes: "High-security corporate VIP delegation. Maintain crisp operational timing.",
+        asiPermitNumber: "ASI-FORT-CHT-550"
+      },
+      {
+        dayNumber: 2,
+        date: "2026-12-11",
+        dayTitle: "Mewar Dynastic Architecture & Chittorgarh Fort Excursion",
+        tourTheme: "Fortress Architecture, Vijay Stambha Victory Tower & Padmini Palace",
+        reportingTime: "08:15 IST",
+        tourStartTime: "08:30 IST",
+        tourEndTime: "18:30 IST",
+        meetingPoint: "The Oberoi Udaivilas Presidential Wing Porte-Cochère",
+        monumentVisits: [
+          {
+            siteName: "Chittorgarh Fort & Vijay Stambha (Tower of Victory)",
+            duration: "3 hours",
+            highlights: "Comprehensive architectural survey of 7th-century Chittorgarh: 9-storey Victory Tower, Kirti Stambha, and Rajput valor chronicles",
+            accessType: "After-Hours Private Access",
+            entrySlot: "10:30 – 13:30 IST (Special ASI Permit #ASI-FORT-CHT-550)"
+          },
+          {
+            siteName: "Padmini Palace & Water Pavilions",
+            duration: "1 hour 30 mins",
+            highlights: "Water palace surrounded by lotus moat; mirror legend and historic siege defenses",
+            accessType: "Standard VIP",
+            entrySlot: "14:30 – 16:00 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Convoy of 2x Land Rover Defender 110",
+          licensePlate: "RJ 27 EA 0004 & RJ 27 EA 0005",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet)",
+          routeDescription: "Udaivilas ➔ NH-48 Express ➔ Chittorgarh Ramparts ➔ Victory Tower ➔ Padmini Palace ➔ Return Udaivilas",
+          dropoffPoint: "The Oberoi Udaivilas Presidential Suite Block"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          roomType: "Presidential Block Suites #201-#204",
+          checkInTime: "13:00 IST",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Presidential Concierge (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Dawn terrace breakfast at Udaivilas",
+          lunchVenue: "Chittorgarh Heritage Palace Pavilion",
+          lunchMenu: "Traditional Mewari feast with kachoris, rotis, and dry fruit dal",
+          highTeaVenue: "Fort Ramparts Sunset Tea (16:30 IST)",
+          highTeaMenu: "Hot masala chai and Rajasthani sweets overlooking the plains",
+          dinnerVenue: "The Oberoi Udaivilas Lakeside Pavilion",
+          dinnerMenu: "Multi-course royal Rajasthani banquet",
+          dietaryRestrictions: "Strictly pure vegetarian. No onions or garlic for Mr. Singhania."
+        },
+        specialGuideNotes: "Dr. Mathur will deliver a 30-minute introductory monograph on Mewar military architecture during the drive.",
+        asiPermitNumber: "ASI-FORT-CHT-550"
+      }
+    ],
+gourmetMenuPlan: [
       {
         dayNumber: 1,
         date: "2026-12-10",
@@ -1420,10 +1977,14 @@ export function getStoredLeads(): CRMLead[] {
           ...item,
           arrivalDetails: { ...base.arrivalDetails, ...(item.arrivalDetails || {}) },
           routeSchedule: base.routeSchedule,
+          guideSchedule: base.guideSchedule,
           gourmetMenuPlan: base.gourmetMenuPlan,
           vendorAssignments: {
             ...base.vendorAssignments,
             ...(item.vendorAssignments || {}),
+            guide: item.vendorAssignments?.guide || base.vendorAssignments?.guide,
+            driver: item.vendorAssignments?.driver || base.vendorAssignments?.driver,
+            hotel: item.vendorAssignments?.hotel || base.vendorAssignments?.hotel,
           },
         });
       } else {
