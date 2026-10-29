@@ -2688,7 +2688,7 @@ export function getStoredPartners(): PartnerTieUp[] {
           if (Array.isArray(parsedV1)) {
             list = parsedV1;
           }
-        } catch {}
+        } catch (e) {}
       }
     }
 
@@ -2778,7 +2778,7 @@ export function getDeletedLeadIds(): Set<string> {
     if (!raw) return new Set();
     const parsed = JSON.parse(raw);
     return new Set(Array.isArray(parsed) ? parsed : []);
-  } catch {
+  } catch (e) {
     return new Set();
   }
 }
@@ -2798,7 +2798,7 @@ export function clearDeletedLeadIds(): void {
   if (typeof window === "undefined") return;
   try {
     localStorage.removeItem(DELETED_LEADS_STORAGE_KEY);
-  } catch {}
+  } catch (e) {}
 }
 
 let isCloudPushing = false;
@@ -2840,7 +2840,7 @@ export async function fetchCloudLeads(): Promise<CRMLead[]> {
       if (rawRes.ok) {
         const rawJson = await rawRes.json();
         const arr = Array.isArray(rawJson) ? rawJson : [];
-        return arr.filter((l: any) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
+        return arr.filter((l: CRMLead) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
       }
       return [];
     }
@@ -2849,7 +2849,7 @@ export async function fetchCloudLeads(): Promise<CRMLead[]> {
     const decoded = base64ToString(data.content);
     const parsed = JSON.parse(decoded);
     const arr = Array.isArray(parsed) ? parsed : [];
-    return arr.filter((l: any) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
+    return arr.filter((l: CRMLead) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
   } catch (err) {
     console.warn("Could not fetch cloud leads (using local cache):", err);
     return [];
@@ -2964,7 +2964,7 @@ export function getStoredLeads(): CRMLead[] {
     }
     const parsed = JSON.parse(raw);
     const arr = Array.isArray(parsed) && parsed.length > 0 ? parsed : [];
-    const valid = arr.filter((l: any) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
+    const valid = arr.filter((l: CRMLead) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
 
     // Ensure our INITIAL_LEADS (with rich gourmet menus and arrival details) are always merged
     const leadMap = new Map<string, CRMLead>();
@@ -3565,7 +3565,7 @@ export async function syncTeamWithCloud(): Promise<TeamMember[]> {
   if (typeof window !== "undefined") {
     try {
       localStorage.setItem(SOULSVENTURE_TEAM_KEY, JSON.stringify(merged));
-    } catch {}
+    } catch (e) {}
   }
   return merged;
 }
@@ -3606,7 +3606,7 @@ export function getAdminAuthSession(): AdminAuthSession | null {
     const session: AdminAuthSession = JSON.parse(raw);
     if (!session || !session.user) return null;
     return session;
-  } catch {
+  } catch (e) {
     return null;
   }
 }
@@ -4298,7 +4298,7 @@ export function getStoredClientAccounts(): ClientAccount[] {
     }
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : INITIAL_CLIENT_ACCOUNTS;
-  } catch {
+  } catch (e) {
     return INITIAL_CLIENT_ACCOUNTS;
   }
 }
@@ -4319,7 +4319,7 @@ export function getClientAuthSession(): ClientAccount | null {
     const raw = localStorage.getItem(SOULSVENTURE_CLIENT_AUTH_KEY);
     if (!raw) return null;
     return JSON.parse(raw);
-  } catch {
+  } catch (e) {
     return null;
   }
 }
@@ -4494,7 +4494,7 @@ export function getStoredClientDocuments(): ClientDocumentVaultItem[] {
     }
     const parsed = JSON.parse(raw);
     return Array.isArray(parsed) ? parsed : INITIAL_CLIENT_DOCUMENTS;
-  } catch {
+  } catch (e) {
     return INITIAL_CLIENT_DOCUMENTS;
   }
 }
@@ -4521,7 +4521,7 @@ export function getVendorAuthSession(): PartnerTieUp | null {
     const raw = localStorage.getItem(SOULSVENTURE_VENDOR_AUTH_KEY);
     if (!raw) return null;
     return JSON.parse(raw);
-  } catch {
+  } catch (e) {
     return null;
   }
 }
@@ -4541,7 +4541,7 @@ export function clearVendorAuthSession(): void {
   try {
     localStorage.removeItem(SOULSVENTURE_VENDOR_AUTH_KEY);
     window.dispatchEvent(new Event("storage"));
-  } catch {}
+  } catch (e) {}
 }
 
 export function verifyVendorLogin(phoneInput: string, pinInput: string): PartnerTieUp | null {

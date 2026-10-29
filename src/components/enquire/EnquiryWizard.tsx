@@ -135,7 +135,7 @@ export default function EnquiryWizard() {
 
   const onSubmit = async (data: EnquiryFormData) => {
     setIsSubmitting(true);
-    const code = `SV-${Math.floor(1000 + Math.random() * 9000)}-IND`;
+    const code = `SV-${Date.now().toString().slice(-4)}-IND`;
     setReferenceCode(code);
 
     let estimatedVal = 600000;

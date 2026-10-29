@@ -14,12 +14,10 @@ import {
   Heart,
   Sparkles,
   BarChart3,
-  Plane,
   Receipt,
 } from "lucide-react";
 import AdminItineraryBuilder from "@/components/admin/AdminItineraryBuilder";
 import AdminGSTInvoicingSuite from "@/components/admin/AdminGSTInvoicingSuite";
-import AdminCharterBookingModule from "@/components/admin/AdminCharterBookingModule";
 import AdminCRMTable from "@/components/admin/AdminCRMTable";
 import AdminCalendarView from "@/components/admin/AdminCalendarView";
 import AdminPipelineKanban from "@/components/admin/AdminPipelineKanban";

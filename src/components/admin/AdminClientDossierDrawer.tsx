@@ -67,14 +67,12 @@ export default function AdminClientDossierDrawer({
   onToggleMilestone,
   onGenerateProposal,
 }: AdminClientDossierDrawerProps) {
-  if (!lead) return null;
-
-  const [notes, setNotes] = useState(lead.internalNotes || "");
+  const [notes, setNotes] = useState(lead?.internalNotes || "");
   const [isSavedAlert, setIsSavedAlert] = useState(false);
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [voiceCallAlert, setVoiceCallAlert] = useState("");
   const [localNuances, setLocalNuances] = useState<ClientNuanceProfile>(
-    lead.clientNuances || {
+    lead?.clientNuances || {
       dietaryRestrictions: ["Pure Vegetarian Preferred", "Organic Farm-to-Table"],
       roomPreferences: ["Highest Floor Palace Lake Suite"],
       beveragePreferences: ["Dom Pérignon Champagne & Darjeeling First Flush"],
@@ -89,33 +87,33 @@ export default function AdminClientDossierDrawer({
   const [allPartners, setAllPartners] = useState<PartnerTieUp[]>([]);
   const [regionFilter, setRegionFilter] = useState<string>("all");
   const [hotelPartnerId, setHotelPartnerId] = useState<string>(
-    lead.vendorAssignments?.hotel?.partnerId || ""
+    lead?.vendorAssignments?.hotel?.partnerId || ""
   );
   const [hotelStatus, setHotelStatus] = useState<string>(
-    lead.vendorAssignments?.hotel?.status || "Pending Confirmation"
+    lead?.vendorAssignments?.hotel?.status || "Pending Confirmation"
   );
   const [hotelNotes, setHotelNotes] = useState<string>(
-    lead.vendorAssignments?.hotel?.notes || ""
+    lead?.vendorAssignments?.hotel?.notes || ""
   );
 
   const [driverPartnerId, setDriverPartnerId] = useState<string>(
-    lead.vendorAssignments?.driver?.partnerId || ""
+    lead?.vendorAssignments?.driver?.partnerId || ""
   );
   const [driverStatus, setDriverStatus] = useState<string>(
-    lead.vendorAssignments?.driver?.status || "Pending Dispatch"
+    lead?.vendorAssignments?.driver?.status || "Pending Dispatch"
   );
   const [driverNotes, setDriverNotes] = useState<string>(
-    lead.vendorAssignments?.driver?.notes || ""
+    lead?.vendorAssignments?.driver?.notes || ""
   );
 
   const [guidePartnerId, setGuidePartnerId] = useState<string>(
-    lead.vendorAssignments?.guide?.partnerId || ""
+    lead?.vendorAssignments?.guide?.partnerId || ""
   );
   const [guideStatus, setGuideStatus] = useState<string>(
-    lead.vendorAssignments?.guide?.status || "Pending Assignment"
+    lead?.vendorAssignments?.guide?.status || "Pending Assignment"
   );
   const [guideNotes, setGuideNotes] = useState<string>(
-    lead.vendorAssignments?.guide?.notes || ""
+    lead?.vendorAssignments?.guide?.notes || ""
   );
 
   const [dispatchSavedToast, setDispatchSavedToast] = useState("");
@@ -124,7 +122,7 @@ export default function AdminClientDossierDrawer({
     const partners = getStoredPartners();
     setAllPartners(partners);
 
-    if (lead.vendorAssignments) {
+    if (lead?.vendorAssignments) {
       if (lead.vendorAssignments.hotel) {
         setHotelPartnerId(lead.vendorAssignments.hotel.partnerId || "");
         setHotelStatus(lead.vendorAssignments.hotel.status || "Pending Confirmation");
@@ -144,6 +142,7 @@ export default function AdminClientDossierDrawer({
   }, [lead]);
 
   const handleSaveNotes = () => {
+    if (!lead) return;
     onUpdateNotes(lead.id, notes);
     setIsSavedAlert(true);
     setTimeout(() => setIsSavedAlert(false), 2000);
@@ -151,6 +150,7 @@ export default function AdminClientDossierDrawer({
 
   // Dispatch individual or all vendor roles
   const handleSaveVendorAssignments = () => {
+    if (!lead) return;
     const selectedHotel = allPartners.find((p) => p.id === hotelPartnerId);
     const selectedDriver = allPartners.find((p) => p.id === driverPartnerId);
     const selectedGuide = allPartners.find((p) => p.id === guidePartnerId);
@@ -194,9 +194,11 @@ export default function AdminClientDossierDrawer({
 
   // Simulate AI Voice Call & Transcription Sync
   const handleSimulateVoiceCall = () => {
+    if (!lead) return;
+    const currentLead = lead;
     setIsTranscribing(true);
     setTimeout(() => {
-      const transcript = simulateVoiceCallTranscription(lead.clientName);
+      const transcript = simulateVoiceCallTranscription(currentLead.clientName);
       const updatedNuances: ClientNuanceProfile = {
         dietaryRestrictions: transcript.extractedNuances.dietary || localNuances.dietaryRestrictions,
         roomPreferences: transcript.extractedNuances.roomViews || localNuances.roomPreferences,
@@ -214,7 +216,7 @@ export default function AdminClientDossierDrawer({
       // Save to CRM store
       const allLeads = getStoredLeads();
       const updated = allLeads.map((l) =>
-        l.id === lead.id
+        l.id === currentLead.id
           ? {
               ...l,
               clientNuances: updatedNuances,
@@ -227,7 +229,7 @@ export default function AdminClientDossierDrawer({
 
       setIsTranscribing(false);
       setVoiceCallAlert(
-        `AI Call transcribed! Nuance Vault updated for ${lead.clientName} (Vegetarian, Lake Suite, Dom Pérignon & Defender 4x4).`
+        `AI Call transcribed! Nuance Vault updated for ${currentLead.clientName} (Vegetarian, Lake Suite, Dom Pérignon & Defender 4x4).`
       );
       setTimeout(() => setVoiceCallAlert(""), 5000);
     }, 1200);
@@ -248,6 +250,8 @@ export default function AdminClientDossierDrawer({
     (p) => (p.role === "guide" || p.category === "Tour Guides & Escorts") &&
            (regionFilter === "all" || p.region.toLowerCase().includes(regionFilter.toLowerCase()))
   );
+
+  if (!lead) return null;
 
   const cleanPhone = lead.phone.replace(/[^0-9]/g, "");
   const whatsappGreeting = `Greetings ${lead.firstName},

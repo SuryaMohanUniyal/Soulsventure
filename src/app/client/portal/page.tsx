@@ -211,11 +211,11 @@ export default function ClientPortalDashboard() {
   // Normalize phone and email for reliable matching
   const clientPhoneClean = useMemo(() => {
     return client?.phone ? client.phone.replace(/[^0-9]/g, "") : "";
-  }, [client?.phone]);
+  }, [client.phone]);
 
   const clientEmailNorm = useMemo(() => {
     return client?.email ? client.email.trim().toLowerCase() : "";
-  }, [client?.email]);
+  }, [client.email]);
 
   // Find all queries/leads matching this client
   const clientLeads = useMemo(() => {
@@ -228,7 +228,7 @@ export default function ClientPortalDashboard() {
       }
       return false;
     });
-  }, [leads, client?.activeTripRef, clientEmailNorm, clientPhoneClean]);
+  }, [leads, client.activeTripRef, clientEmailNorm, clientPhoneClean]);
 
   // Active query/lead: prioritize user selection, then confirmed leads, then first lead
   const activeLead = useMemo(() => {
@@ -251,7 +251,7 @@ export default function ClientPortalDashboard() {
       return activeLead.proposalDays;
     }
     return MASTER_TRIP_DAYS;
-  }, [activeLead?.proposalDays]);
+  }, [activeLead]);
 
   const currentDay = tripDays[selectedDayNum - 1] || tripDays[0];
 

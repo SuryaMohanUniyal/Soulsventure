@@ -177,7 +177,7 @@ export function ClientScrapbookView({ initialRef }: { initialRef: string }) {
               How was your SoulsVenture experience?
             </h3>
             <p className="text-xs text-[#888888] mt-1">
-              Your confidential reflections help us continuously refine India's most extraordinary bespoke journeys.
+              Your confidential reflections help us continuously refine India&apos;s most extraordinary bespoke journeys.
             </p>
           </div>
 

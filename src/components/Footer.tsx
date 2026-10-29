@@ -104,10 +104,16 @@ export default function Footer() {
                 <MapPin className="w-3.5 h-3.5 text-[#C5A880]" /> Dehradun, Uttarakhand, India
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#C5A880]" /> Contact: +91 98XXXXXXXX
+                <Phone className="w-3.5 h-3.5 text-[#C5A880]" />
+                <a href="tel:+918126357353" className="hover:text-white transition-colors">
+                  Suraj Uniyal: +91 81263 57353
+                </a>
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#C5A880]" /> Contact: +91 98XXXXXXXX
+                <Phone className="w-3.5 h-3.5 text-[#C5A880]" />
+                <a href="tel:+919319843524" className="hover:text-white transition-colors">
+                  Harsh Sood: +91 93198 43524
+                </a>
               </p>
             </div>
           </div>

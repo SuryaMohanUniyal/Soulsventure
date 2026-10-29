@@ -2,7 +2,7 @@ import React from "react";
 import { Metadata } from "next";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Sparkles, Shield, Award, Globe, HeartHandshake, Compass, MapPin, Phone, Mail, UserCheck } from "lucide-react";
+import { ArrowRight, Sparkles, Shield, Award, HeartHandshake, MapPin, Phone, UserCheck } from "lucide-react";
 import { SPECIALISTS } from "@/data/mockData";
 
 export const metadata: Metadata = {

@@ -237,7 +237,7 @@ export default function ClientLoginPage() {
         {/* Register Link */}
         <div className="text-center pt-2">
           <span className="text-xs text-[#71717A]">
-            Don't have a private member account yet?{" "}
+            Don&apos;t have a private member account yet?{" "}
             <Link
               href="/client/register"
               className="text-[#C5A059] hover:underline font-semibold"

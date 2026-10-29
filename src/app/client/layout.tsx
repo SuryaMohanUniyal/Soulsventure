@@ -3,14 +3,8 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Sparkles,
-  ShieldCheck,
-  Phone,
   MessageCircle,
   LogOut,
-  User,
-  Compass,
-  FileText,
 } from "lucide-react";
 import {
   ClientAccount,

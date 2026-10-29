@@ -3,16 +3,13 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import {
-  Building2,
   ShieldCheck,
-  Phone,
   MessageCircle,
   LogOut,
   Hotel,
   Car,
   Compass,
   Plane,
-  Sparkles,
 } from "lucide-react";
 import {
   PartnerTieUp,

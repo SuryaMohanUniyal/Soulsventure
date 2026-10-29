@@ -707,7 +707,7 @@ export function AdminPermissionsMatrix({
                 <input
                   name="password"
                   required
-                  defaultValue={"sv" + Math.floor(100000 + Math.random() * 900000)}
+                  defaultValue="sv2026pass"
                   className="w-full bg-[#111111] border border-[#333333] rounded-lg px-3 py-2 text-[#C5A059] font-mono focus:outline-none focus:border-[#C5A059]"
                 />
               </div>
