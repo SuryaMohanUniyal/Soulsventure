@@ -1,0 +1,151 @@
+      {
+        dayNumber: 3,
+        date: "2026-12-04",
+        dayTitle: "Kumbhalgarh Fort Great Wall & Mountain Excursion",
+        tourTheme: "Kumbhalgarh Fortress Architectural Engineering & The Great Wall of Mewar",
+        reportingTime: "08:15 IST",
+        tourStartTime: "08:30 IST",
+        tourEndTime: "18:30 IST",
+        meetingPoint: "The Oberoi Udaivilas Lobby Porte-Cochère",
+        monumentVisits: [
+          {
+            siteName: "Kumbhalgarh Fort Citadel & 36km Perimeter Wall",
+            duration: "2 hours 30 mins",
+            highlights: "Walkthrough of the impenetrable Mewar hill fortress, Badal Mahal (Cloud Palace), and the birthplace of Maharana Pratap",
+            accessType: "Curator Special Permit",
+            entrySlot: "11:00 – 13:30 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Mercedes-Maybach S-Class",
+          licensePlate: "RJ 27 EA 0003",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet)",
+          chauffeurPhone: "+91 98290 11222",
+          routeDescription: "Udaivilas ➔ NH-58 Hill Corridor ➔ Kumbhalgarh Forest Range ➔ Badal Mahal ➔ Return",
+          dropoffPoint: "The Oberoi Udaivilas Lobby"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          hotelAddress: "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur 313001",
+          frontDeskPhone: "+91 294 243 3300",
+          roomType: "Premier Pool Suite #112",
+          checkInTime: "12:30 IST",
+          checkOutTime: "14:00 IST",
+          conciergeContact: "Chief Concierge Desk (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Champagne Continental Buffet on Lake Terrace",
+          lunchVenue: "Aravalli Mountain View Terrace (13:30 IST)",
+          lunchMenu: "Curated organic salads and roasted vegetable skewers",
+          highTeaVenue: "Fortress Overlook High-Tea (16:30 IST)",
+          highTeaMenu: "Artisanal saffron tea and light pastries",
+          dinnerVenue: "Lakeside Royal Mewari Pavilion (20:30 IST)",
+          dinnerMenu: "Sous-vide Mediterranean-Rajasthani course with vintage wine",
+          dietaryRestrictions: "Low sodium and refined European palate."
+        },
+        specialGuideNotes: "Explain the strategic architectural design of the second longest continuous wall in the world in French.",
+        asiPermitNumber: "ASI-KMB-WALL-211"
+      },
+      {
+        dayNumber: 4,
+        date: "2026-12-05",
+        dayTitle: "Shilpgram Artisan Village & Lake Badi Sunset Loop",
+        tourTheme: "Rural Rajasthani Folk Arts & Lake Badi Mountain Sanctuary",
+        reportingTime: "09:15 IST",
+        tourStartTime: "09:30 IST",
+        tourEndTime: "18:30 IST",
+        meetingPoint: "The Oberoi Udaivilas Lobby Porte-Cochère",
+        monumentVisits: [
+          {
+            siteName: "Shilpgram Rural Arts & Terracotta Complex",
+            duration: "2 hours",
+            highlights: "Curator-guided exploration of 10 traditional huts representing western Indian tribal architecture, living artisans, and bronze casting",
+            accessType: "Standard VIP",
+            entrySlot: "10:30 – 12:30 IST"
+          },
+          {
+            siteName: "Lake Badi (Tiger Lake) & Bahubali Hill Sunset Overview",
+            duration: "1 hour 30 mins",
+            highlights: "Tranquil mountain-surrounded freshwater lake built in 1680 AD with scenic viewpoint over western hills",
+            accessType: "Curator Special Permit",
+            entrySlot: "16:30 – 18:00 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Mercedes-Maybach S-Class",
+          licensePlate: "RJ 27 EA 0003",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet)",
+          chauffeurPhone: "+91 98290 11222",
+          routeDescription: "Udaivilas ➔ Shilpgram Rural Arts ➔ Lake Badi ➔ Bahubali Hill ➔ Udaivilas",
+          dropoffPoint: "The Oberoi Udaivilas Lobby"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          hotelAddress: "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur 313001",
+          frontDeskPhone: "+91 294 243 3300",
+          roomType: "Premier Pool Suite #112",
+          checkInTime: "12:30 IST",
+          checkOutTime: "14:00 IST",
+          conciergeContact: "Chief Concierge Desk (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Organic Fresh Berries & Brioche on Lake Terrace",
+          lunchVenue: "Shilpgram Artisan Courtyard (13:00 IST)",
+          lunchMenu: "Light regional delicacies with fresh mint coolers",
+          highTeaVenue: "Lake Badi Sunset Tea (17:00 IST)",
+          highTeaMenu: "French pressed coffee & pistachio shortbread",
+          dinnerVenue: "The Oberoi Udaivilas Private Gazebo",
+          dinnerMenu: "Candlelit 5-course gourmet tasting menu",
+          dietaryRestrictions: "Bottled mineral water exclusively."
+        },
+        specialGuideNotes: "Introduce Countess to Shilpgram master terracotta sculptor.",
+        asiPermitNumber: "ASI-SHP-FOLK-108"
+      },
+      {
+        dayNumber: 5,
+        date: "2026-12-06",
+        dayTitle: "Saheliyon-ki-Bari Morning Walk & Final Airport Farewell",
+        tourTheme: "Royal Courtyard Gardens & Diplomatic Farewell Excursion",
+        reportingTime: "09:30 IST",
+        tourStartTime: "10:00 IST",
+        tourEndTime: "14:00 IST",
+        meetingPoint: "The Oberoi Udaivilas Lobby",
+        monumentVisits: [
+          {
+            siteName: "Saheliyon-ki-Bari Natural Gravity Fountains",
+            duration: "1 hour 30 mins",
+            highlights: "Historic ornamental gardens built for the royal maids of honor with 18th-century gravity-fed water fountains",
+            accessType: "Standard VIP",
+            entrySlot: "10:30 – 12:00 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Mercedes-Maybach S-Class",
+          licensePlate: "RJ 27 EA 0003",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet)",
+          chauffeurPhone: "+91 98290 11222",
+          routeDescription: "Udaivilas ➔ Saheliyon-ki-Bari ➔ NH-48 Express ➔ Udaipur Airport VIP Lounge",
+          dropoffPoint: "Udaipur Airport VIP Lounge Exit Gate 1"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          hotelAddress: "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur 313001",
+          frontDeskPhone: "+91 294 243 3300",
+          roomType: "Premier Pool Suite #112",
+          checkInTime: "12:30 IST",
+          checkOutTime: "14:00 IST",
+          conciergeContact: "Chief Concierge Desk (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Champagne Lake Pichola Breakfast",
+          lunchVenue: "The Oberoi Udaivilas Lake Veranda (12:30 IST)",
+          lunchMenu: "Farewell light meal before flight",
+          highTeaVenue: "Airport VIP Lounge",
+          highTeaMenu: "In-flight catering",
+          dinnerVenue: "In-flight selection",
+          dinnerMenu: "International First Class service",
+          dietaryRestrictions: "None."
+        },
+        specialGuideNotes: "Present the signed art history catalogue and escort Countess to airport VIP gate with Vikram Singh.",
+        asiPermitNumber: "ASI-SKB-GARDEN-332"
+      }

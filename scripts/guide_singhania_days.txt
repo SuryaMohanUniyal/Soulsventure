@@ -1,0 +1,199 @@
+      {
+        dayNumber: 2,
+        date: "2026-12-11",
+        dayTitle: "City Palace Executive Archives & Princely State Diplomacy",
+        tourTheme: "Mewar Governance & Princely State Diplomatic History",
+        reportingTime: "08:15 IST",
+        tourStartTime: "08:30 IST",
+        tourEndTime: "18:00 IST",
+        meetingPoint: "The Oberoi Udaivilas Presidential Wing",
+        monumentVisits: [
+          {
+            siteName: "City Palace Private Assembly Chamber & Badi Pol",
+            duration: "2 hours",
+            highlights: "VIP delegation access through historic royal gateway and briefing on Mewar treaty history",
+            accessType: "After-Hours Private Access",
+            entrySlot: "09:00 – 11:00 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Convoy of 2x Land Rover Defender 110",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet Lead)",
+          chauffeurPhone: "+91 98290 11222",
+          routeDescription: "Udaivilas ➔ Private Jetty ➔ City Palace Badi Pol ➔ Zenana Mahal ➔ Return Convoy",
+          dropoffPoint: "City Palace VIP Portico"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          hotelAddress: "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur 313001",
+          frontDeskPhone: "+91 294 243 3300",
+          roomType: "Presidential Suite Wing",
+          checkInTime: "13:00 IST",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Presidential Concierge (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Presidential Private Breakfast",
+          lunchVenue: "Zenana Mahal Executive Chamber (13:30 IST)",
+          lunchMenu: "Executive Marwari Thali",
+          highTeaVenue: "City Palace Balcony (16:30 IST)",
+          highTeaMenu: "Masala chai & dry fruit sweets",
+          dinnerVenue: "Lakeside Royal Mewari Pavilion (20:30 IST)",
+          dinnerMenu: "Pure Marwari vegetarian feast cooked in Gir cow desi ghee",
+          dietaryRestrictions: "Strictly pure vegetarian."
+        },
+        specialGuideNotes: "Delegation includes foreign energy counterparts. Emphasize commercial conservation history.",
+        asiPermitNumber: "ASI-ROYAL-POL-901"
+      },
+      {
+        dayNumber: 3,
+        date: "2026-12-12",
+        dayTitle: "Sacred 10th-Century Nagda & Eklingji Dynastic Temples",
+        tourTheme: "Sacred 10th-Century Nagda & Eklingji Dynastic Temples",
+        reportingTime: "08:45 IST",
+        tourStartTime: "09:00 IST",
+        tourEndTime: "17:30 IST",
+        meetingPoint: "The Oberoi Udaivilas Presidential Wing",
+        monumentVisits: [
+          {
+            siteName: "Eklingji Temple Complex (108 Marble Shrines)",
+            duration: "2 hours",
+            highlights: "Private darshan and Vedic architectural walkthrough of the titular Mewar royal deity temple",
+            accessType: "Curator Special Permit",
+            entrySlot: "10:00 – 12:00 IST"
+          },
+          {
+            siteName: "Sas-Bahu 10th-Century Twin Temples (Ancient Nagda)",
+            duration: "1 hour 30 mins",
+            highlights: "Intricate sandstone and marble carvings of Ramayana and Mahabharata epics",
+            accessType: "Standard VIP",
+            entrySlot: "14:00 – 15:30 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Convoy of 2x Land Rover Defender 110",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet Lead)",
+          chauffeurPhone: "+91 98290 11222",
+          routeDescription: "Udaivilas ➔ NH-58 North Express ➔ Eklingji ➔ Nagda ➔ Udaivilas",
+          dropoffPoint: "The Oberoi Udaivilas Presidential Wing"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          hotelAddress: "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur 313001",
+          frontDeskPhone: "+91 294 243 3300",
+          roomType: "Presidential Suite Wing",
+          checkInTime: "13:00 IST",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Presidential Concierge (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Traditional Rajasthani Breakfast",
+          lunchVenue: "Heritage Garden Pavilion (13:00 IST)",
+          lunchMenu: "Pure vegetarian satvik meal",
+          highTeaVenue: "Temple Garden Overlook",
+          highTeaMenu: "Saffron milk & sweets",
+          dinnerVenue: "The Oberoi Udaivilas Private Gazebo",
+          dinnerMenu: "Candlelit Marwari banquet",
+          dietaryRestrictions: "Strictly pure vegetarian."
+        },
+        specialGuideNotes: "Special VIP temple protocol arranged with temple trust.",
+        asiPermitNumber: "ASI-NAGDA-EKL-502"
+      },
+      {
+        dayNumber: 4,
+        date: "2026-12-13",
+        dayTitle: "Lake Pichola Maritime Architecture & Jagmandir Island Gala",
+        tourTheme: "Lake Pichola Maritime Architecture & Jagmandir Pleasure Palace",
+        reportingTime: "09:45 IST",
+        tourStartTime: "10:00 IST",
+        tourEndTime: "18:00 IST",
+        meetingPoint: "The Oberoi Udaivilas Private Boat Dock",
+        monumentVisits: [
+          {
+            siteName: "Jagmandir Island Palace Private Courtyard",
+            duration: "2 hours",
+            highlights: "Water palace architectural tour where Mughal prince Khurram (later Shah Jahan) took refuge in 1623 AD",
+            accessType: "Curator Special Permit",
+            entrySlot: "11:00 – 13:00 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Convoy of 2x Land Rover Defender 110",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet Lead)",
+          chauffeurPhone: "+91 98290 11222",
+          routeDescription: "Udaivilas ➔ Waterfront Promenade ➔ Badi Pal Jetty ➔ Jagmandir ➔ Return",
+          dropoffPoint: "The Oberoi Udaivilas Private Boat Dock"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          hotelAddress: "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur 313001",
+          frontDeskPhone: "+91 294 243 3300",
+          roomType: "Presidential Suite Wing",
+          checkInTime: "13:00 IST",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Presidential Concierge (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Executive Lake Terrace Breakfast",
+          lunchVenue: "Jagmandir Island Courtyard (13:30 IST)",
+          lunchMenu: "Mewari thali with lake panorama",
+          highTeaVenue: "Water Palace Domes (17:00 IST)",
+          highTeaMenu: "Royal Darjeeling tea & savories",
+          dinnerVenue: "Jagmandir Island Gala Dinner",
+          dinnerMenu: "9-course royal delegation banquet",
+          dietaryRestrictions: "Strictly pure vegetarian."
+        },
+        specialGuideNotes: "Private historical lecture on the inspiration Jagmandir provided for the Taj Mahal dome.",
+        asiPermitNumber: "ASI-JAG-ISL-705"
+      },
+      {
+        dayNumber: 5,
+        date: "2026-12-14",
+        dayTitle: "Presidential Convoy Farewell & General Aviation Departure",
+        tourTheme: "Final Presidential Farewell & Aviation Departure Escort",
+        reportingTime: "10:00 IST",
+        tourStartTime: "10:30 IST",
+        tourEndTime: "12:30 IST",
+        meetingPoint: "The Oberoi Udaivilas Presidential Wing",
+        monumentVisits: [
+          {
+            siteName: "Ceremonial Waterfront Escort & Farewell",
+            duration: "1 hour",
+            highlights: "Final lakeside shehnai farewell and convoy escort to private aviation lounge",
+            accessType: "Standard VIP",
+            entrySlot: "10:30 – 11:30 IST"
+          }
+        ],
+        transportCoordination: {
+          vehicleModel: "Convoy of 2x Land Rover Defender 110",
+          licensePlate: "RJ 27 EA 0001",
+          chauffeurName: "Vikram Singh (Royal Chauffeur Fleet Lead)",
+          chauffeurPhone: "+91 98290 11222",
+          routeDescription: "Udaivilas ➔ Express Corridor ➔ Airport Bypass ➔ General Aviation VIP Terminal",
+          dropoffPoint: "General Aviation VIP Terminal, Udaipur Airport"
+        },
+        stayHotel: {
+          hotelName: "The Oberoi Udaivilas",
+          hotelAddress: "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur 313001",
+          frontDeskPhone: "+91 294 243 3300",
+          roomType: "Presidential Suite Wing",
+          checkInTime: "13:00 IST",
+          checkOutTime: "12:00 IST",
+          conciergeContact: "Presidential Concierge (+91 294 243 3300)"
+        },
+        diningBriefing: {
+          breakfast: "Executive Farewell Breakfast",
+          lunchVenue: "General Aviation VIP Lounge",
+          lunchMenu: "In-flight catering",
+          highTeaVenue: "In-flight catering",
+          highTeaMenu: "In-flight catering",
+          dinnerVenue: "In-flight selection",
+          dinnerMenu: "In-flight selection",
+          dietaryRestrictions: "Strictly pure vegetarian."
+        },
+        specialGuideNotes: "Escort Mr. Singhania and delegation to private jet steps.",
+        asiPermitNumber: "ASI-VIP-AVN-990"
+      }

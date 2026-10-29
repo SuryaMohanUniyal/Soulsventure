@@ -1,0 +1,71 @@
+      {
+        dayNumber: 2,
+        date: "2026-12-11",
+        dayTitle: "Bilateral Clean Energy Summit & Zenana Mahal Escort",
+        reportingTime: "08:30 IST",
+        releaseTime: "21:30 IST",
+        startLocation: "The Oberoi Udaivilas Presidential Wing",
+        endLocation: "The Oberoi Udaivilas Presidential Wing",
+        routeOverview: "Udaivilas ➔ Private Jetty ➔ City Palace Badi Pol ➔ Zenana Mahal Executive Chamber ➔ Return Convoy",
+        distanceKm: 18,
+        travelDuration: "Full Day VIP Security Protocol",
+        sightseeingVisits: [
+          "VIP delegation motorcade to City Palace",
+          "Bilateral Clean Energy Summit in Zenana Mahal",
+          "Private lakeside escort and evening gala dinner"
+        ],
+        chauffeurDirectives: "Both Defenders maintain tandem spacing with lead protocol. Standby at City Palace VIP portico."
+      },
+      {
+        dayNumber: 3,
+        date: "2026-12-12",
+        dayTitle: "Eklingji & Nagda 10th-Century Temple Complex Convoy",
+        reportingTime: "09:00 IST",
+        releaseTime: "18:30 IST",
+        startLocation: "The Oberoi Udaivilas Presidential Wing",
+        endLocation: "The Oberoi Udaivilas Presidential Wing",
+        routeOverview: "Udaivilas ➔ NH-58 North Expressway ➔ Kailashpuri Eklingji Temple ➔ Sas-Bahu Nagda Temples ➔ Udaivilas",
+        distanceKm: 46,
+        travelDuration: "Half Day Temple Convoy Excursion",
+        sightseeingVisits: [
+          "Eklingji Temple (guardian deity of the House of Mewar with 108 shrines)",
+          "10th-century Sas-Bahu twin temples in ancient Nagda",
+          "Private temple blessing by Chief Priest"
+        ],
+        chauffeurDirectives: "Highway convoy cruising. Ensure security clearance at temple VIP gate. Keep bottled spring water chilled."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-12-13",
+        dayTitle: "Jagmandir Island Palace Gala Dinner Security Escort",
+        reportingTime: "10:00 IST",
+        releaseTime: "23:00 IST",
+        startLocation: "The Oberoi Udaivilas Presidential Wing",
+        endLocation: "The Oberoi Udaivilas Presidential Wing",
+        routeOverview: "Udaivilas ➔ Waterfront Promenade ➔ Badi Pal Jetty (Boat Transfer) ➔ Jagmandir Island ➔ Return Escort",
+        distanceKm: 14,
+        travelDuration: "Executive Leisure & Evening Island Gala",
+        sightseeingVisits: [
+          "Executive delegation shopping at Mewar Art Gallery",
+          "Sunset royal boat transfer across Lake Pichola",
+          "Jagmandir Island Palace celebratory gala dinner"
+        ],
+        chauffeurDirectives: "Station vehicles at Badi Pal jetty parking. Remain on active radio standby until final return boat docks."
+      },
+      {
+        dayNumber: 5,
+        date: "2026-12-14",
+        dayTitle: "Presidential Convoy Departure Transfer",
+        reportingTime: "10:30 IST",
+        releaseTime: "12:30 IST (Trip Sign-Off)",
+        startLocation: "The Oberoi Udaivilas Presidential Wing",
+        endLocation: "General Aviation VIP Terminal, Udaipur Airport",
+        routeOverview: "Udaivilas ➔ Express Corridor ➔ Airport Bypass ➔ General Aviation VIP Terminal",
+        distanceKm: 26,
+        travelDuration: "35 mins",
+        sightseeingVisits: [
+          "Presidential motorcade farewell transfer",
+          "Direct tarmac escort to private jet steps"
+        ],
+        chauffeurDirectives: "Full ceremonial departure formation. Transfer all delegation luggage directly to aircraft hold."
+      }

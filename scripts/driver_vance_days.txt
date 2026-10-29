@@ -1,0 +1,71 @@
+      {
+        dayNumber: 3,
+        date: "2026-11-20",
+        dayTitle: "Devgiri Cave Temple & Granite Hills Exploration",
+        reportingTime: "06:00 IST",
+        releaseTime: "19:30 IST",
+        startLocation: "SUJÁN JAWAI Camp Base",
+        endLocation: "SUJÁN JAWAI Camp Base",
+        routeOverview: "Camp ➔ Devgiri Granite Caves ➔ Hilltop Shrine ➔ Wilderness Pastures ➔ Camp",
+        distanceKm: 36,
+        travelDuration: "Half Day Disposal + Sunset Drive",
+        sightseeingVisits: [
+          "Ancient Devgiri cave temple perched atop monolith rocks",
+          "Wild leopard habitat tracking on granite boulders",
+          "Sunset high-tea setup at escarpment summit"
+        ],
+        chauffeurDirectives: "Standby at camp gate. Assist guests during rocky ascents and maintain chilled beverages in vehicle."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-11-21",
+        dayTitle: "Jawai Dam Reservoir & Migratory Flamingo Safari",
+        reportingTime: "06:15 IST",
+        releaseTime: "19:00 IST",
+        startLocation: "SUJÁN JAWAI Camp Base",
+        endLocation: "SUJÁN JAWAI Camp Base",
+        routeOverview: "Camp ➔ Jawai Bandh Sluice Gates ➔ Marshland Overlook ➔ Local Artisan Pottery ➔ Camp",
+        distanceKm: 48,
+        travelDuration: "Full Day Wetland Excursion",
+        sightseeingVisits: [
+          "Jawai Dam reservoir & marsh crocodile observation points",
+          "Migratory flamingo, crane and pelican colonies with Swarovski optics",
+          "Pottery demonstration with rural village master artisans"
+        ],
+        chauffeurDirectives: "Keep dust covers on luggage. Coordinate timing with Naturalist Salim for ideal wetland lighting."
+      },
+      {
+        dayNumber: 5,
+        date: "2026-11-22",
+        dayTitle: "Granite Wilderness Sundowner & Astronomy Night",
+        reportingTime: "08:00 IST",
+        releaseTime: "21:30 IST",
+        startLocation: "SUJÁN JAWAI Camp Base",
+        endLocation: "SUJÁN JAWAI Camp Base",
+        routeOverview: "Camp ➔ Southern Koppies Track ➔ Bush Dining Glade ➔ Stargazing Ridge ➔ Camp",
+        distanceKm: 32,
+        travelDuration: "Afternoon & Stargazing Disposal",
+        sightseeingVisits: [
+          "Leisurely bush trail drive exploring indigenous flora & fauna",
+          "Campfire sundowner on scenic granite ridge",
+          "Telescope stargazing session under clear desert skies"
+        ],
+        chauffeurDirectives: "Pre-warm cabin with fleece blankets for night return transfer. Flashlights on standby."
+      },
+      {
+        dayNumber: 6,
+        date: "2026-11-23",
+        dayTitle: "Intercity Highway Departure to Udaipur Airport",
+        reportingTime: "07:30 IST",
+        releaseTime: "11:30 IST (Trip Sign-Off)",
+        startLocation: "SUJÁN JAWAI Camp Porch",
+        endLocation: "Udaipur Airport (UDR) Terminal 1 Gate 1",
+        routeOverview: "Jawai Bandh ➔ Pindwara ➔ Gogunda Mountain Pass ➔ NH-27 Expressway ➔ Udaipur Airport",
+        distanceKm: 145,
+        travelDuration: "3 hours 15 mins",
+        sightseeingVisits: [
+          "Scenic morning drive through southern Aravalli hills",
+          "VIP airport express transfer to Departure Gate 1"
+        ],
+        chauffeurDirectives: "Check tyre pressure and fuel at 07:00 IST. Assist with luggage handover at airport VIP check-in."
+      }

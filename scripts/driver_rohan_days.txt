@@ -1,0 +1,53 @@
+      {
+        dayNumber: 3,
+        date: "2026-12-04",
+        dayTitle: "Kumbhalgarh Fort Great Wall & Mountain Excursion",
+        reportingTime: "08:30 IST",
+        releaseTime: "18:30 IST",
+        startLocation: "The Oberoi Udaivilas",
+        endLocation: "The Oberoi Udaivilas",
+        routeOverview: "Udaivilas ➔ NH-58 Hill Corridor ➔ Kumbhalgarh Forest Range ➔ Badal Mahal ➔ Return",
+        distanceKm: 98,
+        travelDuration: "Full Day Mountain Excursion (2h 15m each way)",
+        sightseeingVisits: [
+          "The Great Wall of India (second longest continuous wall in the world)",
+          "Cloud Palace (Badal Mahal) birthplace of Maharana Pratap",
+          "Scenic mountain pass vistas of the Aravalli range"
+        ],
+        chauffeurDirectives: "Smooth hill driving with gentle acceleration. Maintain 21°C cabin temperature. Assist Countess during steep fortress walks."
+      },
+      {
+        dayNumber: 4,
+        date: "2026-12-05",
+        dayTitle: "Shilpgram Artisan Village & Lake Badi Sunset Loop",
+        reportingTime: "09:30 IST",
+        releaseTime: "19:30 IST",
+        startLocation: "The Oberoi Udaivilas",
+        endLocation: "The Oberoi Udaivilas",
+        routeOverview: "Udaivilas ➔ Shilpgram Rural Arts Complex ➔ Lake Badi (Tiger Lake) ➔ Bahubali Hill ➔ Udaivilas",
+        distanceKm: 34,
+        travelDuration: "Heritage Leisure Disposal",
+        sightseeingVisits: [
+          "Shilpgram traditional folk art and terracotta craft pavilion",
+          "Lake Badi tranquil mountain-surrounded waters",
+          "Sunset viewpoint at Bahubali Hill overview"
+        ],
+        chauffeurDirectives: "Station vehicle in shade at Shilpgram VIP parking. Assist with delicate artisan pottery purchases."
+      },
+      {
+        dayNumber: 5,
+        date: "2026-12-06",
+        dayTitle: "Final VIP Airport Express Departure",
+        reportingTime: "12:00 IST",
+        releaseTime: "14:30 IST (Trip Sign-Off)",
+        startLocation: "The Oberoi Udaivilas Main Lobby",
+        endLocation: "Udaipur Airport VIP Lounge Exit Gate 1",
+        routeOverview: "The Oberoi Udaivilas ➔ Fatehsagar Promenade ➔ NH-48 Expressway ➔ Udaipur Airport VIP Lounge",
+        distanceKm: 24,
+        travelDuration: "35 mins",
+        sightseeingVisits: [
+          "Farewell lakeside drive",
+          "VIP tarmac lounge drop-off"
+        ],
+        chauffeurDirectives: "Report at 12:00 IST sharp. Transfer 5 VIP bags with white-glove protocol to airport airline concierge."
+      }

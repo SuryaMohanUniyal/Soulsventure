@@ -1,0 +1,41 @@
+// Helper function: Driver-specific meal schedule (TIMINGS & VENUES ONLY - NO DISHES/RECIPES)
+function getDriverMealSchedule(lead: CRMLead, dayNumber: number, date?: string) {
+  const guideDay = lead.guideSchedule?.find((g) => g.dayNumber === dayNumber);
+  const isFirstDay = dayNumber === 1;
+  const totalDays = lead.routeSchedule?.length || 6;
+  const isFinalDay = dayNumber === totalDays;
+
+  const lunchVenue = guideDay?.diningBriefing?.lunchVenue || "1559 AD Heritage Restaurant / Fatehsagar Lake View";
+  const highTeaVenue = guideDay?.diningBriefing?.highTeaVenue || "The Oberoi Udaivilas Lakeside Domes";
+  const dinnerVenue = guideDay?.diningBriefing?.dinnerVenue || "Jagmandir Island Palace / Main Dining Hall";
+
+  return {
+    breakfast: {
+      title: "Breakfast / Morning Service",
+      time: isFirstDay ? "14:00 IST (Tarmac Arrival Welcome)" : "08:00 – 09:30 IST",
+      venue: isFirstDay ? "Airport VIP Lounge / Hotel Welcome Veranda" : "Hotel Lakeside Breakfast Terrace",
+      driverDuty: isFirstDay
+        ? "Flight touchdown standby at 13:15 IST • Placard ready at Gate 2"
+        : "Vehicle wiped & AC cooled at hotel lobby by 09:15 IST for morning departure",
+    },
+    lunch: {
+      title: "Royal Lunch Excursion",
+      time: "13:00 – 14:30 IST",
+      venue: lunchVenue,
+      driverDuty: "Drop guests at venue by 12:45 IST (15 mins prior) • Standby for pickup at 14:30 IST",
+    },
+    highTea: {
+      title: "Sunset High-Tea & Sundowner",
+      time: "17:00 – 18:00 IST",
+      venue: highTeaVenue,
+      driverDuty: "Arrive at high-tea venue by 16:45 IST • Standby at 18:00 IST for evening transfer",
+    },
+    dinner: {
+      title: isFinalDay ? "Farewell Royal Dinner" : "Evening Banquet & Royal Dinner",
+      time: "20:00 – 22:30 IST",
+      venue: dinnerVenue,
+      driverDuty: "Drop guests at dining venue / dock at 19:45 IST • Standby for return transfer at 22:30 IST",
+    },
+  };
+}
+
