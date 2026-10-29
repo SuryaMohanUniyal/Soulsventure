@@ -30,7 +30,6 @@ export type AdminTab =
   | "pipeline"
   | "live"
   | "itinerary-builder"
-  | "content-engine"
   | "invoicing"
   | "charters"
   | "vendors"
@@ -124,13 +123,6 @@ export default function AdminSidebar({
       label: "AI Itinerary & Magazine PDF",
       icon: Sparkles,
       badge: "AI Studio",
-      badgeColor: "bg-[#C5A059] text-black font-bold",
-    },
-    {
-      id: "content-engine" as AdminTab,
-      label: "Content & Copywriting Engine",
-      icon: Sparkles,
-      badge: "SEO Copy",
       badgeColor: "bg-[#C5A059] text-black font-bold",
     },
     {
