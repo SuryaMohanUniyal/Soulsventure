@@ -611,12 +611,24 @@ export function updateLeadMilestone(
     if (lead.id === leadId) {
       const currentVal = lead.milestones[milestoneKey];
       const nextVal = value !== undefined ? value : !currentVal;
+      const newMilestones = {
+        ...lead.milestones,
+        [milestoneKey]: nextVal,
+      };
+
+      let newStatus = lead.status;
+      if (milestoneKey === "depositReceived") {
+        if (nextVal && (lead.status === "New Lead" || lead.status === "Discovery Call" || lead.status === "Proposal Sent")) {
+          newStatus = "Deposit Confirmed";
+        } else if (!nextVal && lead.status === "Deposit Confirmed") {
+          newStatus = "Proposal Sent";
+        }
+      }
+
       return {
         ...lead,
-        milestones: {
-          ...lead.milestones,
-          [milestoneKey]: nextVal,
-        },
+        status: newStatus,
+        milestones: newMilestones,
       };
     }
     return lead;
@@ -624,6 +636,17 @@ export function updateLeadMilestone(
   saveLeads(updated);
   pushCloudLeads(updated).catch(() => {});
   return updated;
+}
+
+export function isLeadDepositConfirmed(lead?: CRMLead | null, client?: ClientAccount | null): boolean {
+  if (client?.id === "client-001" || client?.id === "client-003") return true;
+  if (!lead) return false;
+  return (
+    lead.status === "Deposit Confirmed" ||
+    lead.status === "On-Ground Active" ||
+    lead.status === "Completed" ||
+    lead.milestones?.depositReceived === true
+  );
 }
 
 export function deleteLead(leadId: string): CRMLead[] {
@@ -1863,7 +1886,12 @@ export function registerClientAccount(data: {
     return { success: true, client: accounts[existingIdx] };
   }
 
-  const newRef = "SV-2026-VIP-" + Math.floor(100 + Math.random() * 900);
+  const existingLead = getStoredLeads().find(
+    (l) =>
+      (normEmail && l.email.toLowerCase() === normEmail) ||
+      (cleanPhone.length >= 6 && l.phone.replace(/[^0-9]/g, "").endsWith(cleanPhone))
+  );
+  const newRef = existingLead ? existingLead.referenceCode : "SV-2026-VIP-" + Math.floor(100 + Math.random() * 900);
   const newClient: ClientAccount = {
     id: "client-" + Date.now(),
     name: data.name.trim(),
