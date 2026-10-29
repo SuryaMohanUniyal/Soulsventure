@@ -147,6 +147,31 @@ export interface VendorBookingAssignment {
   assignedAt: string;
 }
 
+export interface ArrivalAndDepartureDetails {
+  arrivalDate: string;        // "2026-11-14"
+  arrivalTime: string;        // "14:00 IST"
+  flightOrTrain?: string;     // "Air India AI-471 (DEL → UDR)"
+  terminalGate?: string;      // "Udaipur Airport Gate 2 VIP Lounge Exit"
+  pickupReportingTime?: string; // "13:30 IST"
+  checkInTime: string;        // "14:00 IST"
+  checkOutDate: string;       // "2026-11-19"
+  checkOutTime: string;       // "12:00 IST"
+  transferVehicle?: string;   // "Land Rover Defender 110 4WD"
+  transferProtocol?: string;  // "Private Shikara boat across Lake Pichola"
+}
+
+export interface GourmetDayPlan {
+  dayNumber: number;
+  date: string;
+  dayTitle: string;
+  breakfast: string;
+  lunch: string;
+  highTea?: string;
+  dinner: string;
+  winePairing?: string;
+  dietaryNotes: string;
+}
+
 export interface CRMLead {
   id: string;
   referenceCode: string;
@@ -178,6 +203,8 @@ export interface CRMLead {
   assignedVehicle?: string;
   assignedChauffeur?: string;
   proposalDays?: BespokeItineraryDay[];
+  arrivalDetails?: ArrivalAndDepartureDetails;
+  gourmetMenuPlan?: GourmetDayPlan[];
   milestones: {
     inquiryLogged: boolean;
     discoveryCallCompleted: boolean;
@@ -232,7 +259,444 @@ export interface VendorPayout {
   vipContact: string;
 }
 
-export const INITIAL_LEADS: CRMLead[] = [];
+export const INITIAL_LEADS: CRMLead[] = [
+  {
+    id: "lead-sharma-2026",
+    referenceCode: "SV-2026-VIP-01",
+    createdAt: "2026-10-25T09:00:00Z",
+    dateKey: "2026-11-14",
+    clientName: "Mr. Rajesh Sharma & Family",
+    firstName: "Rajesh",
+    lastName: "Sharma",
+    email: "r.sharma@indiacapital.in",
+    phone: "+91 98201 44521",
+    destinations: ["Rajasthan", "Udaipur", "Jawai"],
+    destinationSummary: "Rajasthan (Udaipur Lake Palace & Jawai Hills)",
+    travelWindow: "Nov 14, 2026 – Nov 19, 2026",
+    departureDate: "2026-11-14",
+    duration: "6 Days / 5 Nights",
+    companions: "Family (2 Adults, 2 Teens)",
+    familyAges: "Ages 16 & 19",
+    budgetTier: "₹18,50,000 (Royal Luxury Tier)",
+    estimatedValueINR: 1850000,
+    specialInterests: ["Heritage Palaces", "Lake Sunsets", "Private Wildlife Safaris", "Fine Dining"],
+    specialRequests: "Strictly Pure Vegetarian. Special 20th Wedding Anniversary cake and candlelit setup on Lake Pichola on Nov 15 evening.",
+    consultationMethod: "phone",
+    preferredTimeOfDay: "Evening 18:00 IST",
+    status: "Deposit Confirmed",
+    assignedCurator: "Suraj Uniyal",
+    internalNotes: "Tier-1 VIP client. Founder of India Capital Partners. Enjoys Dom Pérignon and bespoke historical narratives. Dedicated 24/7 concierge priority.",
+    isVIP: true,
+    clientNuances: {
+      dietaryRestrictions: ["100% Pure Vegetarian", "Jain Friendly (No Onion/Garlic for Mrs. Sharma)", "Nut-Allergy Protocol"],
+      roomPreferences: ["Kohinoor Suite", "Lake Pichola Sanctuary View", "High Floor", "Feather-Free Hypoallergenic Pillows"],
+      beveragePreferences: ["Dom Pérignon 2013", "Sparkling Hibiscus Elixir", "Cold-Pressed Pomegranate", "Kashmiri Kahwa"],
+      vehiclePreference: "Land Rover Defender 110 4WD (Black Spec)",
+      milestoneEvents: [{ title: "20th Wedding Anniversary", date: "2026-11-15", relation: "Couple Milestone" }],
+      voiceCalls: [],
+      specialProtocol: "White-glove arrival garland with private Shehnai musicians at Badi Pal Jetty.",
+    },
+    assignedVehicle: "Land Rover Defender 110 4WD (White-Glove VIP Chauffeur)",
+    assignedChauffeur: "Vikram Singh (Royal Chauffeur Fleet)",
+    milestones: {
+      inquiryLogged: true,
+      discoveryCallCompleted: true,
+      proposalSent: true,
+      depositReceived: true,
+      vouchersIssued: true,
+      conciergeActive: true,
+    },
+    vendorAssignments: {
+      hotel: {
+        partnerId: "vendor-hotel-01",
+        partnerName: "The Oberoi Udaivilas",
+        role: "hotel",
+        status: "Room Suite Reserved",
+        notes: "Kohinoor Lake View Suite #204 allocated. Private Shikara boat transfer from Badi Pal at 14:00 IST.",
+        assignedAt: "2026-10-25T10:00:00Z",
+      },
+      driver: {
+        partnerId: "vendor-driver-01",
+        partnerName: "Vikram Singh (Royal Chauffeur Fleet)",
+        role: "driver",
+        status: "Vehicle Prepped & Fueled",
+        notes: "Defender 110 stationed at Udaipur Airport Gate 2 from 13:15 IST holding placard 'Mr. Rajesh Sharma'.",
+        assignedAt: "2026-10-25T10:00:00Z",
+      },
+      guide: {
+        partnerId: "vendor-guide-01",
+        partnerName: "Dr. Mathur (Senior ASI Royal Historian)",
+        role: "guide",
+        status: "Accepted by Tour Guide",
+        notes: "City Palace private royal armoury and archives tour confirmed for Nov 15 at 16:30 IST.",
+        assignedAt: "2026-10-25T10:00:00Z",
+      },
+    },
+    arrivalDetails: {
+      arrivalDate: "2026-11-14",
+      arrivalTime: "14:00 IST (Jetty Check-in)",
+      flightOrTrain: "Air India AI-471 (DEL → UDR)",
+      terminalGate: "Udaipur Airport Gate 2 VIP Lounge Exit",
+      pickupReportingTime: "13:15 IST (Flight lands 13:15)",
+      checkInTime: "14:00 IST",
+      checkOutDate: "2026-11-19",
+      checkOutTime: "12:00 IST",
+      transferVehicle: "Land Rover Defender 110 4WD",
+      transferProtocol: "Private Shikara boat across Lake Pichola with rose petal shower and cold towels",
+    },
+    gourmetMenuPlan: [
+      {
+        dayNumber: 1,
+        date: "2026-11-14",
+        dayTitle: "Royal Arrival & Lake Pichola Welcome",
+        breakfast: "Welcome detox on tarmac: Fresh tender coconut water & pomegranate-mint cooler",
+        lunch: "Lake Promenade Lunch: Truffle asparagus risotto, heirloom burrata salad, warm artisanal herb focaccia",
+        highTea: "Sunset High Tea at Udaivilas Domes (17:30 IST): Kashmiri saffron kahwa, pistachio baklava, artisanal cucumber sandwiches",
+        dinner: "7-Course Royal Mewari Banquet: Smoked Ker Sangri, Dal Baati Churma cooked in Gir cow ghee, Paneer Kundan Kaliyan, Saffron Shahi Tukda (100% Pure Veg)",
+        winePairing: "Dom Pérignon Vintage 2013 & Sparkling Hibiscus Elixir",
+        dietaryNotes: "Strictly 100% Pure Vegetarian. Separate Jain course (no onion/garlic) prepared for Mrs. Sharma.",
+      },
+      {
+        dayNumber: 2,
+        date: "2026-11-15",
+        dayTitle: "Anniversary Celebration & City Palace Walk",
+        breakfast: "Champagne Breakfast on Lake Pichola Terrace: Organic berries, fresh dosas, Belgian waffles, French pressed Blue Tokai coffee",
+        lunch: "Palace Garden Courtyard: Stuffed Rajasthani Mirchi Vada (mild), yellow moong dal tadka, steamed fragrant basmati, pomegranate raita",
+        highTea: "Royal Armoury High-Tea (17:00 IST): Handcrafted masala chai in clay kulhads, cardamom shortbread, savory samosas",
+        dinner: "20th Anniversary Candlelit Poolside Dinner: Wild morel mushroom pulao, lotus root kofta, warm gulab jamun with saffron rabri, custom anniversary cake",
+        winePairing: "Sula Dindori Reserve Viognier & Non-Alcoholic Sparkling White Grape",
+        dietaryNotes: "Eggless 20th Anniversary Cake to be served at 21:00 IST with candlelit fanfare.",
+      },
+      {
+        dayNumber: 3,
+        date: "2026-11-16",
+        dayTitle: "Jawai Escarpment Wilderness Excursion",
+        breakfast: "Ayurvedic Morning Wellness: Steamed poha with curry leaves, cold-pressed green elixirs, chia-almond bowl",
+        lunch: "Granite Koppie Scenic Picnic: Roasted cumin potatoes, fresh roomali rotis, spiced roasted buttermilk",
+        highTea: "Safari Sunset Tea (17:30 IST): Ginger-lemon honey tea served atop private hill overlooking leopard terrain",
+        dinner: "Lantern-Lit Bush Dinner under Stars: Charcoal roasted sweet corn, Rajasthani khichdi with spiced curd, warm almond halwa",
+        winePairing: "Chandon Brut Rosé",
+        dietaryNotes: "Nut-allergy certified. Campfire setup with warm blankets.",
+      },
+      {
+        dayNumber: 4,
+        date: "2026-11-17",
+        dayTitle: "Leopard Tracking Safari & Temple Walk",
+        breakfast: "Bush Safari Dawn Breakfast (08:30 IST): Masala omelettes (or paneer scramble), warm croissants, freshly squeezed valencia orange juice",
+        lunch: "Courtyard Dining: Smoked baingan bharta, phulkas with churned white butter, cucumber mint soup",
+        highTea: "Village Hearth Tea: Spiced chai brewed over acacia embers, sesame seed laddoos",
+        dinner: "Private Terrace Candlelit Feast: Mughlai paneer lababdar, dal makhani slow cooked for 24 hours, laccha paratha, kesar pista kulfi",
+        winePairing: "Sula Rasa Cabernet Sauvignon",
+        dietaryNotes: "Mild spice levels for teenagers.",
+      },
+      {
+        dayNumber: 5,
+        date: "2026-11-18",
+        dayTitle: "Udaipur Leisure & Vintage Boat Cruise",
+        breakfast: "Royal Buffet Breakfast: Artisanal cheeses, fresh fruit platters, idli-vada with coconut chutney",
+        lunch: "Lakeside Trattoria: Woodfired margherita pizza with fresh basil, hand-rolled penne all'arrabbiata",
+        highTea: "Private Shikara Afternoon Tea (16:30 IST): Darjeeling First Flush with lemon tarts & walnut brownies",
+        dinner: "Farewell Royal Marwari Thali: 11 traditional bowls including gatte ki kadhi, churma variations, rabdi jalebi",
+        winePairing: "Vintage Dom Pérignon 2013",
+        dietaryNotes: "Farewell personalized menu card printed on handmade paper.",
+      },
+    ],
+  },
+  {
+    id: "lead-vance-2026",
+    referenceCode: "SV-2026-VIP-02",
+    createdAt: "2026-10-26T10:00:00Z",
+    dateKey: "2026-11-18",
+    clientName: "Dr. Alistair & Lady Eleanor Vance",
+    firstName: "Alistair",
+    lastName: "Vance",
+    email: "a.vance@oxfordcurators.org",
+    phone: "+44 7700 900142",
+    destinations: ["Rajasthan", "Jawai", "Udaipur"],
+    destinationSummary: "Rajasthan (Jawai Leopard Camp & Oberoi Lake Sanctuary)",
+    travelWindow: "Nov 18, 2026 – Nov 23, 2026",
+    departureDate: "2026-11-18",
+    duration: "6 Days / 5 Nights",
+    companions: "Couple (2 VIP Adults)",
+    budgetTier: "₹14,00,000 (Wilderness & Heritage Sanctuary)",
+    estimatedValueINR: 1400000,
+    specialInterests: ["Wild Leopard Photography", "Organic Farm Gastronomy", "Ancient Temple Carvings"],
+    specialRequests: "Lady Eleanor is strictly Gluten-Free (celiac). Dr. Vance requests dawn birdwatching with senior naturalist.",
+    consultationMethod: "zoom",
+    preferredTimeOfDay: "Afternoon 14:00 GMT",
+    status: "Deposit Confirmed",
+    assignedCurator: "Harsh Sood",
+    internalNotes: "Fellows of Royal Geographical Society. Avid ornithologists and conservation patrons. Prefer quiet luxury without loud crowds.",
+    isVIP: true,
+    clientNuances: {
+      dietaryRestrictions: ["Strictly Gluten-Free (Lady Eleanor)", "Organic & Free-Range Only", "Low Sodium"],
+      roomPreferences: ["Royal Tented Pavilion #03", "Private Veranda Facing Escarpment", "King Featherbed", "Silent AC"],
+      beveragePreferences: ["Châteauneuf-du-Pape", "Cloudy Bay Sauvignon Blanc", "Fresh Ginger & Mint Infusions", "Sparkling Water"],
+      vehiclePreference: "Mercedes-Maybach S-Class (Intercity) + Open-Top 4x4 Safari Jeep",
+      milestoneEvents: [{ title: "Retirement from Oxford Chair", date: "2026-11-20", relation: "Career Milestone" }],
+      voiceCalls: [],
+      specialProtocol: "Naturalist Salim to accompany on all leopard tracking drives.",
+    },
+    assignedVehicle: "Mercedes-Maybach S-Class (Intercity transfer to camp)",
+    assignedChauffeur: "Vikram Singh (Royal Chauffeur Fleet)",
+    milestones: {
+      inquiryLogged: true,
+      discoveryCallCompleted: true,
+      proposalSent: true,
+      depositReceived: true,
+      vouchersIssued: true,
+      conciergeActive: true,
+    },
+    vendorAssignments: {
+      hotel: {
+        partnerId: "vendor-hotel-02",
+        partnerName: "SUJÁN JAWAI Luxury Camp",
+        role: "hotel",
+        status: "VIP Welcome Ready",
+        notes: "Royal Tented Pavilion #03 reserved. Camp tracker Salim briefed for dawn leopard drive.",
+        assignedAt: "2026-10-26T11:00:00Z",
+      },
+      driver: {
+        partnerId: "vendor-driver-01",
+        partnerName: "Vikram Singh (Royal Chauffeur Fleet)",
+        role: "driver",
+        status: "Accepted by Chauffeur",
+        notes: "Mercedes-Maybach pickup from Udaipur Airport Gate 1 at 15:30 IST. Chauffeur fluent in English.",
+        assignedAt: "2026-10-26T11:00:00Z",
+      },
+    },
+    arrivalDetails: {
+      arrivalDate: "2026-11-18",
+      arrivalTime: "15:30 IST (Flight Landing) / 17:30 IST (Camp Check-in)",
+      flightOrTrain: "IndiGo 6E-2051 (BOM → UDR)",
+      terminalGate: "Udaipur Airport Gate 1",
+      pickupReportingTime: "15:00 IST",
+      checkInTime: "17:30 IST (Royal Tented Pavilion)",
+      checkOutDate: "2026-11-23",
+      checkOutTime: "11:00 IST",
+      transferVehicle: "Mercedes-Maybach S-Class",
+      transferProtocol: "Cold towels, chilled mineral water, and Rabari ceremonial welcome at campsite gate",
+    },
+    gourmetMenuPlan: [
+      {
+        dayNumber: 1,
+        date: "2026-11-18",
+        dayTitle: "Arrival at Jawai Camp & Lantern-Lit Welcome",
+        breakfast: "In-flight selection",
+        lunch: "Chauffeured Luxury Picnic: Smoked chicken breast with Dijon mustard, gluten-free seed crackers, chilled organic grape spritzer",
+        highTea: "Jawai Escarpment Sunset Tea (17:45 IST): Herbal rooibos tea, roasted spiced almonds, gluten-free lemon cookies",
+        dinner: "Lantern-Lit Bush Dinner: Slow-braised Rajasthani Laal Maas (spiced tender mutton), chargrilled paneer skewers, millet rotis, warm date & fig pudding",
+        winePairing: "Châteauneuf-du-Pape 2018",
+        dietaryNotes: "100% Gluten-free certified kitchen preparation for Lady Eleanor.",
+      },
+      {
+        dayNumber: 2,
+        date: "2026-11-19",
+        dayTitle: "Dawn Leopard Safari & Wilderness Barbecue",
+        breakfast: "Bush Safari Dawn Breakfast (08:30 IST): Eggs benedict on gluten-free brioche, fresh papaya & passionfruit, hot French press coffee",
+        lunch: "Farm-to-Table Organic Garden Lunch: Crisp garden leaves, grilled Himalayan river trout, coriander lemon rice",
+        highTea: "Rabari Village Hearth Tea: Wood-fire brewed chai with millet crackers",
+        dinner: "Under-Canvas Camp Fire Barbecue: Herb-crusted lamb chops, grilled portobello mushrooms, saffron kheer",
+        winePairing: "Cloudy Bay Sauvignon Blanc 2022",
+        dietaryNotes: "Medium-rare cuts for Dr. Vance.",
+      },
+    ],
+  },
+  {
+    id: "lead-rohan-2026",
+    referenceCode: "SV-2026-VIP-03",
+    createdAt: "2026-10-27T11:00:00Z",
+    dateKey: "2026-12-02",
+    clientName: "Countess Sophie De Rohan",
+    firstName: "Sophie",
+    lastName: "De Rohan",
+    email: "sophie.derohan@rohan-patrimoine.fr",
+    phone: "+33 6 12 34 56 78",
+    destinations: ["Rajasthan", "Udaipur"],
+    destinationSummary: "Rajasthan (Udaipur Heritage Sanctuary)",
+    travelWindow: "Dec 02, 2026 – Dec 06, 2026",
+    departureDate: "2026-12-02",
+    duration: "5 Days / 4 Nights",
+    companions: "Solo VIP Traveler",
+    budgetTier: "₹11,00,000 (Private Heritage & Royal Art)",
+    estimatedValueINR: 1100000,
+    specialInterests: ["Mewar Royal History", "Miniature Paintings", "Private Architecture Tours"],
+    specialRequests: "French speaking guide (Dr. Mathur or ASI associate). Premier Pool Suite with morning sun orientation.",
+    consultationMethod: "whatsapp",
+    preferredTimeOfDay: "Morning 11:00 CET",
+    status: "Deposit Confirmed",
+    assignedCurator: "Suraj Uniyal",
+    internalNotes: "Art historian from Paris. Holds deep passion for 17th-century Rajasthani miniature schools. Provide exclusive access to palace library.",
+    isVIP: true,
+    clientNuances: {
+      dietaryRestrictions: ["Low Sodium", "Prefers Seafood & Light Med Courses", "Fresh Citrus Fruit"],
+      roomPreferences: ["Premier Pool Suite", "Morning Sun Terrace", "Lavender Aroma Protocol"],
+      beveragePreferences: ["Moët & Chandon Grand Vintage 2015", "Earl Grey Imperial", "San Pellegrino"],
+      vehiclePreference: "Mercedes-Maybach S-Class / Vintage 1947 Cadillac",
+      milestoneEvents: [{ title: "Art Monograph Publication", date: "2026-12-04", relation: "Author Celebration" }],
+      voiceCalls: [],
+      specialProtocol: "Curator Dr. Mathur personally greeting guest with vintage manuscript facsimile.",
+    },
+    assignedVehicle: "Mercedes-Maybach S-Class & Vintage 1947 Cadillac",
+    assignedChauffeur: "Vikram Singh (Royal Chauffeur Fleet)",
+    milestones: {
+      inquiryLogged: true,
+      discoveryCallCompleted: true,
+      proposalSent: true,
+      depositReceived: true,
+      vouchersIssued: true,
+      conciergeActive: true,
+    },
+    vendorAssignments: {
+      hotel: {
+        partnerId: "vendor-hotel-01",
+        partnerName: "The Oberoi Udaivilas",
+        role: "hotel",
+        status: "Room Suite Reserved",
+        notes: "Premier Pool Suite #112 reserved. French-speaking guest relations executive assigned.",
+        assignedAt: "2026-10-27T12:00:00Z",
+      },
+      guide: {
+        partnerId: "vendor-guide-01",
+        partnerName: "Dr. Mathur (Senior ASI Royal Historian)",
+        role: "guide",
+        status: "Tour Briefing Complete",
+        notes: "Exclusive access permit for City Palace Zenana Mahal and private royal armory verified.",
+        assignedAt: "2026-10-27T12:00:00Z",
+      },
+      driver: {
+        partnerId: "vendor-driver-01",
+        partnerName: "Vikram Singh (Royal Chauffeur Fleet)",
+        role: "driver",
+        status: "Vehicle Prepped & Fueled",
+        notes: "Airport arrival pickup in Maybach; Vintage 1947 Cadillac for Dec 03 evening drive.",
+        assignedAt: "2026-10-27T12:00:00Z",
+      },
+    },
+    arrivalDetails: {
+      arrivalDate: "2026-12-02",
+      arrivalTime: "11:45 IST",
+      flightOrTrain: "Air India AI-473 (DEL → UDR)",
+      terminalGate: "VIP Tarmac Lounge Exit",
+      pickupReportingTime: "11:15 IST",
+      checkInTime: "12:30 IST",
+      checkOutDate: "2026-12-06",
+      checkOutTime: "14:00 IST",
+      transferVehicle: "Mercedes-Maybach S-Class",
+      transferProtocol: "Rose garland ceremony and private Shehnai musicians at lakeside entrance",
+    },
+    gourmetMenuPlan: [
+      {
+        dayNumber: 1,
+        date: "2026-12-02",
+        dayTitle: "Arrival & French-Rajasthani Fusion Welcome",
+        breakfast: "Welcome Bellini & fresh fruit skewer upon lakeside check-in",
+        lunch: "Indo-French Tasting Menu: Pan-seared sea bass with saffron curry emulsion, asparagus velouté, mille-feuille",
+        highTea: "Palace Zen Garden Tea (16:30 IST): Rare Darjeeling First Flush, pistachio macarons, lavender scones",
+        dinner: "Royal Dining Chamber: Rajasthani safed maas (almond gravy lamb), wild saffron rice, rose petal kulfi",
+        winePairing: "Moët & Chandon Grand Vintage 2015",
+        dietaryNotes: "French translated menu card. Low sodium preparation.",
+      },
+    ],
+  },
+  {
+    id: "lead-singhania-2026",
+    referenceCode: "SV-2026-VIP-04",
+    createdAt: "2026-10-28T08:30:00Z",
+    dateKey: "2026-12-10",
+    clientName: "Vikramaditya Singhania & VIP Delegation",
+    firstName: "Vikramaditya",
+    lastName: "Singhania",
+    email: "v.singhania@singhaniaholdings.in",
+    phone: "+91 98100 88776",
+    destinations: ["Rajasthan", "Jaipur", "Udaipur"],
+    destinationSummary: "Rajasthan (Jaipur to Udaipur Royal Corridor)",
+    travelWindow: "Dec 10, 2026 – Dec 14, 2026",
+    departureDate: "2026-12-10",
+    duration: "5 Days / 4 Nights",
+    companions: "Delegation (4 VIP Adults)",
+    budgetTier: "₹22,00,000 (Presidential VIP Block)",
+    estimatedValueINR: 2200000,
+    specialInterests: ["High-Security VIP Escort", "Private Heritage Fort Dinners", "Presidential Hospitality"],
+    specialRequests: "Adjoining suites for security detail. Chauffeur convoy with luggage van. Traditional royal Marwari banquet.",
+    consultationMethod: "phone",
+    preferredTimeOfDay: "Morning 10:00 IST",
+    status: "Deposit Confirmed",
+    assignedCurator: "Suraj Uniyal",
+    internalNotes: "Industrialist delegation. High-protocol security clearance. Requires seamless coordination between fleet, security, and hotel GMs.",
+    isVIP: true,
+    clientNuances: {
+      dietaryRestrictions: ["Pure Marwari Vegetarian", "Strict Desi Ghee Preparation", "Fresh Almond Milk at Night"],
+      roomPreferences: ["Kohinoor Suite + 2 Luxury Suites", "Adjoining Security Room", "Highest Floor"],
+      beveragePreferences: ["Vintage Krug Champagne", "Glenfiddich 18", "Fresh Sweet Lime Juice"],
+      vehiclePreference: "Convoy of 2 Land Rover Defenders + Luggage Innova Crysta",
+      milestoneEvents: [{ title: "Bilateral Energy Summit", date: "2026-12-11", relation: "Corporate Milestone" }],
+      voiceCalls: [],
+      specialProtocol: "Full ceremonial guard salute and dedicated butler team on 24/7 call.",
+    },
+    assignedVehicle: "Convoy of 2 Land Rover Defender 110s + Luggage Vehicle",
+    assignedChauffeur: "Vikram Singh (Royal Chauffeur Fleet)",
+    milestones: {
+      inquiryLogged: true,
+      discoveryCallCompleted: true,
+      proposalSent: true,
+      depositReceived: true,
+      vouchersIssued: true,
+      conciergeActive: true,
+    },
+    vendorAssignments: {
+      hotel: {
+        partnerId: "vendor-hotel-01",
+        partnerName: "The Oberoi Udaivilas",
+        role: "hotel",
+        status: "VIP Welcome Ready",
+        notes: "Presidential block reservation #201-#204. Full security protocol cleared.",
+        assignedAt: "2026-10-28T09:00:00Z",
+      },
+      driver: {
+        partnerId: "vendor-driver-01",
+        partnerName: "Vikram Singh (Royal Chauffeur Fleet)",
+        role: "driver",
+        status: "Vehicle Prepped & Fueled",
+        notes: "2x Defenders fueled and polished with security escort protocol in place.",
+        assignedAt: "2026-10-28T09:00:00Z",
+      },
+      guide: {
+        partnerId: "vendor-guide-01",
+        partnerName: "Dr. Mathur (Senior ASI Royal Historian)",
+        role: "guide",
+        status: "Accepted by Tour Guide",
+        notes: "Private architectural briefing on Mewar dynastic architecture scheduled for Dec 11.",
+        assignedAt: "2026-10-28T09:00:00Z",
+      },
+    },
+    arrivalDetails: {
+      arrivalDate: "2026-12-10",
+      arrivalTime: "13:00 IST",
+      flightOrTrain: "Private Aviation Flight (JAI → UDR)",
+      terminalGate: "General Aviation VIP Terminal",
+      pickupReportingTime: "12:30 IST",
+      checkInTime: "13:00 IST",
+      checkOutDate: "2026-12-14",
+      checkOutTime: "12:00 IST",
+      transferVehicle: "Convoy of 2x Land Rover Defender 110",
+      transferProtocol: "Ceremonial royal welcome at private jetty with floral rangoli and guard salute",
+    },
+    gourmetMenuPlan: [
+      {
+        dayNumber: 1,
+        date: "2026-12-10",
+        dayTitle: "Delegation Arrival & Marwari Welcome Feast",
+        breakfast: "Hot Poha & Kesari Jalebi with single-estate Assam tea on private terrace",
+        lunch: "Executive Boardroom Royal Thali: Gatte ki subzi, papad mangodi, smoked baati, churma trio",
+        highTea: "Executive Afternoon Tea: Cardamom tea, almond biscotti, savory samosas",
+        dinner: "Royal Grand Banquet: 9-Course Marwari & Mughlai feast, live shehnai recital, Malpua with Rabdi",
+        winePairing: "Glenfiddich 18 & Vintage Krug Champagne",
+        dietaryNotes: "High VIP security protocol. Dedicated butler team for table service.",
+      },
+    ],
+  },
+];
 
 export const SEASONAL_INTEL: SeasonalIntel[] = [
   {
@@ -676,21 +1140,51 @@ export async function syncLeadsWithCloud(): Promise<CRMLead[]> {
 }
 
 export function getStoredLeads(): CRMLead[] {
-  if (typeof window === "undefined") return [];
+  if (typeof window === "undefined") return INITIAL_LEADS;
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+    const deleted = getDeletedLeadIds();
+
     if (!raw) {
       localStorage.removeItem("soulsventure_crm_leads_v2");
-      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify([]));
-      return [];
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(INITIAL_LEADS));
+      return INITIAL_LEADS;
     }
     const parsed = JSON.parse(raw);
-    const arr = Array.isArray(parsed) ? parsed : [];
-    const deleted = getDeletedLeadIds();
-    return arr.filter((l: any) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
+    const arr = Array.isArray(parsed) && parsed.length > 0 ? parsed : [];
+    const valid = arr.filter((l: any) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
+
+    // Ensure our INITIAL_LEADS (with rich gourmet menus and arrival details) are always merged
+    const leadMap = new Map<string, CRMLead>();
+    for (const init of INITIAL_LEADS) {
+      if (!deleted.has(init.id)) {
+        leadMap.set(init.referenceCode || init.id, init);
+      }
+    }
+    for (const item of valid) {
+      const base = leadMap.get(item.referenceCode || item.id);
+      if (base) {
+        leadMap.set(item.referenceCode || item.id, {
+          ...base,
+          ...item,
+          arrivalDetails: item.arrivalDetails || base.arrivalDetails,
+          gourmetMenuPlan: item.gourmetMenuPlan || base.gourmetMenuPlan,
+          vendorAssignments: {
+            ...base.vendorAssignments,
+            ...item.vendorAssignments,
+          },
+        });
+      } else {
+        leadMap.set(item.referenceCode || item.id, item);
+      }
+    }
+
+    const result = Array.from(leadMap.values());
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(result));
+    return result;
   } catch (e) {
     console.error("Failed to parse CRM leads from localStorage:", e);
-    return [];
+    return INITIAL_LEADS;
   }
 }
 

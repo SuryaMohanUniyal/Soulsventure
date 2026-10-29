@@ -1,1 +1,114 @@
-[]
+[
+  {
+    "id": "lead-sharma-2026",
+    "referenceCode": "SV-2026-VIP-01",
+    "createdAt": "2026-10-25T09:00:00Z",
+    "dateKey": "2026-11-14",
+    "clientName": "Mr. Rajesh Sharma & Family",
+    "firstName": "Rajesh",
+    "lastName": "Sharma",
+    "email": "r.sharma@indiacapital.in",
+    "phone": "+91 98201 44521",
+    "destinations": [
+      "Rajasthan",
+      "Udaipur",
+      "Jawai"
+    ],
+    "destinationSummary": "Rajasthan (Udaipur Lake Palace & Jawai Hills)",
+    "travelWindow": "Nov 14, 2026 – Nov 19, 2026",
+    "departureDate": "2026-11-14",
+    "duration": "6 Days / 5 Nights",
+    "companions": "Family (2 Adults, 2 Teens)",
+    "familyAges": "Ages 16 & 19",
+    "budgetTier": "₹18,50,000 (Royal Luxury Tier)",
+    "estimatedValueINR": 1850000,
+    "specialInterests": [
+      "Heritage Palaces",
+      "Lake Sunsets",
+      "Private Wildlife Safaris",
+      "Fine Dining"
+    ],
+    "specialRequests": "Strictly Pure Vegetarian. Special 20th Wedding Anniversary cake and candlelit setup on Lake Pichola on Nov 15 evening.",
+    "consultationMethod": "phone",
+    "preferredTimeOfDay": "Evening 18:00 IST",
+    "status": "Deposit Confirmed",
+    "assignedCurator": "Suraj Uniyal",
+    "internalNotes": "Tier-1 VIP client. Founder of India Capital Partners. Dedicated 24/7 concierge priority.",
+    "isVIP": true,
+    "clientNuances": {
+      "dietaryRestrictions": [
+        "100% Pure Vegetarian",
+        "Jain Friendly (No Onion/Garlic for Mrs. Sharma)",
+        "Nut-Allergy Protocol"
+      ],
+      "roomPreferences": [
+        "Kohinoor Suite",
+        "Lake Pichola Sanctuary View",
+        "High Floor"
+      ],
+      "beveragePreferences": [
+        "Dom Pérignon 2013",
+        "Sparkling Hibiscus Elixir",
+        "Kashmiri Kahwa"
+      ],
+      "vehiclePreference": "Land Rover Defender 110 4WD (Black Spec)",
+      "milestoneEvents": [
+        {
+          "title": "20th Wedding Anniversary",
+          "date": "2026-11-15",
+          "relation": "Couple Milestone"
+        }
+      ],
+      "voiceCalls": [],
+      "specialProtocol": "White-glove arrival garland with private Shehnai musicians at Badi Pal Jetty."
+    },
+    "assignedVehicle": "Land Rover Defender 110 4WD (White-Glove VIP Chauffeur)",
+    "assignedChauffeur": "Vikram Singh (Royal Chauffeur Fleet)",
+    "milestones": {
+      "inquiryLogged": true,
+      "discoveryCallCompleted": true,
+      "proposalSent": true,
+      "depositReceived": true,
+      "vouchersIssued": true,
+      "conciergeActive": true
+    },
+    "vendorAssignments": {
+      "hotel": {
+        "partnerId": "vendor-hotel-01",
+        "partnerName": "The Oberoi Udaivilas",
+        "role": "hotel",
+        "status": "Room Suite Reserved",
+        "notes": "Kohinoor Lake View Suite #204 allocated. Private Shikara boat transfer from Badi Pal at 14:00 IST.",
+        "assignedAt": "2026-10-25T10:00:00Z"
+      },
+      "driver": {
+        "partnerId": "vendor-driver-01",
+        "partnerName": "Vikram Singh (Royal Chauffeur Fleet)",
+        "role": "driver",
+        "status": "Vehicle Prepped & Fueled",
+        "notes": "Defender 110 stationed at Udaipur Airport Gate 2 from 13:15 IST holding placard Mr. Rajesh Sharma.",
+        "assignedAt": "2026-10-25T10:00:00Z"
+      },
+      "guide": {
+        "partnerId": "vendor-guide-01",
+        "partnerName": "Dr. Mathur (Senior ASI Royal Historian)",
+        "role": "guide",
+        "status": "Accepted by Tour Guide",
+        "notes": "City Palace private royal armoury and archives tour confirmed for Nov 15 at 16:30 IST.",
+        "assignedAt": "2026-10-25T10:00:00Z"
+      }
+    },
+    "arrivalDetails": {
+      "arrivalDate": "2026-11-14",
+      "arrivalTime": "14:00 IST (Jetty Check-in)",
+      "flightOrTrain": "Air India AI-471 (DEL → UDR)",
+      "terminalGate": "Udaipur Airport Gate 2 VIP Lounge Exit",
+      "pickupReportingTime": "13:15 IST (Flight lands 13:15)",
+      "checkInTime": "14:00 IST",
+      "checkOutDate": "2026-11-19",
+      "checkOutTime": "12:00 IST",
+      "transferVehicle": "Land Rover Defender 110 4WD",
+      "transferProtocol": "Private Shikara boat across Lake Pichola with rose petal shower and cold towels"
+    }
+  }
+]
