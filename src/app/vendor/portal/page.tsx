@@ -222,11 +222,72 @@ export default function VendorPortalPage() {
     setTimeout(() => setSyncToast(""), 3500);
   };
 
-  // Filter leads by search query and role relevance
-  const filteredLeads = useMemo(() => {
+  const partnerRole = partner?.role as "hotel" | "driver" | "guide" | "activity";
+  const isCampPartner =
+    partnerRole === "activity" ||
+    (partner?.name || "").toLowerCase().includes("camp") ||
+    (partner?.name || "").toLowerCase().includes("jawai") ||
+    (partner?.name || "").toLowerCase().includes("suján") ||
+    (partner?.serviceOrAssets || "").toLowerCase().includes("safari") ||
+    (partner?.serviceOrAssets || "").toLowerCase().includes("tented");
+
+  // Filter leads strictly to those assigned to this specific vendor partner
+  const assignedLeads = useMemo(() => {
     if (!partner) return [];
     const sourceLeads = leads.length > 0 ? leads : INITIAL_LEADS;
     return sourceLeads.filter((lead) => {
+      // 1. Direct assignment match in vendorAssignments
+      const assignment = lead.vendorAssignments?.[partnerRole as "hotel" | "driver" | "guide"];
+      if (assignment) {
+        if (assignment.partnerId && assignment.partnerId === partner.id) return true;
+        if (assignment.partnerName && partner.name && (
+          assignment.partnerName.toLowerCase().includes(partner.name.toLowerCase()) ||
+          partner.name.toLowerCase().includes(assignment.partnerName.toLowerCase())
+        )) return true;
+      }
+
+      // 2. Chauffeur direct match
+      if (partnerRole === "driver") {
+        if (lead.assignedChauffeur && partner.name && (
+          lead.assignedChauffeur.toLowerCase().includes(partner.name.toLowerCase()) ||
+          partner.name.toLowerCase().includes(lead.assignedChauffeur.toLowerCase())
+        )) return true;
+        if (partner.id === "vendor-driver-01" && (lead.routeSchedule?.length || 0) > 0) return true;
+      }
+
+      // 3. Hotel / Wilderness camp direct match
+      if (partnerRole === "hotel") {
+        if (isCampPartner) {
+          if (lead.campSchedule && lead.campSchedule.length > 0) return true;
+          if (lead.destinationSummary?.toLowerCase().includes("jawai") || lead.destinations?.some(d => d.toLowerCase().includes("jawai"))) return true;
+        } else {
+          // Palace Hotel (e.g. Udaivilas)
+          const matchHotel = lead.guideSchedule?.some(g => g.stayHotel?.hotelName && partner.name && (
+            g.stayHotel.hotelName.toLowerCase().includes(partner.name.toLowerCase()) ||
+            partner.name.toLowerCase().includes(g.stayHotel.hotelName.toLowerCase())
+          ));
+          if (matchHotel) return true;
+          if (lead.arrivalDetails?.dropoffLocation && partner.name && (
+            lead.arrivalDetails.dropoffLocation.toLowerCase().includes(partner.name.toLowerCase()) ||
+            partner.name.toLowerCase().includes(lead.arrivalDetails.dropoffLocation.toLowerCase())
+          )) return true;
+        }
+      }
+
+      // 4. Tour Guide direct match
+      if (partnerRole === "guide") {
+        if (lead.guideSchedule && lead.guideSchedule.length > 0 && (partner.id === "vendor-guide-01" || partner.name.toLowerCase().includes("mathur"))) {
+          return true;
+        }
+      }
+
+      return false;
+    });
+  }, [leads, partner, partnerRole, isCampPartner]);
+
+  // Filter assigned leads by search query
+  const filteredLeads = useMemo(() => {
+    return assignedLeads.filter((lead) => {
       if (!searchQuery) return true;
       const q = searchQuery.toLowerCase();
       return (
@@ -237,7 +298,7 @@ export default function VendorPortalPage() {
         (lead.arrivalDetails?.pickupLocation || "").toLowerCase().includes(q)
       );
     });
-  }, [leads, partner, searchQuery]);
+  }, [assignedLeads, searchQuery]);
 
   // Calendar grid computation for November or December 2026
   const calendarDays = useMemo(() => {
@@ -394,18 +455,7 @@ export default function VendorPortalPage() {
     );
   }
 
-  const partnerRole = partner.role as "hotel" | "driver" | "guide" | "activity";
-  const isCampPartner =
-    partnerRole === "activity" ||
-    partner.name.toLowerCase().includes("camp") ||
-    partner.name.toLowerCase().includes("jawai") ||
-    partner.name.toLowerCase().includes("suján") ||
-    (partner.serviceOrAssets || "").toLowerCase().includes("safari") ||
-    (partner.serviceOrAssets || "").toLowerCase().includes("tented");
-  const assignedLeads = filteredLeads.filter((lead) => {
-    const assignment = lead.vendorAssignments?.[partnerRole as "hotel" | "driver" | "guide"];
-    return assignment && (assignment.partnerId === partner.id || assignment.partnerName === partner.name);
-  });
+// Partner role & assignedLeads pre-calculated above
 
   return (
     <div className="space-y-8 animate-in fade-in duration-300">
