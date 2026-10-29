@@ -851,6 +851,8 @@ export default function VendorPortalPage() {
                   const guideDay = lead.guideSchedule?.find((g) => g.date === selectedDate);
                   const campDay = lead.campSchedule?.find((c) => c.date === selectedDate);
                   const menuDay = lead.gourmetMenuPlan?.find((m) => m.date === selectedDate);
+                  const activeGuideDayNum = activeGuideDayNumber[lead.id] || (guideDay?.dayNumber || 1);
+                  const currentGuideDay = lead.guideSchedule?.find((g) => g.dayNumber === activeGuideDayNum) || guideDay || lead.guideSchedule?.[0];
                   const assignment = lead.vendorAssignments?.[partnerRole as "hotel" | "driver" | "guide"];
                   const currentStatus =
                     statusDrafts[lead.id] ||
@@ -997,16 +999,16 @@ export default function VendorPortalPage() {
                       {/* ========================================================= */}
                       {partner.role === "guide" ? (
                         <div className="space-y-4">
-                          {/* 1. Guide Excursion Logistics Ribbon */}
-                          <div className="p-4 rounded-xl bg-[#161616] border border-amber-900/50 space-y-2.5">
+                          {/* 1. Guide Excursion Logistics Ribbon (Hotel & Driver Details at top) */}
+                          <div className="p-4 rounded-xl bg-[#161616] border border-amber-900/50 space-y-3">
                             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#252525] pb-2">
                               <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
                                 <Compass className="w-3.5 h-3.5 text-amber-400" />
-                                Tour Guide Excursion Briefing & Access Clearances ({selectedDate})
+                                Tour Guide Operations, Hotel & Chauffeur Coordination ({currentGuideDay?.date || selectedDate})
                               </span>
                               <div className="flex items-center gap-2">
                                 <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 px-2.5 py-0.5 rounded border border-amber-700/60 font-semibold">
-                                  ASI Permit: #{guideDay?.asiPermitNumber || "ASI-ROYAL-MWR-782"}
+                                  ASI Permit: #{currentGuideDay?.asiPermitNumber || "ASI-ROYAL-MWR-782"}
                                 </span>
                                 <span className="text-[10px] font-mono text-[#D4D4D8] bg-[#222] px-2 py-0.5 rounded border border-[#333]">
                                   {arr?.totalDays || lead.duration}
@@ -1016,214 +1018,362 @@ export default function VendorPortalPage() {
 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                               <div>
-                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Guide Reporting Time</span>
+                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Guide Duty Hours</span>
                                 <span className="font-mono text-amber-300 font-bold text-sm block">
-                                  {guideDay?.reportingTime || "09:15 IST"}
+                                  {currentGuideDay?.reportingTime || "09:15 IST"}
                                 </span>
-                                <span className="text-[9px] text-[#888] font-mono block">Tour: {guideDay?.tourStartTime || "09:30"} – {guideDay?.tourEndTime || "18:30 IST"}</span>
+                                <span className="text-[9px] text-[#888] font-mono block">Tour: {currentGuideDay?.tourStartTime || "09:30"} – {currentGuideDay?.tourEndTime || "18:30 IST"}</span>
                               </div>
-                              <div>
-                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Hotel Meeting Point</span>
-                                <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
-                                  {guideDay?.meetingPoint || "The Oberoi Udaivilas Lobby"}
-                                </span>
-                                <span className="text-[9px] text-amber-400/80 font-mono block">Porte-Cochère Dispatch</span>
-                              </div>
+
                               <div>
                                 <span className="text-[10px] text-[#71717A] uppercase font-mono block">Stay Hotel & Suite</span>
                                 <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
-                                  {guideDay?.stayHotel.hotelName || "The Oberoi Udaivilas"}
+                                  {currentGuideDay?.stayHotel.hotelName || "The Oberoi Udaivilas"}
                                 </span>
-                                <span className="text-[9px] text-emerald-400 font-mono block">{guideDay?.stayHotel.roomType || "Kohinoor Suite #204"}</span>
+                                <span className="text-[9px] text-emerald-400 font-mono block">{currentGuideDay?.stayHotel.roomType || "Kohinoor Suite #204"}</span>
                               </div>
+
                               <div>
-                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Excursion Transit</span>
-                                <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
-                                  Private Luxury AC Fleet
+                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Hotel Front Desk</span>
+                                <span className="font-mono text-[#C5A059] font-medium block leading-tight">
+                                  {currentGuideDay?.stayHotel.frontDeskPhone || "+91 294 243 3300"}
                                 </span>
-                                <span className="text-[9px] text-sky-400 font-mono block">Dedicated Lobby Dispatch</span>
+                                <span className="text-[9px] text-[#888] font-mono block">Chief Concierge Desk</span>
+                              </div>
+
+                              <div>
+                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Assigned Chauffeur & Fleet</span>
+                                <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                                  {currentGuideDay?.transportCoordination.chauffeurName || "Vikram Singh (Fleet Lead)"}
+                                </span>
+                                <span className="text-[9px] text-sky-400 font-mono block">
+                                  {currentGuideDay?.transportCoordination.vehicleModel} ({currentGuideDay?.transportCoordination.licensePlate || "RJ 27 EA 0001"})
+                                </span>
                               </div>
                             </div>
                           </div>
 
-                          {/* 2. Monument Visits & Historical Walkthrough ("Kha kha visit karwana hai") */}
-                          <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-[#2B2B2B] space-y-3.5">
-                            <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
-                              <div>
-                                <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
-                                  Day {guideDay?.dayNumber || 1} Theme: {guideDay?.tourTheme || "Mewar Royal Dynastic Walkthrough"}
+                          {/* 2. Complete Multi-Day Itinerary Selector (All Days Pre-Decided for Tour Guide) */}
+                          {lead.guideSchedule && lead.guideSchedule.length > 0 && (
+                            <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-amber-900/60 space-y-4">
+                              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
+                                <div>
+                                  <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
+                                    <Compass className="w-4 h-4 text-amber-400" />
+                                    Complete {lead.guideSchedule.length}-Day Heritage Excursions & Sightseeing Plan ({arr?.totalDays || lead.duration})
+                                  </span>
+                                  <span className="text-[10px] text-[#888] font-mono block mt-0.5">
+                                    Select any day to inspect monument entry slots, ASI permits, hotel coordination, and chauffeur dispatch:
+                                  </span>
+                                </div>
+                                <span className="text-[10px] font-mono text-amber-300 bg-amber-950 px-2.5 py-1 rounded border border-amber-800">
+                                  Day {activeGuideDayNum} Active
                                 </span>
-                                <h5 className="font-serif text-lg text-[#FDFBF7] font-semibold">
-                                  {guideDay?.dayTitle || "Historical Sightseeing & Monument Excursion"}
-                                </h5>
                               </div>
-                              <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2.5 py-0.5 rounded border border-emerald-800">
-                                {guideDay?.monumentVisits.length || 0} Key Monument Stops
-                              </span>
-                            </div>
 
-                            <div className="space-y-2.5">
-                              <span className="text-[10px] font-mono uppercase text-[#71717A] block">
-                                Monuments & Historical Sites to Visit (Detailed Walkthrough & Timing):
-                              </span>
-                              <div className="grid grid-cols-1 gap-2.5">
-                                {(guideDay?.monumentVisits || []).map((visit, i) => (
-                                  <div
-                                    key={i}
-                                    className="p-3.5 rounded-xl bg-[#121212] border border-[#262626] space-y-1.5 text-xs"
+                              {/* Multi-Day Selector Pills so Tour Guide can inspect any/all days */}
+                              <div className="flex flex-wrap items-center gap-1.5">
+                                {lead.guideSchedule.map((g) => (
+                                  <button
+                                    key={g.dayNumber}
+                                    type="button"
+                                    onClick={() =>
+                                      setActiveGuideDayNumber((prev) => ({ ...prev, [lead.id]: g.dayNumber }))
+                                    }
+                                    className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all cursor-pointer ${
+                                      activeGuideDayNum === g.dayNumber
+                                        ? "bg-amber-950 text-amber-200 border border-amber-600 font-bold shadow-sm"
+                                        : "bg-[#141414] text-[#888] hover:text-[#D4D4D8] border border-[#2B2B2B]"
+                                    }`}
                                   >
-                                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
-                                      <div className="flex items-center gap-2">
-                                        <span className="w-5 h-5 rounded-full bg-amber-950/90 text-amber-300 border border-amber-800 flex items-center justify-center text-[10px] font-mono font-bold">
-                                          {i + 1}
-                                        </span>
-                                        <span className="font-serif text-sm text-[#FDFBF7] font-semibold">
-                                          {visit.siteName}
-                                        </span>
-                                      </div>
-                                      <div className="flex items-center gap-2">
-                                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1F1F1F] text-[#C5A059] border border-[#333]">
-                                          Slot: {visit.entrySlot}
-                                        </span>
-                                        <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/60 text-amber-200 border border-amber-800/80">
-                                          {visit.accessType}
-                                        </span>
-                                      </div>
-                                    </div>
-                                    <p className="text-[#A1A1AA] leading-relaxed text-xs pl-7">
-                                      <strong className="text-amber-200/90 font-mono text-[11px]">Historical Highlights: </strong>
-                                      {visit.highlights}
-                                    </p>
-                                  </div>
+                                    Day {g.dayNumber} ({g.date.slice(5)})
+                                  </button>
                                 ))}
                               </div>
-                            </div>
 
-                            {/* Special Storytelling Notes */}
-                            {guideDay?.specialGuideNotes && (
-                              <div className="p-3 rounded-lg bg-[#141414] border border-amber-900/30 text-xs text-[#D4D4D8] space-y-1">
-                                <span className="text-[10px] font-mono uppercase text-amber-300 font-semibold block">
-                                  📜 Senior Historian Briefing & Storytelling Directives:
-                                </span>
-                                <p className="leading-relaxed text-[#A1A1AA] italic">
-                                  "{guideDay.specialGuideNotes}"
-                                </p>
-                              </div>
-                            )}
-                          </div>
+                              {/* Active Guide Day Monument Walkthrough Card */}
+                              {currentGuideDay && (
+                                <div className="p-4 rounded-xl bg-[#121212] border border-[#262626] space-y-3.5 text-xs">
+                                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#222] pb-2.5">
+                                    <div>
+                                      <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                        Day {currentGuideDay.dayNumber} Theme: {currentGuideDay.tourTheme}
+                                      </span>
+                                      <h5 className="font-serif text-lg text-[#FDFBF7] font-semibold mt-0.5">
+                                        {currentGuideDay.dayTitle} ({currentGuideDay.date})
+                                      </h5>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-2">
+                                      <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 px-2.5 py-0.5 rounded border border-amber-700/60 font-semibold">
+                                        Duty: {currentGuideDay.reportingTime} – {currentGuideDay.tourEndTime}
+                                      </span>
+                                      <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
+                                        Permit #{currentGuideDay.asiPermitNumber || "ASI-ROYAL-MWR-782"}
+                                      </span>
+                                    </div>
+                                  </div>
 
-                          {/* 3. Stay Hotel & Room Details ("Kon se hotel me rukna hai") */}
-                          {guideDay?.stayHotel && (
-                            <div className="p-4 rounded-xl bg-[#161616] border border-[#282828] space-y-2.5 text-xs">
-                              <div className="flex items-center justify-between border-b border-[#222] pb-2">
-                                <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
-                                  <Hotel className="w-3.5 h-3.5 text-emerald-400" />
-                                  Guest Stay & Hotel Coordination (Kon se hotel me rukna hai)
-                                </span>
-                                <span className="text-[10px] font-mono text-[#888]">
-                                  Check-in: {guideDay.stayHotel.checkInTime} • Check-out: {guideDay.stayHotel.checkOutTime}
-                                </span>
-                              </div>
+                                  {/* Monument Visits */}
+                                  <div className="space-y-2.5">
+                                    <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
+                                      🏛️ Monuments & Sites to Visit (Detailed Walkthrough & Entry Slots):
+                                    </span>
+                                    <div className="grid grid-cols-1 gap-2.5">
+                                      {currentGuideDay.monumentVisits.map((visit, i) => (
+                                        <div
+                                          key={i}
+                                          className="p-3.5 rounded-xl bg-[#171717] border border-[#262626] space-y-1.5"
+                                        >
+                                          <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1.5">
+                                            <div className="flex items-center gap-2">
+                                              <span className="w-5 h-5 rounded-full bg-amber-950/90 text-amber-300 border border-amber-800 flex items-center justify-center text-[10px] font-mono font-bold">
+                                                {i + 1}
+                                              </span>
+                                              <span className="font-serif text-sm text-[#FDFBF7] font-semibold">
+                                                {visit.siteName}
+                                              </span>
+                                              <span className="text-[10px] font-mono text-[#888]">
+                                                ({visit.duration})
+                                              </span>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-[#1F1F1F] text-[#C5A059] border border-[#333]">
+                                                Slot: {visit.entrySlot}
+                                              </span>
+                                              <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-amber-950/60 text-amber-200 border border-amber-800/80">
+                                                {visit.accessType}
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <p className="text-[#A1A1AA] text-xs pl-7 leading-relaxed">
+                                            <strong className="text-amber-200/90 font-mono text-[11px]">Walkthrough Highlights: </strong>
+                                            {visit.highlights}
+                                          </p>
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
 
-                              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                                <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
-                                  <span className="text-[10px] font-mono uppercase text-[#71717A] block">Hotel Property</span>
-                                  <p className="font-serif text-[#FDFBF7] font-semibold text-sm mt-0.5">{guideDay.stayHotel.hotelName}</p>
-                                  <span className="text-[9px] text-[#888] font-mono">Luxury Heritage Sanctuary</span>
+                                  {/* Historian Storytelling Directives */}
+                                  {currentGuideDay.specialGuideNotes && (
+                                    <div className="p-3 rounded-lg bg-[#141414] border border-amber-900/30 text-xs text-[#D4D4D8] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-amber-300 font-semibold block">
+                                        📜 Senior Historian Briefing & Storytelling Directives:
+                                      </span>
+                                      <p className="leading-relaxed text-[#A1A1AA] italic">
+                                        "{currentGuideDay.specialGuideNotes}"
+                                      </p>
+                                    </div>
+                                  )}
                                 </div>
-                                <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
-                                  <span className="text-[10px] font-mono uppercase text-[#71717A] block">Reserved Suite & Wing</span>
-                                  <p className="font-serif text-[#FDFBF7] font-semibold text-sm mt-0.5">{guideDay.stayHotel.roomType}</p>
-                                  <span className="text-[9px] text-emerald-400 font-mono">Lake View Private Quarters</span>
-                                </div>
-                                <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
-                                  <span className="text-[10px] font-mono uppercase text-[#71717A] block">Concierge Direct Desk</span>
-                                  <p className="font-mono text-[#C5A059] font-medium text-xs mt-0.5">{guideDay.stayHotel.conciergeContact}</p>
-                                  <span className="text-[9px] text-[#888] font-mono">Guide Lobby Access Permitted</span>
-                                </div>
-                              </div>
-                            </div>
-                          )}
+                              )}
 
-                          {/* 4. Full Food Menu & Gastronomy ("Kya menu hai food ka") */}
-                          {guideDay?.diningBriefing && (
-                            <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-[#2B2B2B] space-y-3">
-                              <div className="flex items-center justify-between border-b border-[#242424] pb-2">
-                                <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-bold flex items-center gap-1.5">
-                                  <Utensils className="w-3.5 h-3.5" />
-                                  Full Day Gastronomy & Food Menu Briefing (Kya menu hai food ka)
+                              {/* 3. Hotel Stay, Location & Front Desk Coordination Card */}
+                              {currentGuideDay?.stayHotel && (
+                                <div className="p-4 sm:p-5 rounded-xl bg-[#161616] border border-emerald-900/50 space-y-3 text-xs">
+                                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#252525] pb-2">
+                                    <span className="text-[11px] font-mono uppercase tracking-wider text-emerald-400 font-bold flex items-center gap-1.5">
+                                      <Hotel className="w-3.5 h-3.5 text-emerald-400" />
+                                      Guest Hotel Stay, Location & Front Desk Coordination (Day {activeGuideDayNum})
+                                    </span>
+                                    <span className="text-[10px] font-mono text-[#888]">
+                                      Check-in: {currentGuideDay.stayHotel.checkInTime} • Check-out: {currentGuideDay.stayHotel.checkOutTime}
+                                    </span>
+                                  </div>
+
+                                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#71717A] block">Hotel Property & Location:</span>
+                                      <p className="font-serif text-[#FDFBF7] font-semibold text-sm">{currentGuideDay.stayHotel.hotelName}</p>
+                                      <p className="text-[11px] text-[#A1A1AA] flex items-start gap-1 mt-0.5">
+                                        <MapPin className="w-3.5 h-3.5 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                                        <span>{currentGuideDay.stayHotel.hotelAddress || "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur, Rajasthan 313001"}</span>
+                                      </p>
+                                    </div>
+
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#71717A] block">Guest Room & Meeting Point:</span>
+                                      <p className="font-serif text-[#FDFBF7] font-semibold text-sm">{currentGuideDay.stayHotel.roomType}</p>
+                                      <span className="text-[11px] text-[#C5A059] block mt-0.5 font-medium">
+                                        Lobby Rendezvous: {currentGuideDay.meetingPoint}
+                                      </span>
+                                    </div>
+
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-2">
+                                      <span className="text-[10px] font-mono uppercase text-[#71717A] block">Hotel Front Desk / Concierge Phone:</span>
+                                      <p className="font-mono text-emerald-400 font-bold text-xs">
+                                        {currentGuideDay.stayHotel.frontDeskPhone || currentGuideDay.stayHotel.conciergeContact || "+91 294 243 3300"}
+                                      </p>
+                                      <div className="flex items-center gap-2 pt-0.5">
+                                        <a
+                                          href={`tel:${(currentGuideDay.stayHotel.frontDeskPhone || "+91 294 243 3300").replace(/\s+/g, "")}`}
+                                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#222] hover:bg-[#2A2A2A] text-xs font-mono text-[#D4D4D8] border border-[#333]"
+                                        >
+                                          <Phone className="w-3 h-3 text-emerald-400" />
+                                          <span>Call Front Desk</span>
+                                        </a>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* 4. Assigned Chauffeur & Fleet Coordination Card (With Direct Contact) */}
+                              {currentGuideDay?.transportCoordination && (
+                                <div className="p-4 sm:p-5 rounded-xl bg-[#161616] border border-sky-950 space-y-3 text-xs">
+                                  <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
+                                    <span className="text-[11px] font-mono uppercase tracking-wider text-sky-400 font-bold flex items-center gap-1.5">
+                                      <Navigation className="w-3.5 h-3.5 text-sky-400" />
+                                      Assigned Chauffeur & Fleet Coordination (Day {activeGuideDayNum})
+                                    </span>
+                                    <span className="text-[10px] font-mono text-sky-300 bg-sky-950 px-2 py-0.5 rounded border border-sky-800">
+                                      Duty Chauffeur Assigned
+                                    </span>
+                                  </div>
+
+                                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#71717A] block">Chauffeur Details:</span>
+                                      <p className="font-serif text-[#FDFBF7] font-semibold text-sm">
+                                        {currentGuideDay.transportCoordination.chauffeurName || "Vikram Singh (Royal Chauffeur Fleet)"}
+                                      </p>
+                                      <p className="font-mono text-xs text-[#C5A059]">
+                                        Direct: {currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222"}
+                                      </p>
+                                      <div className="flex items-center gap-2 pt-1.5">
+                                        <a
+                                          href={`tel:${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222").replace(/\s+/g, "")}`}
+                                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#222] hover:bg-[#2A2A2A] text-[11px] font-mono text-[#D4D4D8] border border-[#333]"
+                                        >
+                                          <Phone className="w-3 h-3 text-sky-400" />
+                                          <span>Call Driver</span>
+                                        </a>
+                                        <a
+                                          href={`https://wa.me/${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                                            `Namaste ${currentGuideDay.transportCoordination.chauffeurName || "Vikram Singh"}. This is ${partner.name} (Tour Guide) re: Guest ${lead.clientName}. Day ${activeGuideDayNum} tour coordination:`
+                                          )}`}
+                                          target="_blank"
+                                          rel="noopener noreferrer"
+                                          className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-950 hover:bg-emerald-900 text-[11px] font-mono text-emerald-300 border border-emerald-800"
+                                        >
+                                          <MessageCircle className="w-3 h-3" />
+                                          <span>WhatsApp</span>
+                                        </a>
+                                      </div>
+                                    </div>
+
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#71717A] block">Vehicle Model & License Plate:</span>
+                                      <p className="font-serif text-[#FDFBF7] font-semibold text-sm">
+                                        {currentGuideDay.transportCoordination.vehicleModel || "Land Rover Defender 110 4WD"}
+                                      </p>
+                                      <span className="text-[10px] font-mono text-sky-300 block">
+                                        Plate: {currentGuideDay.transportCoordination.licensePlate || "RJ 27 EA 0001"}
+                                      </span>
+                                      <span className="text-[10px] text-[#888] font-mono block">
+                                        Stationed at Hotel Lobby 15 mins before tour
+                                      </span>
+                                    </div>
+
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#71717A] block">Transit Route & Drop Point:</span>
+                                      <p className="text-[11px] text-[#D4D4D8] leading-relaxed">
+                                        {currentGuideDay.transportCoordination.routeDescription}
+                                      </p>
+                                      <span className="text-[10px] font-mono text-emerald-400 block pt-1 border-t border-[#222]">
+                                        Drop-off: {currentGuideDay.transportCoordination.dropoffPoint}
+                                      </span>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* 5. Full Day Gastronomy & Food Menu Briefing */}
+                              {currentGuideDay?.diningBriefing && (
+                                <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-[#2B2B2B] space-y-3">
+                                  <div className="flex items-center justify-between border-b border-[#242424] pb-2">
+                                    <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-bold flex items-center gap-1.5">
+                                      <Utensils className="w-3.5 h-3.5" />
+                                      Full Day Gastronomy & Food Menu Briefing (Day {activeGuideDayNum})
+                                    </span>
+                                    <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+                                      Chef Special Briefed
+                                    </span>
+                                  </div>
+
+                                  <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
+                                        <Coffee className="w-3 h-3" /> Breakfast / Morning
+                                      </span>
+                                      <p className="text-[#FDFBF7] text-xs leading-relaxed">{currentGuideDay.diningBriefing.breakfast}</p>
+                                    </div>
+
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
+                                        <Utensils className="w-3 h-3" /> Royal Lunch Venue
+                                      </span>
+                                      <span className="text-[10px] font-mono text-sky-300 block">{currentGuideDay.diningBriefing.lunchVenue}</span>
+                                      <p className="text-[#FDFBF7] text-xs leading-relaxed">{currentGuideDay.diningBriefing.lunchMenu}</p>
+                                    </div>
+
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
+                                        <Coffee className="w-3 h-3" /> Sunset High-Tea
+                                      </span>
+                                      <span className="text-[10px] font-mono text-amber-300 block">{currentGuideDay.diningBriefing.highTeaVenue}</span>
+                                      <p className="text-[#FDFBF7] text-xs leading-relaxed">{currentGuideDay.diningBriefing.highTeaMenu}</p>
+                                    </div>
+
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
+                                        <Wine className="w-3 h-3" /> Evening Banquet
+                                      </span>
+                                      <span className="text-[10px] font-mono text-rose-300 block">{currentGuideDay.diningBriefing.dinnerVenue}</span>
+                                      <p className="text-[#FDFBF7] text-xs leading-relaxed">{currentGuideDay.diningBriefing.dinnerMenu}</p>
+                                    </div>
+                                  </div>
+
+                                  <div className="p-2.5 rounded-lg bg-[#121212] border border-amber-900/40 text-xs text-amber-300 font-mono">
+                                    <strong>Strict Dietary & Allergy Directives:</strong> {currentGuideDay.diningBriefing.dietaryRestrictions}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* 6. All-Days Tour Master Roadmap (So Tour Guide sees all 5/6 days at a glance) */}
+                              <div className="p-3.5 rounded-xl bg-[#141414] border border-[#242424] space-y-2">
+                                <span className="text-[10px] font-mono uppercase text-[#A1A1AA] font-semibold block">
+                                  📋 Full {lead.guideSchedule.length}-Day Tour Itinerary Roadmap (All Days At a Glance):
                                 </span>
-                                <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
-                                  Chef Special Briefed
-                                </span>
-                              </div>
-
-                              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
-                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
-                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
-                                    <Coffee className="w-3 h-3" /> Breakfast / Morning
-                                  </span>
-                                  <p className="text-[#FDFBF7] text-xs leading-relaxed">{guideDay.diningBriefing.breakfast}</p>
-                                </div>
-
-                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
-                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
-                                    <Utensils className="w-3 h-3" /> Royal Lunch Venue
-                                  </span>
-                                  <span className="text-[10px] font-mono text-sky-300 block">{guideDay.diningBriefing.lunchVenue}</span>
-                                  <p className="text-[#FDFBF7] text-xs leading-relaxed">{guideDay.diningBriefing.lunchMenu}</p>
-                                </div>
-
-                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
-                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
-                                    <Coffee className="w-3 h-3" /> Sunset High-Tea
-                                  </span>
-                                  <span className="text-[10px] font-mono text-amber-300 block">{guideDay.diningBriefing.highTeaVenue}</span>
-                                  <p className="text-[#FDFBF7] text-xs leading-relaxed">{guideDay.diningBriefing.highTeaMenu}</p>
-                                </div>
-
-                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
-                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
-                                    <Wine className="w-3 h-3" /> Evening Banquet
-                                  </span>
-                                  <span className="text-[10px] font-mono text-rose-300 block">{guideDay.diningBriefing.dinnerVenue}</span>
-                                  <p className="text-[#FDFBF7] text-xs leading-relaxed">{guideDay.diningBriefing.dinnerMenu}</p>
-                                </div>
-                              </div>
-
-                              <div className="p-2.5 rounded-lg bg-[#121212] border border-amber-900/40 text-xs text-amber-300 font-mono">
-                                <strong>Strict Dietary & Allergy Directives:</strong> {guideDay.diningBriefing.dietaryRestrictions}
-                              </div>
-                            </div>
-                          )}
-
-                          {/* 5. Chauffeur Vehicle & Drop-off Point ("Bus ka route aur kha drop karna hai") */}
-                          {guideDay?.transportCoordination && (
-                            <div className="p-4 rounded-xl bg-[#161616] border border-sky-950 space-y-2.5 text-xs">
-                              <div className="flex items-center justify-between border-b border-[#222] pb-2">
-                                <span className="text-[11px] font-mono uppercase tracking-wider text-sky-400 font-bold flex items-center gap-1.5">
-                                  <Navigation className="w-3.5 h-3.5 text-sky-400" />
-                                  Fleet Route & Drop-off Point (Bus ka route aur kha drop karna hai)
-                                </span>
-                                <span className="text-[10px] font-mono text-sky-300">
-                                  Chauffeur: {guideDay.transportCoordination.chauffeurName}
-                                </span>
-                              </div>
-
-                              <div className="p-3 rounded-lg bg-[#111111] border border-[#222] space-y-1.5">
-                                <span className="text-[10px] font-mono uppercase text-[#71717A] block">
-                                  Excursion Transit Route:
-                                </span>
-                                <p className="font-serif text-[#FDFBF7] text-sm leading-relaxed">
-                                  {guideDay.transportCoordination.routeDescription}
-                                </p>
-                                <div className="pt-2 border-t border-[#222] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 text-[11px]">
-                                  <span>
-                                    <strong>Vehicle:</strong> {guideDay.transportCoordination.vehicleModel} ({guideDay.transportCoordination.licensePlate})
-                                  </span>
-                                  <span className="text-emerald-400 font-medium">
-                                    <strong>Exact Drop-off Destination:</strong> {guideDay.transportCoordination.dropoffPoint}
-                                  </span>
+                                <div className="space-y-1.5">
+                                  {lead.guideSchedule.map((g) => (
+                                    <div
+                                      key={g.dayNumber}
+                                      onClick={() => setActiveGuideDayNumber((prev) => ({ ...prev, [lead.id]: g.dayNumber }))}
+                                      className={`p-2 rounded-lg border text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 cursor-pointer transition-all ${
+                                        activeGuideDayNum === g.dayNumber
+                                          ? "bg-[#1E1E1E] border-amber-600/70 text-[#FDFBF7]"
+                                          : "bg-[#101010] border-[#222] text-[#888] hover:border-[#333] hover:text-[#CCC]"
+                                      }`}
+                                    >
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#222] text-amber-300 font-bold">
+                                          Day {g.dayNumber}
+                                        </span>
+                                        <span className="font-mono text-[10px] text-[#A1A1AA]">{g.date}</span>
+                                        <span className="font-serif font-medium text-xs text-[#E4E4E7] truncate max-w-[240px] sm:max-w-[340px]">
+                                          {g.dayTitle}
+                                        </span>
+                                      </div>
+                                      <div className="flex items-center gap-2 text-[10px] font-mono">
+                                        <span className="text-amber-300">Duty: {g.reportingTime} – {g.tourEndTime}</span>
+                                        <span>•</span>
+                                        <span className="text-emerald-400">{g.stayHotel.hotelName}</span>
+                                        <span>•</span>
+                                        <span className="text-sky-300">{g.transportCoordination.chauffeurName.split(" ")[0]} ({g.transportCoordination.licensePlate})</span>
+                                      </div>
+                                    </div>
+                                  ))}
                                 </div>
                               </div>
                             </div>
@@ -2205,52 +2355,75 @@ export default function VendorPortalPage() {
                   {/* ========================================================= */}
                   {partner.role === "guide" ? (
                     <div className="space-y-4 my-3">
-                      {/* Guide Key Logistics Ribbon */}
-                      <div className="p-4 rounded-xl bg-[#161616] border border-amber-900/50 space-y-2.5">
+                      {/* 1. Guide Key Logistics Ribbon (Hotel & Driver Details at top) */}
+                      <div className="p-4 rounded-xl bg-[#161616] border border-amber-900/50 space-y-3">
                         <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#252525] pb-2">
                           <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
                             <Compass className="w-3.5 h-3.5 text-amber-400" />
                             Tour Guide Excursion & Historical Walkthrough Manifest ({arr?.totalDays || lead.duration})
                           </span>
-                          <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 px-2.5 py-0.5 rounded border border-amber-700/60 font-semibold">
-                            ASI Permit: #{currentGuideDay?.asiPermitNumber || lead.guideSchedule?.[0]?.asiPermitNumber || "ASI-ROYAL-MWR-782"}
-                          </span>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 px-2.5 py-0.5 rounded border border-amber-700/60 font-semibold">
+                              ASI Permit: #{currentGuideDay?.asiPermitNumber || lead.guideSchedule?.[0]?.asiPermitNumber || "ASI-ROYAL-MWR-782"}
+                            </span>
+                            <span className="text-[10px] font-mono text-[#D4D4D8] bg-[#222] px-2 py-0.5 rounded border border-[#333]">
+                              {lead.guideSchedule?.length || 1} Days Planned
+                            </span>
+                          </div>
                         </div>
 
                         <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs">
                           <div>
-                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Guide Reporting Time</span>
-                            <span className="font-mono text-amber-300 font-bold text-sm block">{currentGuideDay?.reportingTime || "09:15 IST"}</span>
+                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Guide Duty Hours</span>
+                            <span className="font-mono text-amber-300 font-bold text-sm block">
+                              {currentGuideDay?.reportingTime || "09:15 IST"}
+                            </span>
                             <span className="text-[9px] text-[#888] font-mono block">Tour: {currentGuideDay?.tourStartTime || "09:30"} – {currentGuideDay?.tourEndTime || "18:30 IST"}</span>
                           </div>
-                          <div>
-                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Hotel Meeting Point</span>
-                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">{currentGuideDay?.meetingPoint || arr?.dropoffLocation || "The Oberoi Udaivilas Lobby"}</span>
-                            <span className="text-[9px] text-amber-400/80 font-mono block">Porte-Cochère Dispatch</span>
-                          </div>
+
                           <div>
                             <span className="text-[10px] text-[#71717A] uppercase font-mono block">Stay Hotel & Suite</span>
-                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">{currentGuideDay?.stayHotel.hotelName || "The Oberoi Udaivilas"}</span>
+                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                              {currentGuideDay?.stayHotel.hotelName || "The Oberoi Udaivilas"}
+                            </span>
                             <span className="text-[9px] text-emerald-400 font-mono block">{currentGuideDay?.stayHotel.roomType || "Kohinoor Suite #204"}</span>
                           </div>
+
                           <div>
-                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Excursion Transit</span>
-                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">Private Luxury AC Fleet</span>
-                            <span className="text-[9px] text-sky-400 font-mono block">Dedicated Lobby Dispatch</span>
+                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Hotel Front Desk</span>
+                            <span className="font-mono text-[#C5A059] font-medium block leading-tight">
+                              {currentGuideDay?.stayHotel.frontDeskPhone || "+91 294 243 3300"}
+                            </span>
+                            <span className="text-[9px] text-[#888] font-mono block">Chief Concierge Desk</span>
+                          </div>
+
+                          <div>
+                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Assigned Chauffeur & Fleet</span>
+                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
+                              {currentGuideDay?.transportCoordination.chauffeurName || "Vikram Singh (Fleet Lead)"}
+                            </span>
+                            <span className="text-[9px] text-sky-400 font-mono block">
+                              {currentGuideDay?.transportCoordination.vehicleModel} ({currentGuideDay?.transportCoordination.licensePlate || "RJ 27 EA 0001"})
+                            </span>
                           </div>
                         </div>
                       </div>
 
-                      {/* Day-by-Day Guide Excursion Tabs */}
+                      {/* 2. Day-by-Day Guide Excursion Tabs (All Days Pre-Decided for Tour Guide) */}
                       {lead.guideSchedule && lead.guideSchedule.length > 0 && (
                         <div className="p-4 sm:p-5 rounded-xl bg-[#161616] border border-[#2B2B2B] space-y-4">
                           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
-                            <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
-                              <Compass className="w-3.5 h-3.5 text-amber-400" />
-                              Day-by-Day Heritage Excursions & Monument Walkthrough (What to Visit, Hotels & Menus)
-                            </span>
-                            <span className="text-[10px] font-mono text-[#888]">
-                              Select a day to view itinerary:
+                            <div>
+                              <span className="text-[11px] font-mono uppercase tracking-wider text-amber-300 font-bold flex items-center gap-1.5">
+                                <Compass className="w-3.5 h-3.5 text-amber-400" />
+                                Day-by-Day Heritage Excursions & Monument Walkthrough (What to Visit, Hotels & Menus)
+                              </span>
+                              <span className="text-[10px] text-[#888] font-mono block mt-0.5">
+                                Complete {lead.guideSchedule.length}-day schedule for Tour Guide ({arr?.totalDays || lead.duration}):
+                              </span>
+                            </div>
+                            <span className="text-[10px] font-mono text-amber-300 bg-amber-950 px-2.5 py-1 rounded border border-amber-800">
+                              Day {activeGuideDayNum} Active
                             </span>
                           </div>
 
@@ -2284,11 +2457,11 @@ export default function VendorPortalPage() {
                                     Day {currentGuideDay.dayNumber}: {currentGuideDay.tourTheme}
                                   </span>
                                   <h5 className="font-serif text-lg text-[#FDFBF7] font-semibold mt-0.5">
-                                    {currentGuideDay.dayTitle}
+                                    {currentGuideDay.dayTitle} ({currentGuideDay.date})
                                   </h5>
                                 </div>
-                                <div className="flex items-center gap-2">
-                                  <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 px-2 py-0.5 rounded border border-amber-800">
+                                <div className="flex flex-wrap items-center gap-2">
+                                  <span className="text-[10px] font-mono text-amber-300 bg-amber-950/80 px-2.5 py-0.5 rounded border border-amber-800">
                                     Duty: {currentGuideDay.reportingTime} – {currentGuideDay.tourEndTime}
                                   </span>
                                   <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950 px-2 py-0.5 rounded border border-emerald-800">
@@ -2300,13 +2473,13 @@ export default function VendorPortalPage() {
                               {/* 1. Monuments & Excursions to Visit */}
                               <div className="space-y-2">
                                 <span className="text-[10px] font-mono uppercase text-[#C5A059] block font-semibold">
-                                  🏛️ Monuments & Sites to Visit (Kha kha visit karwana hai):
+                                  🏛️ Monuments & Sites to Visit (Walkthrough Highlights & Entry Slots):
                                 </span>
                                 <div className="grid grid-cols-1 gap-2.5">
                                   {currentGuideDay.monumentVisits.map((visit, i) => (
                                     <div
                                       key={i}
-                                      className="p-3 rounded-xl bg-[#171717] border border-[#262626] space-y-1.5"
+                                      className="p-3.5 rounded-xl bg-[#171717] border border-[#262626] space-y-1.5"
                                     >
                                       <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1">
                                         <div className="flex items-center gap-2">
@@ -2338,53 +2511,71 @@ export default function VendorPortalPage() {
                                 </div>
                               </div>
 
-                              {/* 2. Hotel Stay & Suite Coordination ("Kon se hotel me rukna hai") */}
-                              <div className="p-3.5 rounded-xl bg-[#161616] border border-[#262626] space-y-2">
-                                <span className="text-[10px] font-mono uppercase text-emerald-400 font-semibold block flex items-center gap-1.5">
-                                  <Hotel className="w-3.5 h-3.5" />
-                                  🏨 Guest Hotel Stay & Lobby Meeting Point (Kon se hotel me rukna hai):
-                                </span>
-                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5 text-xs">
-                                  <div>
-                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Hotel Name</span>
-                                    <p className="font-serif text-[#FDFBF7] font-semibold">{currentGuideDay.stayHotel.hotelName}</p>
-                                  </div>
-                                  <div>
-                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Suite & Wing</span>
-                                    <p className="font-serif text-[#FDFBF7] font-semibold">{currentGuideDay.stayHotel.roomType}</p>
-                                  </div>
-                                  <div>
-                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Lobby Meeting Instructions</span>
-                                    <p className="font-serif text-[#C5A059] font-medium leading-snug">{currentGuideDay.meetingPoint}</p>
-                                  </div>
+                              {/* 2. Hotel Stay, Location & Front Desk Coordination */}
+                              <div className="p-3.5 sm:p-4 rounded-xl bg-[#161616] border border-emerald-950 space-y-3">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
+                                  <span className="text-[11px] font-mono uppercase text-emerald-400 font-semibold block flex items-center gap-1.5">
+                                    <Hotel className="w-3.5 h-3.5" />
+                                    🏨 Guest Hotel Stay, Location & Front Desk Coordination (Day {activeGuideDayNum})
+                                  </span>
+                                  <span className="text-[10px] font-mono text-[#888]">
+                                    Check-in: {currentGuideDay.stayHotel.checkInTime} • Check-out: {currentGuideDay.stayHotel.checkOutTime}
+                                  </span>
                                 </div>
-                                <div className="text-[10px] font-mono text-[#888] pt-1 border-t border-[#222]">
-                                  Check-in: {currentGuideDay.stayHotel.checkInTime} • Check-out: {currentGuideDay.stayHotel.checkOutTime} • Concierge Desk: <span className="text-[#D4D4D8]">{currentGuideDay.stayHotel.conciergeContact}</span>
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1">
+                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Hotel Name & Location:</span>
+                                    <p className="font-serif text-[#FDFBF7] font-semibold">{currentGuideDay.stayHotel.hotelName}</p>
+                                    <p className="text-[11px] text-[#A1A1AA] flex items-start gap-1 mt-0.5">
+                                      <MapPin className="w-3 h-3 text-[#C5A059] flex-shrink-0 mt-0.5" />
+                                      <span>{currentGuideDay.stayHotel.hotelAddress || "Haridas Ji Ki Magri, Mulla Talai, Lake Pichola Waterfront, Udaipur, Rajasthan 313001"}</span>
+                                    </p>
+                                  </div>
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1">
+                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Suite & Meeting Point:</span>
+                                    <p className="font-serif text-[#FDFBF7] font-semibold">{currentGuideDay.stayHotel.roomType}</p>
+                                    <span className="text-[11px] text-[#C5A059] block mt-0.5 font-medium leading-snug">
+                                      Lobby Rendezvous: {currentGuideDay.meetingPoint}
+                                    </span>
+                                  </div>
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1.5">
+                                    <span className="text-[9px] text-[#71717A] uppercase font-mono block">Front Desk / Concierge Phone:</span>
+                                    <p className="font-mono text-emerald-400 font-bold text-xs">
+                                      {currentGuideDay.stayHotel.frontDeskPhone || currentGuideDay.stayHotel.conciergeContact || "+91 294 243 3300"}
+                                    </p>
+                                    <a
+                                      href={`tel:${(currentGuideDay.stayHotel.frontDeskPhone || "+91 294 243 3300").replace(/\s+/g, "")}`}
+                                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#222] hover:bg-[#2A2A2A] text-xs font-mono text-[#D4D4D8] border border-[#333]"
+                                    >
+                                      <Phone className="w-3 h-3 text-emerald-400" />
+                                      <span>Call Front Desk</span>
+                                    </a>
+                                  </div>
                                 </div>
                               </div>
 
-                              {/* 3. Full Day Gastronomy & Food Menu ("Kya menu hai food ka") */}
+                              {/* 3. Full Day Gastronomy & Food Menu */}
                               <div className="p-3.5 rounded-xl bg-[#161616] border border-[#262626] space-y-2">
                                 <span className="text-[10px] font-mono uppercase text-[#C5A059] font-semibold block flex items-center gap-1.5">
                                   <Utensils className="w-3.5 h-3.5" />
-                                  🍽️ Day Gastronomy & Dining Menu Briefing (Kya menu hai food ka):
+                                  🍽️ Day Gastronomy & Dining Menu Briefing (Day {activeGuideDayNum}):
                                 </span>
                                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-xs">
-                                  <div className="p-2 rounded-lg bg-[#111111] border border-[#222]">
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
                                     <span className="text-[9px] font-mono uppercase text-[#C5A059] block">Breakfast</span>
                                     <p className="text-[#D4D4D8] text-[11px] leading-relaxed mt-0.5">{currentGuideDay.diningBriefing.breakfast}</p>
                                   </div>
-                                  <div className="p-2 rounded-lg bg-[#111111] border border-[#222]">
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
                                     <span className="text-[9px] font-mono uppercase text-[#C5A059] block">Royal Lunch</span>
                                     <span className="text-[9px] text-sky-300 font-mono block">{currentGuideDay.diningBriefing.lunchVenue}</span>
                                     <p className="text-[#D4D4D8] text-[11px] leading-relaxed mt-0.5">{currentGuideDay.diningBriefing.lunchMenu}</p>
                                   </div>
-                                  <div className="p-2 rounded-lg bg-[#111111] border border-[#222]">
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
                                     <span className="text-[9px] font-mono uppercase text-[#C5A059] block">Sunset High-Tea</span>
                                     <span className="text-[9px] text-amber-300 font-mono block">{currentGuideDay.diningBriefing.highTeaVenue}</span>
                                     <p className="text-[#D4D4D8] text-[11px] leading-relaxed mt-0.5">{currentGuideDay.diningBriefing.highTeaMenu}</p>
                                   </div>
-                                  <div className="p-2 rounded-lg bg-[#111111] border border-[#222]">
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222]">
                                     <span className="text-[9px] font-mono uppercase text-[#C5A059] block">Evening Banquet</span>
                                     <span className="text-[9px] text-rose-300 font-mono block">{currentGuideDay.diningBriefing.dinnerVenue}</span>
                                     <p className="text-[#D4D4D8] text-[11px] leading-relaxed mt-0.5">{currentGuideDay.diningBriefing.dinnerMenu}</p>
@@ -2395,21 +2586,69 @@ export default function VendorPortalPage() {
                                 </div>
                               </div>
 
-                              {/* 4. Bus / Vehicle Route & Drop-off Point ("Bus ka route aur kha drop karna hai") */}
-                              <div className="p-3.5 rounded-xl bg-[#161616] border border-[#262626] space-y-2">
-                                <span className="text-[10px] font-mono uppercase text-sky-400 font-semibold block flex items-center gap-1.5">
-                                  <Navigation className="w-3.5 h-3.5" />
-                                  🚗 Fleet Route & Drop-off Point (Bus ka route aur kha drop karna hai):
-                                </span>
-                                <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1">
-                                  <span className="text-[9px] font-mono uppercase text-[#71717A] block">Transit Route:</span>
-                                  <p className="font-serif text-[#FDFBF7] text-xs leading-relaxed">{currentGuideDay.transportCoordination.routeDescription}</p>
-                                  <div className="pt-1.5 border-t border-[#222] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[11px]">
-                                    <span>
-                                      <strong>Fleet Transit:</strong> Private Luxury AC Fleet • <strong>Chauffeur Coordination:</strong> Dedicated Fleet Chauffeur
+                              {/* 4. Assigned Chauffeur & Fleet Coordination (With Direct Contact) */}
+                              <div className="p-3.5 sm:p-4 rounded-xl bg-[#161616] border border-sky-950 space-y-3">
+                                <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 border-b border-[#242424] pb-2">
+                                  <span className="text-[11px] font-mono uppercase text-sky-400 font-semibold block flex items-center gap-1.5">
+                                    <Navigation className="w-3.5 h-3.5" />
+                                    🚗 Assigned Chauffeur & Fleet Coordination (Day {activeGuideDayNum})
+                                  </span>
+                                  <span className="text-[10px] font-mono text-sky-300 bg-sky-950 px-2 py-0.5 rounded border border-sky-800">
+                                    Duty Chauffeur Assigned
+                                  </span>
+                                </div>
+
+                                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1">
+                                    <span className="text-[9px] font-mono uppercase text-[#71717A] block">Chauffeur Details:</span>
+                                    <p className="font-serif text-[#FDFBF7] font-semibold text-sm">
+                                      {currentGuideDay.transportCoordination.chauffeurName || "Vikram Singh (Royal Chauffeur Fleet)"}
+                                    </p>
+                                    <p className="font-mono text-xs text-[#C5A059]">
+                                      Direct: {currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222"}
+                                    </p>
+                                    <div className="flex items-center gap-2 pt-1.5">
+                                      <a
+                                        href={`tel:${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222").replace(/\s+/g, "")}`}
+                                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#222] hover:bg-[#2A2A2A] text-[11px] font-mono text-[#D4D4D8] border border-[#333]"
+                                      >
+                                        <Phone className="w-3 h-3 text-sky-400" />
+                                        <span>Call Driver</span>
+                                      </a>
+                                      <a
+                                        href={`https://wa.me/${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                                          `Namaste ${currentGuideDay.transportCoordination.chauffeurName || "Vikram Singh"}. This is ${partner.name} (Tour Guide) re: Guest ${lead.clientName}. Day ${activeGuideDayNum} tour coordination:`
+                                        )}`}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-emerald-950 hover:bg-emerald-900 text-[11px] font-mono text-emerald-300 border border-emerald-800"
+                                      >
+                                        <MessageCircle className="w-3 h-3" />
+                                        <span>WhatsApp</span>
+                                      </a>
+                                    </div>
+                                  </div>
+
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1">
+                                    <span className="text-[9px] font-mono uppercase text-[#71717A] block">Vehicle Model & Plate:</span>
+                                    <p className="font-serif text-[#FDFBF7] font-semibold text-sm">
+                                      {currentGuideDay.transportCoordination.vehicleModel || "Land Rover Defender 110 4WD"}
+                                    </p>
+                                    <span className="text-[10px] font-mono text-sky-300 block">
+                                      Plate: {currentGuideDay.transportCoordination.licensePlate || "RJ 27 EA 0001"}
                                     </span>
-                                    <span className="text-emerald-400 font-medium">
-                                      <strong>Drop-off:</strong> {currentGuideDay.transportCoordination.dropoffPoint}
+                                    <span className="text-[10px] text-[#888] font-mono block">
+                                      Stationed at Hotel Lobby 15 mins before tour
+                                    </span>
+                                  </div>
+
+                                  <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1">
+                                    <span className="text-[9px] font-mono uppercase text-[#71717A] block">Transit Route & Drop Point:</span>
+                                    <p className="text-[11px] text-[#D4D4D8] leading-relaxed">
+                                      {currentGuideDay.transportCoordination.routeDescription}
+                                    </p>
+                                    <span className="text-[10px] font-mono text-emerald-400 block pt-1 border-t border-[#222]">
+                                      Drop-off: {currentGuideDay.transportCoordination.dropoffPoint}
                                     </span>
                                   </div>
                                 </div>
@@ -2426,6 +2665,43 @@ export default function VendorPortalPage() {
                               )}
                             </div>
                           )}
+
+                          {/* 6. All-Days Tour Master Roadmap */}
+                          <div className="p-3.5 rounded-xl bg-[#141414] border border-[#242424] space-y-2">
+                            <span className="text-[10px] font-mono uppercase text-[#A1A1AA] font-semibold block">
+                              📋 Full {lead.guideSchedule.length}-Day Tour Itinerary Roadmap (All Days At a Glance):
+                            </span>
+                            <div className="space-y-1.5">
+                              {lead.guideSchedule.map((g) => (
+                                <div
+                                  key={g.dayNumber}
+                                  onClick={() => setActiveGuideDayNumber((prev) => ({ ...prev, [lead.id]: g.dayNumber }))}
+                                  className={`p-2 rounded-lg border text-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 cursor-pointer transition-all ${
+                                    activeGuideDayNum === g.dayNumber
+                                      ? "bg-[#1E1E1E] border-amber-600/70 text-[#FDFBF7]"
+                                      : "bg-[#101010] border-[#222] text-[#888] hover:border-[#333] hover:text-[#CCC]"
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-2">
+                                    <span className="font-mono text-[10px] px-1.5 py-0.5 rounded bg-[#222] text-amber-300 font-bold">
+                                      Day {g.dayNumber}
+                                    </span>
+                                    <span className="font-mono text-[10px] text-[#A1A1AA]">{g.date}</span>
+                                    <span className="font-serif font-medium text-xs text-[#E4E4E7] truncate max-w-[240px] sm:max-w-[340px]">
+                                      {g.dayTitle}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-2 text-[10px] font-mono">
+                                    <span className="text-amber-300">Duty: {g.reportingTime} – {g.tourEndTime}</span>
+                                    <span>•</span>
+                                    <span className="text-emerald-400">{g.stayHotel.hotelName}</span>
+                                    <span>•</span>
+                                    <span className="text-sky-300">{g.transportCoordination.chauffeurName.split(" ")[0]} ({g.transportCoordination.licensePlate})</span>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
                         </div>
                       )}
                     </div>
