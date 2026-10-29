@@ -103,10 +103,10 @@ export default function Footer() {
                 <MapPin className="w-3.5 h-3.5 text-[#C5A880]" /> Dehradun, Uttarakhand, India
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#C5A880]" /> Contact: +91 8126357353
+                <Phone className="w-3.5 h-3.5 text-[#C5A880]" /> Contact: +91 98XXXXXXXX
               </p>
               <p className="flex items-center gap-2">
-                <Phone className="w-3.5 h-3.5 text-[#C5A880]" /> Contact: +91 9319843524
+                <Phone className="w-3.5 h-3.5 text-[#C5A880]" /> Contact: +91 98XXXXXXXX
               </p>
             </div>
           </div>
@@ -190,6 +190,16 @@ export default function Footer() {
               <li>
                 <Link href="/enquire" className="hover:text-white transition-colors text-[#DFCDAE]">
                   Bespoke Trip Inquiry
+                </Link>
+              </li>
+              <li>
+                <Link href="/client/login" className="hover:text-white transition-colors text-[#C5A880] flex items-center gap-1.5 font-medium">
+                  <Sparkles className="w-3 h-3" /> Member Portal Sign In
+                </Link>
+              </li>
+              <li>
+                <Link href="/client/register" className="hover:text-white transition-colors text-white/70">
+                  New Client Registration
                 </Link>
               </li>
             </ul>

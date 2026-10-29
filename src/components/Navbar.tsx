@@ -4,7 +4,7 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Search, ChevronDown, Menu, X, ArrowRight, Compass, ShieldCheck, Sparkles } from "lucide-react";
+import { Search, ChevronDown, Menu, X, ArrowRight, Compass, ShieldCheck, Sparkles, User } from "lucide-react";
 import SearchModal from "./SearchModal";
 import { DESTINATIONS } from "@/data/mockData";
 import SoulsventureLogo from "@/components/SoulsventureLogo";
@@ -214,7 +214,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="hidden lg:flex items-center space-x-4">
+          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4">
             {/* Search Popover Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -228,6 +228,34 @@ export default function Navbar() {
               <span>Search</span>
             </button>
 
+            {/* Client Portal Member Access: Sign In & Register */}
+            <div className={`flex items-center space-x-1.5 pl-2 border-l ${isScrolled ? "border-[#1A1A1A]/15" : "border-white/20"}`}>
+              <Link
+                href="/client/login"
+                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs uppercase tracking-[0.16em] font-medium transition-all ${
+                  isScrolled
+                    ? "text-[#1A1A1A]/85 hover:text-[#C5A880] hover:bg-[#F5F2EB]"
+                    : "text-white/90 hover:text-white hover:bg-white/10"
+                }`}
+                title="Client Portal Sign In"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>Sign In</span>
+              </Link>
+
+              <Link
+                href="/client/register"
+                className={`px-3 py-2 rounded-full text-xs uppercase tracking-[0.16em] font-medium border transition-all ${
+                  isScrolled
+                    ? "border-[#1A1A1A]/20 text-[#1A1A1A] hover:border-[#C5A880] hover:text-[#C5A880] bg-white/50"
+                    : "border-white/30 text-white hover:border-white bg-black/20"
+                }`}
+                title="Client Portal Registration"
+              >
+                Register
+              </Link>
+            </div>
+
             {/* Primary Enquire CTA */}
             <Link
               href="/enquire"
@@ -238,7 +266,17 @@ export default function Navbar() {
           </div>
 
           {/* Mobile Actions & Menu Toggle */}
-          <div className="flex items-center space-x-3 lg:hidden">
+          <div className="flex items-center space-x-2 lg:hidden">
+            <Link
+              href="/client/login"
+              className={`p-2 rounded-full flex items-center gap-1 transition-colors ${
+                isScrolled ? "text-[#1A1A1A] hover:bg-[#F5F2EB]" : "text-white hover:bg-white/10"
+              }`}
+              aria-label="Member Sign In"
+              title="Member Sign In"
+            >
+              <User className="w-5 h-5" />
+            </Link>
             <button
               onClick={() => setIsSearchOpen(true)}
               className={`p-2 rounded-full ${
@@ -320,6 +358,38 @@ export default function Navbar() {
           </div>
 
           <div className="border-t border-[#1A1A1A]/10 pt-4 space-y-3">
+            {/* Client Portal Quick Access on Mobile */}
+            <div className="p-3.5 bg-[#F5F2EB] border border-[#1A1A1A]/10 rounded-xl space-y-2">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-1.5">
+                  <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold">
+                    Private Member Portal
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-[#1A1A1A]/60">VIP Itineraries</span>
+              </div>
+              <p className="text-[11px] text-[#1A1A1A]/70 leading-relaxed font-light">
+                Sign in to review confirmed vouchers, flight passes, and bespoke itineraries.
+              </p>
+              <div className="grid grid-cols-2 gap-2 pt-0.5">
+                <Link
+                  href="/client/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-center py-2 px-3 bg-[#1A1A1A] text-white text-xs uppercase tracking-wider font-semibold rounded-lg hover:bg-[#C5A880] transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/client/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="text-center py-2 px-3 bg-white text-[#1A1A1A] border border-[#1A1A1A]/20 text-xs uppercase tracking-wider font-semibold rounded-lg hover:border-[#1A1A1A] transition-colors"
+                >
+                  Register
+                </Link>
+              </div>
+            </div>
+
             <Link
               href="/enquire"
               className="w-full block text-center py-3.5 bg-[#1A1A1A] text-white text-xs uppercase tracking-[0.2em] font-semibold hover:bg-[#C5A880] transition-colors"
@@ -328,7 +398,7 @@ export default function Navbar() {
             </Link>
             <div className="flex justify-between items-center text-[11px] text-[#1A1A1A]/60 pt-2">
               <span>Dehradun, Uttarakhand</span>
-              <span>+91 8126357353</span>
+              <span>concierge@soulsventure.com</span>
             </div>
           </div>
         </div>

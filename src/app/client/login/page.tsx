@@ -34,7 +34,7 @@ export default function ClientLoginPage() {
       window.location.href = "/client/portal";
     } else {
       setIsSubmitting(false);
-      setErrorMsg("Invalid credentials. Please verify your email/phone and password, or use a demo login below.");
+      setErrorMsg("Account not found or password incorrect. Please verify your details or use 1-Click Demo Access below.");
     }
   };
 
@@ -63,8 +63,17 @@ export default function ClientLoginPage() {
         </div>
 
         {errorMsg && (
-          <div className="p-3 bg-red-950/60 border border-red-800 text-red-300 rounded-xl text-xs">
-            {errorMsg}
+          <div className="p-3.5 bg-red-950/60 border border-red-800 text-red-300 rounded-xl text-xs space-y-2">
+            <p>{errorMsg}</p>
+            <div className="pt-1 border-t border-red-900/40 flex justify-between items-center">
+              <span>New traveler?</span>
+              <Link
+                href="/client/register"
+                className="text-[#C5A059] hover:underline font-semibold"
+              >
+                Register Here in 10s →
+              </Link>
+            </div>
           </div>
         )}
 
@@ -80,7 +89,7 @@ export default function ClientLoginPage() {
                 required
                 value={emailOrPhone}
                 onChange={(e) => setEmailOrPhone(e.target.value)}
-                placeholder="rajesh.sharma@luxuryinvest.in or +91 98201 44521"
+                placeholder="e.g. rajesh.sharma@luxuryinvest.in or +91 98XXXXXXXX"
                 className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
               />
             </div>
@@ -152,6 +161,26 @@ export default function ClientLoginPage() {
                 1-Click Demo
               </span>
             </button>
+
+            {INITIAL_CLIENT_ACCOUNTS[2] && (
+              <button
+                type="button"
+                onClick={() => handleDemoLogin(2)}
+                className="w-full p-2.5 rounded-xl bg-[#202020] hover:bg-[#282828] border border-[#333333] text-left transition-colors text-xs flex items-center justify-between cursor-pointer group"
+              >
+                <div>
+                  <span className="font-serif text-[#FDFBF7] group-hover:text-[#C5A059] block">
+                    Suraj Uniyal (Founder VIP Member)
+                  </span>
+                  <span className="text-[10px] text-[#71717A]">
+                    Royal Expeditions Master Account (Ref: SV-2026-VIP)
+                  </span>
+                </div>
+                <span className="text-[10px] font-mono text-[#C5A059] px-2 py-0.5 rounded bg-black/40">
+                  1-Click Demo
+                </span>
+              </button>
+            )}
           </div>
         </div>
 

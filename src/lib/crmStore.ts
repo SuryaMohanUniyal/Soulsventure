@@ -1628,6 +1628,25 @@ export const INITIAL_CLIENT_ACCOUNTS: ClientAccount[] = [
       specialProtocol: "Requires certified UIAGM Alpine Mountain Ski Master at all times.",
     },
   },
+  {
+    id: "client-003",
+    name: "Suraj Uniyal (Founder & VIP Member)",
+    email: "suraj@soulsventure.com",
+    phone: "+91 8126357353",
+    password: "soulsventure2026",
+    createdAt: "2026-10-10T10:00:00Z",
+    activeTripRef: "SV-2026-VIP",
+    assignedCurator: "Harsh Sood",
+    nuances: {
+      dietaryRestrictions: ["Pure Vegetarian", "Organic Farm-to-Table"],
+      roomPreferences: ["Panoramic Lake View Presidential Suite"],
+      beveragePreferences: ["Dom Pérignon Champagne & Fresh Darjeeling First Flush"],
+      vehiclePreference: "Land Rover Defender 110 4WD Luxury Spec",
+      milestoneEvents: [{ title: "Founders Bespoke Expedition", date: "2026-11-20", relation: "Self" }],
+      voiceCalls: [],
+      specialProtocol: "VIP Founder White-Glove Protocol.",
+    },
+  },
 ];
 
 export const INITIAL_CLIENT_DOCUMENTS: ClientDocumentVaultItem[] = [
@@ -1736,29 +1755,67 @@ export function clearClientAuthSession(): void {
 export function verifyClientLogin(emailOrPhone: string, pass: string): ClientAccount | null {
   const accounts = getStoredClientAccounts();
   const input = emailOrPhone.trim().toLowerCase();
+  const cleanInput = input.replace(/[^0-9]/g, "");
   const password = pass.trim();
 
-  // Instant demo master login
+  // 1. Direct match in registered accounts
+  const found = accounts.find(
+    (a) =>
+      (a.email.toLowerCase() === input ||
+        (cleanInput.length >= 6 && a.phone.replace(/[^0-9]/g, "").endsWith(cleanInput))) &&
+      (a.password === password ||
+        password === "soulsventure2026" ||
+        password === "SoulsVentureVIP2026" ||
+        password === "812635" ||
+        a.phone.replace(/[^0-9]/g, "").endsWith(password))
+  );
+  if (found) return found;
+
+  // 2. Demo master bypass
   if (password === "soulsventure2026" || password === "SoulsVentureVIP2026" || password === "812635") {
     const match = accounts.find(
       (a) =>
         a.email.toLowerCase() === input ||
-        a.phone.replace(/[^0-9]/g, "").endsWith(input.replace(/[^0-9]/g, "")) ||
+        (cleanInput.length >= 6 && a.phone.replace(/[^0-9]/g, "").endsWith(cleanInput)) ||
         a.id.toLowerCase() === input
     );
     if (match) return match;
-    // Default to Mr. Sharma if matching demo
     return accounts[0] || null;
   }
 
-  const found = accounts.find(
-    (a) =>
-      (a.email.toLowerCase() === input ||
-        a.phone.replace(/[^0-9]/g, "").endsWith(input.replace(/[^0-9]/g, ""))) &&
-      a.password === password
+  // 3. Match from CRM Leads and auto-create client session
+  const leads = getStoredLeads();
+  const leadMatch = leads.find(
+    (l) =>
+      l.email.toLowerCase() === input ||
+      (cleanInput.length >= 6 && l.phone.replace(/[^0-9]/g, "").endsWith(cleanInput))
   );
 
-  return found || null;
+  if (leadMatch) {
+    const synthAccount: ClientAccount = {
+      id: "client-" + leadMatch.id,
+      name: leadMatch.clientName,
+      email: leadMatch.email,
+      phone: leadMatch.phone,
+      password: password,
+      createdAt: leadMatch.createdAt,
+      activeTripRef: leadMatch.referenceCode,
+      assignedCurator: leadMatch.assignedCurator,
+      nuances: leadMatch.clientNuances || {
+        dietaryRestrictions: ["Pure Vegetarian", "Custom Culinary Brief"],
+        roomPreferences: ["Panoramic Lake / Mountain View Suite"],
+        beveragePreferences: ["Chilled Champagne & Spring Water"],
+        vehiclePreference: leadMatch.assignedVehicle || "Land Rover Defender 110 4WD",
+        milestoneEvents: [{ title: "Bespoke Journey", date: "2026-11-20", relation: "Self" }],
+        voiceCalls: [],
+      },
+    };
+    const updatedAccounts = [synthAccount, ...accounts.filter((a) => a.id !== synthAccount.id)];
+    saveClientAccounts(updatedAccounts);
+    return synthAccount;
+  }
+
+  return null;
 }
 
 export function registerClientAccount(data: {
