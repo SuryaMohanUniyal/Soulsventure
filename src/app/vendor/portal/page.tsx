@@ -993,11 +993,11 @@ export default function VendorPortalPage() {
                                 <span className="text-[9px] text-emerald-400 font-mono block">{guideDay?.stayHotel.roomType || "Kohinoor Suite #204"}</span>
                               </div>
                               <div>
-                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Chauffeur & Fleet</span>
+                                <span className="text-[10px] text-[#71717A] uppercase font-mono block">Excursion Transit</span>
                                 <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
-                                  {guideDay?.transportCoordination.chauffeurName || lead.assignedChauffeur || "Vikram Singh"}
+                                  Private Luxury AC Fleet
                                 </span>
-                                <span className="text-[9px] text-sky-400 font-mono block">{guideDay?.transportCoordination.licensePlate || "Defender 110 (RJ 27 EA 0001)"}</span>
+                                <span className="text-[9px] text-sky-400 font-mono block">Dedicated Lobby Dispatch</span>
                               </div>
                             </div>
                           </div>
@@ -1433,11 +1433,191 @@ export default function VendorPortalPage() {
                             )}
                           </div>
                         </div>
+                      ) : partner.role === "hotel" ? (
+                        <div className="space-y-4">
+                          {/* 1. Hotel Stay & Room Reservation Logistics */}
+                          {arr && (
+                            <div className="p-4 rounded-xl bg-[#161616] border border-[#292929] space-y-3">
+                              <div className="flex items-center justify-between border-b border-[#222] pb-2">
+                                <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-bold flex items-center gap-1.5">
+                                  <Hotel className="w-3.5 h-3.5" />
+                                  Hotel Stay, Suite Allocation & Check-In / Out Logistics ({selectedDate})
+                                </span>
+                                <span className="text-[10px] font-mono text-emerald-400 bg-emerald-950/60 px-2 py-0.5 rounded border border-emerald-800">
+                                  {arr.totalDays || lead.duration}
+                                </span>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-4 gap-3 text-xs">
+                                <div className="space-y-0.5">
+                                  <span className="text-[10px] text-[#71717A] uppercase font-mono block">Scheduled Check-In</span>
+                                  <p className="font-mono text-[#C5A059] font-bold text-sm">
+                                    {arr.arrivalDate} • {arr.checkInTime || "14:00 IST"}
+                                  </p>
+                                  <span className="text-[9px] text-[#888] font-mono">
+                                    {isArrivalDay ? "Guest Arrives Today" : "In-House Stay"}
+                                  </span>
+                                </div>
+
+                                <div className="space-y-0.5">
+                                  <span className="text-[10px] text-[#71717A] uppercase font-mono block">Scheduled Check-Out</span>
+                                  <p className="font-serif text-[#FDFBF7] font-medium leading-snug">
+                                    {arr.checkOutDate || "Nov 19, 2026"} • {arr.checkOutTime || "12:00 IST"}
+                                  </p>
+                                  <span className="text-[9px] text-rose-400/90 font-mono">
+                                    {isDepartureDay ? "Departure Handover Today" : "Confirmed Reservation"}
+                                  </span>
+                                </div>
+
+                                <div className="space-y-0.5">
+                                  <span className="text-[10px] text-[#71717A] uppercase font-mono block">Reserved Suite & Wing</span>
+                                  <p className="font-serif text-[#FDFBF7] font-medium leading-snug">
+                                    {lead.clientNuances?.roomPreferences?.[0] || "Kohinoor Lake View Suite #204"}
+                                  </p>
+                                  <span className="text-[9px] text-emerald-400 font-mono">Palace Lake View Wing</span>
+                                </div>
+
+                                <div className="space-y-0.5">
+                                  <span className="text-[10px] text-[#71717A] uppercase font-mono block">Stay Duration</span>
+                                  <p className="font-serif text-[#FDFBF7] font-medium leading-snug">
+                                    {arr.totalDays || lead.duration}
+                                  </p>
+                                  <span className="text-[9px] text-sky-400 font-mono">Full Board Gastronomy</span>
+                                </div>
+                              </div>
+
+                              {/* Arrival Welcome Protocol */}
+                              <div className="pt-2.5 border-t border-[#222] space-y-1 text-xs">
+                                <span className="text-[10px] font-mono uppercase text-[#C5A059] font-semibold block flex items-center gap-1.5">
+                                  <Sparkles className="w-3 h-3 text-[#C5A059]" />
+                                  VIP Arrival Welcome Protocol at Hotel Porch / Jetty:
+                                </span>
+                                <p className="text-[#A1A1AA] text-[11px] leading-relaxed">
+                                  {arr.transferProtocol || lead.clientNuances?.specialProtocol || "Private Shikara boat across Lake Pichola with rose petal shower and traditional nagada drums at Badi Pal Jetty. In-suite registration upon arrival with luggage delivered directly to suite."}
+                                </p>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 2. VIP Room Preferences & Guest Housekeeping Nuances */}
+                          {lead.clientNuances && (
+                            <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-[#2A2A2A] space-y-3.5">
+                              <div className="flex items-center justify-between border-b border-[#242424] pb-2">
+                                <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-bold flex items-center gap-1.5">
+                                  <Hotel className="w-3.5 h-3.5 text-[#C5A059]" />
+                                  VIP Room Nuances & Housekeeping Preferences
+                                </span>
+                                <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+                                  5-Star Hospitality Directives
+                                </span>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                {lead.clientNuances.roomPreferences && (
+                                  <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1.5">
+                                    <span className="text-[10px] font-mono uppercase text-[#C5A059] font-semibold block">
+                                      Suite Preferences & Setup:
+                                    </span>
+                                    <ul className="space-y-1 text-[#A1A1AA] text-[11px]">
+                                      {lead.clientNuances.roomPreferences.map((pref, i) => (
+                                        <li key={i} className="flex items-start gap-1.5">
+                                          <Check className="w-3 h-3 text-emerald-400 flex-shrink-0 mt-0.5" />
+                                          <span>{pref}</span>
+                                        </li>
+                                      ))}
+                                    </ul>
+                                  </div>
+                                )}
+
+                                <div className="space-y-3">
+                                  {lead.clientNuances.beveragePreferences && (
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-sky-400 font-semibold block">
+                                        In-Suite Beverage & Mini-Bar Setup:
+                                      </span>
+                                      <p className="text-[#A1A1AA] text-[11px] leading-relaxed">
+                                        {lead.clientNuances.beveragePreferences.join(" • ")}
+                                      </p>
+                                    </div>
+                                  )}
+
+                                  {lead.clientNuances.milestoneEvents && lead.clientNuances.milestoneEvents.length > 0 && (
+                                    <div className="p-3 rounded-lg bg-[#111111] border border-amber-900/40 space-y-1">
+                                      <span className="text-[10px] font-mono uppercase text-amber-300 font-semibold block flex items-center gap-1">
+                                        <Sparkles className="w-3 h-3 text-amber-400" />
+                                        VIP Milestone Celebration:
+                                      </span>
+                                      <p className="text-[#FDFBF7] text-xs font-serif font-medium">
+                                        {lead.clientNuances.milestoneEvents[0].title} ({lead.clientNuances.milestoneEvents[0].relation})
+                                      </p>
+                                      <span className="text-[10px] text-[#888] font-mono block">
+                                        Date: {lead.clientNuances.milestoneEvents[0].date} — Complimentary celebration cake / champagne to be arranged.
+                                      </span>
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          )}
+
+                          {/* 3. Full Gourmet Gastronomy Plan of the Selected Day */}
+                          {menuDay && (
+                            <div className="p-4 sm:p-5 rounded-xl bg-[#181818] border border-[#2A2A2A] space-y-3">
+                              <div className="flex items-center justify-between">
+                                <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-bold flex items-center gap-1.5">
+                                  <Utensils className="w-3.5 h-3.5" />
+                                  Gourmet Gastronomy Plan for this Date ({selectedDate})
+                                </span>
+                                <span className="text-[10px] font-mono text-emerald-300 bg-emerald-950/80 px-2 py-0.5 rounded border border-emerald-800">
+                                  Dietary Directives Verified
+                                </span>
+                              </div>
+
+                              <div className="grid grid-cols-1 md:grid-cols-4 gap-3 text-xs">
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
+                                    <Coffee className="w-3 h-3" /> Breakfast / Morning
+                                  </span>
+                                  <p className="text-[#FDFBF7] text-xs leading-relaxed">{menuDay.breakfast}</p>
+                                </div>
+
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
+                                    <Utensils className="w-3 h-3" /> Royal Lunch
+                                  </span>
+                                  <p className="text-[#FDFBF7] text-xs leading-relaxed">{menuDay.lunch}</p>
+                                </div>
+
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
+                                    <Coffee className="w-3 h-3" /> Sunset High-Tea
+                                  </span>
+                                  <p className="text-[#FDFBF7] text-xs leading-relaxed">{menuDay.highTea || "Royal Tea Service"}</p>
+                                </div>
+
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-[#C5A059] flex items-center gap-1 font-semibold">
+                                    <Wine className="w-3 h-3" /> Evening Banquet
+                                  </span>
+                                  <p className="text-[#FDFBF7] text-xs leading-relaxed">{menuDay.dinner}</p>
+                                  {menuDay.winePairing && (
+                                    <p className="text-[10px] text-amber-300 font-mono mt-1 pt-1 border-t border-[#222]">
+                                      Pairing: {menuDay.winePairing}
+                                    </p>
+                                  )}
+                                </div>
+                              </div>
+
+                              <div className="p-2.5 rounded-lg bg-[#121212] border border-amber-900/40 text-xs text-amber-300 font-mono">
+                                <strong>Strict Dietary Directives:</strong> {menuDay.dietaryNotes || lead.clientNuances?.dietaryRestrictions?.join(" • ") || "Pure Vegetarian"}
+                              </div>
+                            </div>
+                          )}
+                        </div>
                       ) : (
                         <div className="space-y-4">
-                          {/* 1. Core Logistics Box: Reporting, Start/End, Pickup & Drop Points */}
-{/* 1. Core Logistics Box: Reporting, Start/End, Pickup & Drop Points */}
-                      {arr && (
+                          {/* 1. Driver Core Logistics Box: Reporting, Start/End, Pickup & Drop Points */}
+                          {arr && (
                         <div className="p-4 rounded-xl bg-[#161616] border border-[#292929] space-y-3">
                           <div className="flex items-center justify-between border-b border-[#222] pb-2">
                             <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-bold flex items-center gap-1.5">
@@ -1615,7 +1795,15 @@ export default function VendorPortalPage() {
                         <div className="flex-1">
                           <input
                             type="text"
-                            placeholder="Add partner note (e.g. Defender prepped with cold towels, reporting at 13:15 IST)..."
+                            placeholder={
+                            partner.role === "hotel"
+                              ? isCampPartner
+                                ? "Add camp note (e.g. Tent #03 inspected, naturalist briefed, high-tea ready)..."
+                                : "Add hotel note (e.g. Suite #204 inspected, champagne chilled, welcome jetty ready)..."
+                              : partner.role === "guide"
+                              ? "Add tour guide note (e.g. ASI permits collected, lobby meeting at 09:15 IST)..."
+                              : "Add chauffeur note (e.g. Defender prepped with cold towels, reporting at 13:15 IST)..."
+                          }
                             value={currentNotes}
                             onChange={(e) =>
                               setNotesDrafts((prev) => ({ ...prev, [lead.id]: e.target.value }))
@@ -1869,9 +2057,9 @@ export default function VendorPortalPage() {
                             <span className="text-[9px] text-emerald-400 font-mono block">{currentGuideDay?.stayHotel.roomType || "Kohinoor Suite #204"}</span>
                           </div>
                           <div>
-                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Chauffeur & Fleet</span>
-                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">{currentGuideDay?.transportCoordination.chauffeurName || lead.assignedChauffeur || "Vikram Singh"}</span>
-                            <span className="text-[9px] text-sky-400 font-mono block">{currentGuideDay?.transportCoordination.licensePlate || "Defender 110 (RJ 27 EA 0001)"}</span>
+                            <span className="text-[10px] text-[#71717A] uppercase font-mono block">Excursion Transit</span>
+                            <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">Private Luxury AC Fleet</span>
+                            <span className="text-[9px] text-sky-400 font-mono block">Dedicated Lobby Dispatch</span>
                           </div>
                         </div>
                       </div>
@@ -2041,7 +2229,7 @@ export default function VendorPortalPage() {
                                   <p className="font-serif text-[#FDFBF7] text-xs leading-relaxed">{currentGuideDay.transportCoordination.routeDescription}</p>
                                   <div className="pt-1.5 border-t border-[#222] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-1 text-[11px]">
                                     <span>
-                                      <strong>Vehicle:</strong> {currentGuideDay.transportCoordination.vehicleModel} ({currentGuideDay.transportCoordination.licensePlate}) • <strong>Chauffeur:</strong> {currentGuideDay.transportCoordination.chauffeurName}
+                                      <strong>Fleet Transit:</strong> Private Luxury AC Fleet • <strong>Chauffeur Coordination:</strong> Dedicated Fleet Chauffeur
                                     </span>
                                     <span className="text-emerald-400 font-medium">
                                       <strong>Drop-off:</strong> {currentGuideDay.transportCoordination.dropoffPoint}
@@ -2306,10 +2494,121 @@ export default function VendorPortalPage() {
                         </div>
                       )}
                     </div>
+                  ) : partner.role === "hotel" ? (
+                    <div className="space-y-4 my-3">
+                      {/* Hotel Key Logistics Ribbon */}
+                      {arr && (
+                        <div className="p-4 rounded-xl bg-[#111111] border border-[#262626] space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <span className="text-[10px] font-mono uppercase text-[#C5A059] font-bold flex items-center gap-1.5">
+                              <Hotel className="w-3.5 h-3.5" />
+                              Hotel Reservation Logistics: Stay Duration, Check-In / Out & Suite Tier
+                            </span>
+                            <span className="text-[10px] font-mono text-[#A1A1AA]">
+                              {arr.totalDays || lead.duration}
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-xs">
+                            <div>
+                              <span className="text-[10px] text-[#71717A] uppercase font-mono block">Scheduled Check-In</span>
+                              <span className="font-mono text-[#C5A059] font-bold text-sm block">{arr.arrivalDate} • {arr.checkInTime || "14:00 IST"}</span>
+                              <span className="text-[9px] text-[#888] font-mono block">Welcome Ceremony Ready</span>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-[#71717A] uppercase font-mono block">Scheduled Check-Out</span>
+                              <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">{arr.checkOutDate || "Nov 19, 2026"} • {arr.checkOutTime || "12:00 IST"}</span>
+                              <span className="text-[9px] text-emerald-400 font-mono block">Departure Handover</span>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-[#71717A] uppercase font-mono block">Allocated Luxury Suite</span>
+                              <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">{lead.clientNuances?.roomPreferences?.[0] || "Kohinoor Lake View Suite #204"}</span>
+                              <span className="text-[9px] text-sky-400 font-mono block">Lake Pichola Sanctuary</span>
+                            </div>
+                            <div>
+                              <span className="text-[10px] text-[#71717A] uppercase font-mono block">Total Stay Duration</span>
+                              <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">{arr.totalDays || lead.duration}</span>
+                              <span className="text-[9px] text-amber-300 font-mono block">Confirmed Reservation</span>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* VIP Room Preferences & Nuances */}
+                      {lead.clientNuances && (
+                        <div className="p-4 sm:p-5 rounded-xl bg-[#161616] border border-[#2B2B2B] space-y-3">
+                          <div className="flex items-center justify-between border-b border-[#242424] pb-2">
+                            <span className="text-[11px] font-mono uppercase tracking-wider text-[#C5A059] font-bold flex items-center gap-1.5">
+                              <Sparkles className="w-3.5 h-3.5 text-[#C5A059]" />
+                              VIP Guest Suite Preferences & Welcome Directives
+                            </span>
+                            <span className="text-[10px] font-mono text-emerald-400">
+                              5-Star Service Standard
+                            </span>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                            {lead.clientNuances.roomPreferences && (
+                              <div className="p-3 rounded-lg bg-[#111111] border border-[#222] space-y-1.5">
+                                <span className="text-[10px] font-mono uppercase text-[#C5A059] font-semibold block">
+                                  Suite & Housekeeping Requirements:
+                                </span>
+                                <ul className="space-y-1 text-[#A1A1AA] text-[11px]">
+                                  {lead.clientNuances.roomPreferences.map((pref, i) => (
+                                    <li key={i} className="flex items-start gap-1.5">
+                                      <Check className="w-3 h-3 text-emerald-400 flex-shrink-0 mt-0.5" />
+                                      <span>{pref}</span>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+
+                            <div className="space-y-2.5">
+                              {lead.clientNuances.beveragePreferences && (
+                                <div className="p-3 rounded-lg bg-[#111111] border border-[#222] space-y-1">
+                                  <span className="text-[10px] font-mono uppercase text-sky-400 font-semibold block">
+                                    In-Suite Beverage & Mini-Bar Setup:
+                                  </span>
+                                  <p className="text-[#A1A1AA] text-[11px] leading-relaxed">
+                                    {lead.clientNuances.beveragePreferences.join(" • ")}
+                                  </p>
+                                </div>
+                              )}
+
+                              {lead.clientNuances.milestoneEvents && lead.clientNuances.milestoneEvents.length > 0 && (
+                                <div className="p-3 rounded-lg bg-[#111111] border border-amber-900/40 space-y-0.5">
+                                  <span className="text-[10px] font-mono uppercase text-amber-300 font-semibold block flex items-center gap-1">
+                                    <Sparkles className="w-3 h-3 text-amber-400" />
+                                    VIP Milestone Celebration:
+                                  </span>
+                                  <p className="text-[#FDFBF7] text-xs font-serif font-medium">
+                                    {lead.clientNuances.milestoneEvents[0].title} ({lead.clientNuances.milestoneEvents[0].relation})
+                                  </p>
+                                  <span className="text-[10px] text-[#888] font-mono block">
+                                    Date: {lead.clientNuances.milestoneEvents[0].date}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          {/* Arrival Welcome Protocol */}
+                          <div className="p-3 rounded-lg bg-[#111111] border border-[#222] space-y-1 text-xs">
+                            <span className="text-[10px] font-mono uppercase text-[#C5A059] font-semibold block">
+                              VIP Arrival Welcome Protocol at Hotel Porch / Jetty:
+                            </span>
+                            <p className="text-[#A1A1AA] text-[11px] leading-relaxed">
+                              {arr?.transferProtocol || lead.clientNuances?.specialProtocol || "Private Shikara boat across Lake Pichola with rose petal shower and traditional nagada drums at Badi Pal Jetty. In-suite registration upon arrival with luggage delivered directly to suite."}
+                            </p>
+                          </div>
+                        </div>
+                      )}
+                    </div>
                   ) : (
                     <>
-                      {/* Key Logistics Ribbon: Duration, Reporting, Pickup & Final Drop */}
-                  {arr && (
+                      {/* Driver Key Logistics Ribbon: Duration, Reporting, Pickup & Final Drop */}
+                      {arr && (
                     <div className="my-4 p-4 rounded-xl bg-[#111111] border border-[#262626] space-y-2.5">
                       <div className="flex items-center justify-between">
                         <span className="text-[10px] font-mono uppercase text-[#C5A059] font-bold flex items-center gap-1.5">
@@ -2541,7 +2840,15 @@ export default function VendorPortalPage() {
                     <div className="flex-1">
                       <input
                         type="text"
-                        placeholder="Internal partner notes (e.g. Defender prepped with cold towels, reporting at 13:15 IST at Gate 2)..."
+                        placeholder={
+                        partner.role === "hotel"
+                          ? isCampPartner
+                            ? "Internal camp notes (e.g. Tent #03 inspected, plunge pool heated, bush dinner setup)..."
+                            : "Internal hotel notes (e.g. Suite #204 inspected, champagne chilled at 14:00 IST)..."
+                          : partner.role === "guide"
+                          ? "Internal guide notes (e.g. ASI passes validated, heritage briefing prepared)..."
+                          : "Internal chauffeur notes (e.g. Defender prepped with cold towels, reporting at 13:15 IST at Gate 2)..."
+                      }
                         value={currentNotes}
                         onChange={(e) =>
                           setNotesDrafts((prev) => ({ ...prev, [lead.id]: e.target.value }))
