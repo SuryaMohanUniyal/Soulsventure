@@ -2,9 +2,22 @@
 
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Search, ChevronDown, Menu, X, ArrowRight, Compass, ShieldCheck, Sparkles, User } from "lucide-react";
+import {
+  Search,
+  ChevronDown,
+  Menu,
+  X,
+  ArrowRight,
+  Sparkles,
+  User,
+  Calendar,
+  Hotel,
+  Plane,
+  Car,
+  Utensils,
+  FileText,
+} from "lucide-react";
 import SearchModal from "./SearchModal";
 import { DESTINATIONS } from "@/data/mockData";
 import SoulsventureLogo from "@/components/SoulsventureLogo";
@@ -13,7 +26,7 @@ export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [menuDrawerOpen, setMenuDrawerOpen] = useState(false);
   const pathname = usePathname();
 
   // Detect scroll position for dynamic glassmorphism
@@ -31,7 +44,7 @@ export default function Navbar() {
 
   // Close menus on route change
   useEffect(() => {
-    setMobileMenuOpen(false);
+    setMenuDrawerOpen(false);
     setActiveDropdown(null);
   }, [pathname]);
 
@@ -69,7 +82,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center space-x-8 text-xs uppercase tracking-[0.18em] font-medium">
+          <nav className="hidden lg:flex items-center space-x-7 xl:space-x-8 text-xs uppercase tracking-[0.18em] font-medium">
             {/* Destinations Mega Menu */}
             <div
               className="relative"
@@ -218,7 +231,7 @@ export default function Navbar() {
             {/* Search Popover Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className={`flex items-center gap-2 text-xs uppercase tracking-wider px-3 py-2 rounded-full border transition-all ${
+              className={`flex items-center gap-2 text-xs uppercase tracking-wider px-3.5 py-2 rounded-full border transition-all cursor-pointer ${
                 isScrolled
                   ? "border-[#1A1A1A]/15 text-[#1A1A1A]/80 hover:border-[#1A1A1A] hover:text-[#1A1A1A] bg-white/50"
                   : "border-white/25 text-white/90 hover:border-white hover:text-white bg-black/20"
@@ -228,34 +241,6 @@ export default function Navbar() {
               <span>Search</span>
             </button>
 
-            {/* Client Portal Member Access: Sign In & Register */}
-            <div className={`flex items-center space-x-1.5 pl-2 border-l ${isScrolled ? "border-[#1A1A1A]/15" : "border-white/20"}`}>
-              <Link
-                href="/client/login"
-                className={`flex items-center gap-1.5 px-3 py-2 rounded-full text-xs uppercase tracking-[0.16em] font-medium transition-all ${
-                  isScrolled
-                    ? "text-[#1A1A1A]/85 hover:text-[#C5A880] hover:bg-[#F5F2EB]"
-                    : "text-white/90 hover:text-white hover:bg-white/10"
-                }`}
-                title="Client Portal Sign In"
-              >
-                <User className="w-3.5 h-3.5" />
-                <span>Sign In</span>
-              </Link>
-
-              <Link
-                href="/client/register"
-                className={`px-3 py-2 rounded-full text-xs uppercase tracking-[0.16em] font-medium border transition-all ${
-                  isScrolled
-                    ? "border-[#1A1A1A]/20 text-[#1A1A1A] hover:border-[#C5A880] hover:text-[#C5A880] bg-white/50"
-                    : "border-white/30 text-white hover:border-white bg-black/20"
-                }`}
-                title="Client Portal Registration"
-              >
-                Register
-              </Link>
-            </div>
-
             {/* Primary Enquire CTA */}
             <Link
               href="/enquire"
@@ -263,20 +248,27 @@ export default function Navbar() {
             >
               Enquire Now
             </Link>
+
+            {/* Corner Hamburger Menu Button (Opens Member Portal Drawer & Full Navigation) */}
+            <button
+              onClick={() => setMenuDrawerOpen(true)}
+              className={`flex items-center gap-2 px-3.5 py-2 rounded-full border transition-all cursor-pointer ${
+                isScrolled
+                  ? "border-[#1A1A1A]/20 text-[#1A1A1A] hover:border-[#1A1A1A] hover:bg-[#F5F2EB]"
+                  : "border-white/30 text-white hover:border-white hover:bg-white/10"
+              }`}
+              title="Open Member Portal & Menu"
+              aria-label="Open Member Portal and Menu"
+            >
+              <Menu className="w-4 h-4" />
+              <span className="text-xs uppercase tracking-[0.16em] font-medium hidden xl:inline">
+                Menu
+              </span>
+            </button>
           </div>
 
           {/* Mobile Actions & Menu Toggle */}
           <div className="flex items-center space-x-2 lg:hidden">
-            <Link
-              href="/client/login"
-              className={`p-2 rounded-full flex items-center gap-1 transition-colors ${
-                isScrolled ? "text-[#1A1A1A] hover:bg-[#F5F2EB]" : "text-white hover:bg-white/10"
-              }`}
-              aria-label="Member Sign In"
-              title="Member Sign In"
-            >
-              <User className="w-5 h-5" />
-            </Link>
             <button
               onClick={() => setIsSearchOpen(true)}
               className={`p-2 rounded-full ${
@@ -286,12 +278,13 @@ export default function Navbar() {
             >
               <Search className="w-5 h-5" />
             </button>
+
             <button
-              onClick={() => setMobileMenuOpen(true)}
+              onClick={() => setMenuDrawerOpen(true)}
               className={`p-2 rounded-full ${
                 isScrolled ? "text-[#1A1A1A] hover:bg-[#F5F2EB]" : "text-white hover:bg-white/10"
               }`}
-              aria-label="Open mobile menu"
+              aria-label="Open menu and member portal"
             >
               <Menu className="w-6 h-6" />
             </button>
@@ -299,106 +292,215 @@ export default function Navbar() {
         </div>
       </header>
 
-      {/* Full-Screen Mobile Drawer */}
-      {mobileMenuOpen && (
-        <div className="fixed inset-0 z-50 bg-[#FDFBF7] text-[#1A1A1A] flex flex-col justify-between p-6 animate-in slide-in-from-right duration-300">
-          <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-4">
-            <Link href="/" onClick={() => setMobileMenuOpen(false)} aria-label="Soulsventure Home">
-              <SoulsventureLogo isScrolled={true} size="sm" />
-            </Link>
-            <button
-              onClick={() => setMobileMenuOpen(false)}
-              className="p-2 border border-[#1A1A1A]/20 hover:border-[#1A1A1A]"
-              aria-label="Close menu"
-            >
-              <X className="w-6 h-6" />
-            </button>
-          </div>
+      {/* Slide-over Luxury Drawer (Desktop & Mobile) */}
+      {menuDrawerOpen && (
+        <div className="fixed inset-0 z-50 flex justify-end animate-in fade-in duration-200">
+          {/* Dark Backdrop */}
+          <div
+            onClick={() => setMenuDrawerOpen(false)}
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity"
+          />
 
-          <div className="flex-1 py-8 overflow-y-auto space-y-6">
-            <div className="space-y-4">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold block">
-                Destinations
-              </span>
-              <div className="grid grid-cols-2 gap-2 text-sm font-serif">
-                {DESTINATIONS.map((d) => (
-                  <Link
-                    key={d.id}
-                    href={`/destinations/${d.slug}`}
-                    className="p-2 bg-[#F5F2EB] hover:bg-[#EAE5D9] transition-colors"
-                  >
-                    {d.name}
-                  </Link>
-                ))}
-              </div>
+          {/* Drawer Panel */}
+          <div className="relative w-full max-w-md sm:max-w-lg bg-[#FDFBF7] text-[#1A1A1A] h-full shadow-2xl flex flex-col justify-between overflow-hidden animate-in slide-in-from-right duration-300 z-10 border-l border-[#1A1A1A]/10">
+            {/* Drawer Top Header */}
+            <div className="flex items-center justify-between p-5 sm:p-6 border-b border-[#1A1A1A]/10 bg-white/60 backdrop-blur-sm">
+              <Link href="/" onClick={() => setMenuDrawerOpen(false)} aria-label="Soulsventure Home">
+                <SoulsventureLogo isScrolled={true} size="sm" />
+              </Link>
+              <button
+                onClick={() => setMenuDrawerOpen(false)}
+                className="p-2 rounded-full border border-[#1A1A1A]/15 hover:border-[#1A1A1A] hover:bg-[#F5F2EB] transition-colors cursor-pointer"
+                aria-label="Close menu"
+              >
+                <X className="w-5 h-5 text-[#1A1A1A]" />
+              </button>
             </div>
 
-            <div className="space-y-3 pt-4 border-t border-[#1A1A1A]/10">
-              <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold block">
-                Explore More
-              </span>
-              <ul className="space-y-3 text-lg font-serif">
-                <li>
-                  <Link href="/itineraries" className="hover:text-[#C5A880] transition-colors block">
-                    Curated Itineraries
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/about" className="hover:text-[#C5A880] transition-colors block">
-                    About Soulsventure & Specialists
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/journal" className="hover:text-[#C5A880] transition-colors block">
-                    The Journal & Dispatches
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-
-          <div className="border-t border-[#1A1A1A]/10 pt-4 space-y-3">
-            {/* Client Portal Quick Access on Mobile */}
-            <div className="p-3.5 bg-[#F5F2EB] border border-[#1A1A1A]/10 rounded-xl space-y-2">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <Sparkles className="w-3.5 h-3.5 text-[#C5A880]" />
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold">
-                    Private Member Portal
+            {/* Scrollable Drawer Body */}
+            <div className="flex-1 overflow-y-auto p-5 sm:p-6 space-y-6 scrollbar-thin">
+              {/* Private Member Portal Hero Box */}
+              <div className="p-5 bg-gradient-to-br from-[#181818] via-[#1E1E1E] to-[#141414] rounded-2xl border border-[#333333] text-[#FDFBF7] space-y-4 shadow-xl">
+                <div className="flex items-center justify-between">
+                  <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono uppercase tracking-wider bg-[#C5A880]/20 text-[#DFCDAE] border border-[#C5A880]/40">
+                    <Sparkles className="w-3 h-3 text-[#C5A880]" />
+                    Private Member Suite
+                  </span>
+                  <span className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    24/7 Concierge
                   </span>
                 </div>
-                <span className="text-[10px] font-mono text-[#1A1A1A]/60">VIP Itineraries</span>
+
+                <div>
+                  <h3 className="font-serif text-lg sm:text-xl text-white font-medium">
+                    Client Portal Access
+                  </h3>
+                  <p className="text-xs text-[#A1A1AA] mt-1 leading-relaxed">
+                    Apne confirmed itineraries, luxury palace vouchers, assigned vehicle aur direct concierge ko access karne ke liye Sign In ya Register karein:
+                  </p>
+                </div>
+
+                {/* Action Buttons: Log In & Register */}
+                <div className="grid grid-cols-2 gap-2.5 pt-1">
+                  <Link
+                    href="/client/login"
+                    onClick={() => setMenuDrawerOpen(false)}
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-[#C5A880] hover:bg-[#9E7E50] text-white text-xs uppercase tracking-wider font-semibold transition-all shadow-md text-center cursor-pointer"
+                  >
+                    <User className="w-3.5 h-3.5" />
+                    <span>Log In</span>
+                  </Link>
+
+                  <Link
+                    href="/client/register"
+                    onClick={() => setMenuDrawerOpen(false)}
+                    className="flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-xl bg-white/10 hover:bg-white/20 border border-white/20 text-white text-xs uppercase tracking-wider font-semibold transition-all text-center cursor-pointer"
+                  >
+                    <span>Register</span>
+                  </Link>
+                </div>
+
+                {/* What Unlocks in Your Portal */}
+                <div className="pt-3 border-t border-white/10 space-y-2.5">
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold block">
+                    Portal Me Login Karne Se Kya Milega:
+                  </span>
+
+                  <div className="space-y-2 text-xs">
+                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
+                      <Calendar className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white font-medium block">Bespoke Day-by-Day Itineraries</strong>
+                        <span className="text-[11px] text-[#A1A1AA]">
+                          Pura day-wise sightseeing schedule, private escort guides & mountain briefings.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
+                      <Hotel className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white font-medium block">5-Star Palace Vouchers & Confirmations</strong>
+                        <span className="text-[11px] text-[#A1A1AA]">
+                          The Oberoi Udaivilas, Taj Lake Palace & SUJÁN Jawai ke official vouchers bina WhatsApp PDF jhanjhat ke.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
+                      <Plane className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white font-medium block">Private Charter & Flight Passes</strong>
+                        <span className="text-[11px] text-[#A1A1AA]">
+                          Tarmac clearances, Pilatus PC-12 passes & mountain chopper flight documents.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
+                      <Car className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white font-medium block">Dedicated Fleet & Royal Chauffeur</strong>
+                        <span className="text-[11px] text-[#A1A1AA]">
+                          Assigned Mercedes-Maybach / Land Rover Defender 4WD details aur chauffeur line.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
+                      <Utensils className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white font-medium block">Pre-Curated Menus & Dietary Nuances</strong>
+                        <span className="text-[11px] text-[#A1A1AA]">
+                          Pure Veg, Jain & bespoke food preferences jo direct executive chefs ko brief hoti hain.
+                        </span>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start gap-2.5 text-[#D4D4D8]">
+                      <FileText className="w-4 h-4 text-[#C5A880] flex-shrink-0 mt-0.5" />
+                      <div>
+                        <strong className="text-white font-medium block">Digital Document Vault & Tax Invoices</strong>
+                        <span className="text-[11px] text-[#A1A1AA]">
+                          Official 5% tourism GST pro-forma invoices & military inner-line permits ek encrypted vault me.
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <p className="text-[11px] text-[#1A1A1A]/70 leading-relaxed font-light">
-                Sign in to review confirmed vouchers, flight passes, and bespoke itineraries.
-              </p>
-              <div className="grid grid-cols-2 gap-2 pt-0.5">
-                <Link
-                  href="/client/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 px-3 bg-[#1A1A1A] text-white text-xs uppercase tracking-wider font-semibold rounded-lg hover:bg-[#C5A880] transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/client/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="text-center py-2 px-3 bg-white text-[#1A1A1A] border border-[#1A1A1A]/20 text-xs uppercase tracking-wider font-semibold rounded-lg hover:border-[#1A1A1A] transition-colors"
-                >
-                  Register
-                </Link>
+
+              {/* Destinations Explorer Links */}
+              <div className="space-y-3 pt-2">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold block">
+                  Explore Destinations
+                </span>
+                <div className="grid grid-cols-2 gap-2 text-sm font-serif">
+                  {DESTINATIONS.map((d) => (
+                    <Link
+                      key={d.id}
+                      href={`/destinations/${d.slug}`}
+                      onClick={() => setMenuDrawerOpen(false)}
+                      className="p-2.5 bg-[#F5F2EB] hover:bg-[#EAE5D9] transition-colors rounded-lg flex items-center justify-between text-xs font-serif text-[#1A1A1A]"
+                    >
+                      <span>{d.name}</span>
+                      <ArrowRight className="w-3 h-3 text-[#C5A880]" />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Quick Navigation Links */}
+              <div className="space-y-2 pt-2 border-t border-[#1A1A1A]/10">
+                <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold block">
+                  Quick Navigation
+                </span>
+                <ul className="space-y-2 text-sm font-serif">
+                  <li>
+                    <Link
+                      href="/itineraries"
+                      onClick={() => setMenuDrawerOpen(false)}
+                      className="hover:text-[#C5A880] transition-colors block py-1"
+                    >
+                      Curated Itineraries & Trip Types
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/about"
+                      onClick={() => setMenuDrawerOpen(false)}
+                      className="hover:text-[#C5A880] transition-colors block py-1"
+                    >
+                      About Soulsventure & Specialists
+                    </Link>
+                  </li>
+                  <li>
+                    <Link
+                      href="/journal"
+                      onClick={() => setMenuDrawerOpen(false)}
+                      className="hover:text-[#C5A880] transition-colors block py-1"
+                    >
+                      The Journal & Dispatches
+                    </Link>
+                  </li>
+                </ul>
               </div>
             </div>
 
-            <Link
-              href="/enquire"
-              className="w-full block text-center py-3.5 bg-[#1A1A1A] text-white text-xs uppercase tracking-[0.2em] font-semibold hover:bg-[#C5A880] transition-colors"
-            >
-              Start Bespoke Planning
-            </Link>
-            <div className="flex justify-between items-center text-[11px] text-[#1A1A1A]/60 pt-2">
-              <span>Dehradun, Uttarakhand</span>
-              <span>concierge@soulsventure.com</span>
+            {/* Drawer Bottom Footer */}
+            <div className="p-5 sm:p-6 border-t border-[#1A1A1A]/10 bg-white/60 space-y-3">
+              <Link
+                href="/enquire"
+                onClick={() => setMenuDrawerOpen(false)}
+                className="w-full block text-center py-3.5 bg-[#1A1A1A] hover:bg-[#C5A880] text-white text-xs uppercase tracking-[0.2em] font-semibold transition-all rounded-full shadow-md"
+              >
+                Enquire Now & Begin Planning
+              </Link>
+              <div className="flex justify-between items-center text-[11px] text-[#1A1A1A]/60 pt-1">
+                <span>Dehradun, Uttarakhand</span>
+                <span>concierge@soulsventure.com</span>
+              </div>
             </div>
           </div>
         </div>
