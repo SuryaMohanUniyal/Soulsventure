@@ -29,7 +29,6 @@ import {
 import {
   ClientAccount,
   getClientAuthSession,
-  INITIAL_CLIENT_ACCOUNTS,
   getStoredClientDocuments,
   ClientDocumentVaultItem,
   BespokeItineraryDay,
@@ -39,133 +38,8 @@ import {
   isLeadDepositConfirmed,
 } from "@/lib/crmStore";
 
-// Master Luxury 5-Day Itinerary Template
-const MASTER_TRIP_DAYS: BespokeItineraryDay[] = [
-  {
-    dayNumber: 1,
-    title: "Royal Arrival & Private Shikara onto Lake Pichola",
-    location: "Udaipur, Rajasthan",
-    accommodation: {
-      name: "The Oberoi Udaivilas",
-      roomType: "Kohinoor Lake View Suite with Private Pool",
-      checkInTime: "14:00 VIP Expedited",
-    },
-    fleetVehicle: {
-      model: "Mercedes-Maybach S-Class",
-      chauffeur: "Vikram Singh (Senior Royal Chauffeur)",
-    },
-    highlights: [
-      "Private tarmac greeter and champagne convoy transfer from Udaipur airport",
-      "Ceremonial royal welcome at jetty with Aarti, Tikka, and rose petal shower",
-      "Sunset private solar boat cruise with private sitar maestro aboard Lake Pichola",
-    ],
-    dining: {
-      breakfast: "Royal High Tea at Chandni Courtyard",
-      lunch: "Artisanal Mewari Degustation at Udaimahal",
-      dinner: "Private Candlelight Lakeside Dining with Curated Vintage Champagnes",
-    },
-    insiderSecret: "Titular royal family private courtyard open for evening walk before public lighting.",
-  },
-  {
-    dayNumber: 2,
-    title: "Exclusive City Palace After-Hours & Royal Armoury Access",
-    location: "Udaipur, Rajasthan",
-    accommodation: {
-      name: "The Oberoi Udaivilas",
-      roomType: "Kohinoor Lake View Suite with Private Pool",
-    },
-    fleetVehicle: {
-      model: "Vintage 1938 Rolls-Royce Ceremonial Fleet",
-      chauffeur: "Ranveer Rathore",
-    },
-    highlights: [
-      "Private keys to the 300-year-old Zenana Mahal before public opening gates",
-      "Curated historical walkthrough led by Dr. Mathur (Senior ASI Royal Historian)",
-      "Private gem & antique miniature painting consultation at exclusive royal atelier",
-    ],
-    dining: {
-      breakfast: "Champagne Breakfast on Private Terrace Overlooking Jag Mandir",
-      lunch: "Fresh Lake Breeze Al Fresco Dining at The Promenade",
-      dinner: "14-Course Royal Rajasthani Banquet with Heirloom Saffron Recipes",
-    },
-    insiderSecret: "Private access to the Crystal Gallery with zero crowd presence permitted.",
-  },
-  {
-    dayNumber: 3,
-    title: "Scenic Overland Safari to SUJÁN JAWAI & Sunset Leopard Tracking",
-    location: "Jawai Wilderness, Rajasthan",
-    accommodation: {
-      name: "SUJÁN JAWAI",
-      roomType: "Royal Tented Pavilion with Private Butler",
-    },
-    fleetVehicle: {
-      model: "Custom Open-Top Land Rover Defender 4WD Safari Spec",
-      chauffeur: "Lead Naturalist Salim & Chauffeur Bhati",
-    },
-    highlights: [
-      "Chauffeured luxury 4x4 convoy transfer across picturesque Aravali foothills into Jawai",
-      "Afternoon safari tracking wild apex leopards basking upon prehistoric granite boulders",
-      "Sunset sundowners atop granite kopjes with pastoral Rabari herdsmen elders",
-    ],
-    dining: {
-      breakfast: "Bush Camp Breakfast under Ancient Neem Trees",
-      lunch: "Farm-to-Table Organic Garden Pavilion Lunch",
-      dinner: "Fireside Lantern Dinner under Starry Skies with Live Folk Manganiyar Troupe",
-    },
-    insiderSecret: "Rabari tribal elder shares ancient folklore around campfire regarding coexistence with leopards.",
-  },
-  {
-    dayNumber: 4,
-    title: "Overland Mountain Journey into Leh & Indus Valley Acclimatization",
-    location: "Leh, Ladakh",
-    accommodation: {
-      name: "Chamba Camp Thiksey (TUTC)",
-      roomType: "Luxury Heated Colonial Tented Suite with Supplemental O2",
-    },
-    fleetVehicle: {
-      model: "Land Rover Defender 110 4WD (Mountain Spec)",
-      chauffeur: "Tenzin Norbu",
-    },
-    highlights: [
-      "Private landing at Kushok Bakula Airport with white silk ceremonial Khata scarf welcome",
-      "Gentle acclimatization protocol with in-suite herbal infusions overseen by expedition doctor",
-      "Evening serene monastery view from private heated verandah under the Milky Way",
-    ],
-    dining: {
-      breakfast: "Alpine Breakfast at Jawai Bush Camp",
-      lunch: "Light Organic Tsampa and Himalayan Broth at Thiksey",
-      dinner: "Gourmet Tented Dining with Heated Ceramic Stones & French Bordeaux",
-    },
-    insiderSecret: "Private doctor monitors SpO2 levels ensuring effortless high-altitude comfort.",
-  },
-  {
-    dayNumber: 5,
-    title: "Private Chopper Crossing of Khardung La into Nubra Valley",
-    location: "Nubra Valley, Ladakh",
-    accommodation: {
-      name: "The Kyagar Luxury Lodge",
-      roomType: "Grand Valley Suite with Geothermal Underfloor Heating",
-    },
-    fleetVehicle: {
-      model: "Airbus H130 Mountain Helicopter",
-      chauffeur: "Capt. Roy (Aviation Commander)",
-    },
-    highlights: [
-      "30-minute aerial crossing of Khardung La (18,380 ft) by twin-engine Airbus helicopter",
-      "Private Bactrian double-humped camel trek along silver sand dunes of Hunder",
-      "Dark-sky stargazing session with Celestron high-powered telescope and astrophysicist",
-    ],
-    dining: {
-      breakfast: "Sunrise Breakfast on Monastery Rooftop",
-      lunch: "Silk Route Oasis Picnic under Apricot Orchards",
-      dinner: "Traditional Central Asian Clay Oven Feast with Artisanal Cheese",
-    },
-    insiderSecret: "Zero light pollution allows viewing the Andromeda Galaxy with optical binoculars.",
-  },
-];
-
 export default function ClientPortalDashboard() {
-  const [client, setClient] = useState<ClientAccount>(INITIAL_CLIENT_ACCOUNTS[0]);
+  const [client, setClient] = useState<ClientAccount | null>(null);
   const [leads, setLeads] = useState<CRMLead[]>([]);
   const [selectedLeadRef, setSelectedLeadRef] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"itinerary" | "vault" | "nuances" | "history">("itinerary");
@@ -178,9 +52,11 @@ export default function ClientPortalDashboard() {
   // Sync client session & all CRM leads (local + cloud)
   useEffect(() => {
     const session = getClientAuthSession();
-    if (session) {
-      setClient(session);
+    if (!session) {
+      window.location.href = "/client/login";
+      return;
     }
+    setClient(session);
 
     const loadLeadsData = async () => {
       const local = getStoredLeads();
@@ -211,11 +87,11 @@ export default function ClientPortalDashboard() {
   // Normalize phone and email for reliable matching
   const clientPhoneClean = useMemo(() => {
     return client?.phone ? client.phone.replace(/[^0-9]/g, "") : "";
-  }, [client.phone]);
+  }, [client?.phone]);
 
   const clientEmailNorm = useMemo(() => {
     return client?.email ? client.email.trim().toLowerCase() : "";
-  }, [client.email]);
+  }, [client?.email]);
 
   // Find all queries/leads matching this client
   const clientLeads = useMemo(() => {
@@ -228,7 +104,7 @@ export default function ClientPortalDashboard() {
       }
       return false;
     });
-  }, [leads, client.activeTripRef, clientEmailNorm, clientPhoneClean]);
+  }, [leads, client?.activeTripRef, clientEmailNorm, clientPhoneClean]);
 
   // Active query/lead: prioritize user selection, then confirmed leads, then first lead
   const activeLead = useMemo(() => {
@@ -245,15 +121,26 @@ export default function ClientPortalDashboard() {
     return isLeadDepositConfirmed(activeLead, client);
   }, [activeLead, client]);
 
-  // Handcrafted Itinerary Days (custom from proposal if created by curator, else master luxury 5-day template)
+  // Handcrafted Itinerary Days (custom from proposal if created by curator)
   const tripDays: BespokeItineraryDay[] = useMemo(() => {
     if (activeLead?.proposalDays && activeLead.proposalDays.length > 0) {
       return activeLead.proposalDays;
     }
-    return MASTER_TRIP_DAYS;
+    return [];
   }, [activeLead]);
 
   const currentDay = tripDays[selectedDayNum - 1] || tripDays[0];
+
+  if (!client) {
+    return (
+      <div className="min-h-screen bg-[#0C0C0C] flex flex-col items-center justify-center text-[#FDFBF7] space-y-4">
+        <div className="w-12 h-12 rounded-xl bg-[#C5A059]/10 border border-[#C5A059]/40 flex items-center justify-center animate-pulse">
+          <span className="font-serif text-[#C5A059] font-bold text-xl">S</span>
+        </div>
+        <p className="font-serif text-sm text-[#A0A0A0]">Loading Private Member Suite...</p>
+      </div>
+    );
+  }
 
   const handleSendNuanceUpdate = (e: React.FormEvent) => {
     e.preventDefault();
@@ -626,6 +513,15 @@ export default function ClientPortalDashboard() {
         <div className="space-y-6">
           {isDepositConfirmed ? (
             /* UNLOCKED ITINERARY FOR CONFIRMED DEPOSIT */
+            tripDays.length === 0 ? (
+              <div className="p-8 sm:p-12 text-center bg-[#151515] rounded-2xl border border-[#262626] space-y-3">
+                <Calendar className="w-10 h-10 text-[#C5A059] mx-auto opacity-60" />
+                <h3 className="font-serif text-lg text-[#FDFBF7]">Itinerary Curation in Progress</h3>
+                <p className="text-xs text-[#A0A0A0] max-w-md mx-auto leading-relaxed">
+                  Our lead founders (Suraj Uniyal & Harsh Sood) are currently crafting your bespoke day-by-day itinerary. Your personalized schedule, private transfers, and luxury accommodation details will be published here shortly.
+                </p>
+              </div>
+            ) : (
             <>
               {/* Day Selector Buttons */}
               <div className="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-thin">
@@ -747,6 +643,7 @@ export default function ClientPortalDashboard() {
                 )}
               </div>
             </>
+            )
           ) : (
             /* LOCKED ITINERARY STATE (Awaiting Deposit Confirmation) */
             <div className="p-5 sm:p-10 lg:p-12 bg-[#161616] rounded-2xl border-2 border-[#2E281F] text-center space-y-5 sm:space-y-6 shadow-2xl relative overflow-hidden">
@@ -1097,20 +994,13 @@ export default function ClientPortalDashboard() {
               </div>
             )}
 
-            {/* Past Archived Sample Trip */}
-            <div className="p-3.5 sm:p-4 bg-[#1A1A1A] rounded-xl border border-[#262626] flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 text-xs">
-              <div>
-                <span className="font-serif font-semibold text-[#FDFBF7] block">
-                  Royal Rajasthan & Desert Solitude
-                </span>
-                <span className="text-[11px] text-[#71717A]">
-                  Completed: November 2025 • Udaipur, Jodhpur & Jawai
-                </span>
+            {!activeLead && (
+              <div className="p-8 text-center bg-[#151515] rounded-xl border border-[#262626] text-xs text-[#71717A] space-y-2">
+                <Compass className="w-8 h-8 text-[#444] mx-auto" />
+                <p className="font-serif text-[#A0A0A0]">No Historical Journeys</p>
+                <p className="text-[11px]">Your completed bespoke expeditions and permanent memories will be archived here.</p>
               </div>
-              <span className="px-2.5 py-1 rounded bg-emerald-950 text-emerald-300 font-semibold text-[10px] border border-emerald-800">
-                Archived in Vault
-              </span>
-            </div>
+            )}
           </div>
         </div>
       )}

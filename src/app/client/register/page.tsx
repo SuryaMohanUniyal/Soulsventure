@@ -105,7 +105,7 @@ export default function ClientRegisterPage() {
               required
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Mr. Rajesh Sharma"
+              placeholder="e.g. Your Full Name or Title"
               className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
             />
           </div>
@@ -121,7 +121,7 @@ export default function ClientRegisterPage() {
               required
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              placeholder="e.g. +91 98201 11222"
+              placeholder="e.g. +91 98765 43210"
               className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
             />
           </div>
@@ -137,7 +137,7 @@ export default function ClientRegisterPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="e.g. sharma@example.com"
+              placeholder="e.g. yourname@domain.com"
               className="w-full bg-[#1F1F1F] text-[#FDFBF7] px-3.5 py-2.5 rounded-lg border border-[#333333] focus:outline-none focus:border-[#C5A059] placeholder-[#555555]"
             />
           </div>

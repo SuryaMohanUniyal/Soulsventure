@@ -57,9 +57,9 @@ export default function AdminGSTInvoicingSuite() {
   const handleCreateNewInvoice = () => {
     const lead = leads[0] || {
       referenceCode: "SV-2026-VIP",
-      clientName: "Mr. Rajesh Sharma & Family",
-      email: "rajesh.sharma@luxuryinvest.in",
-      phone: "+91 98201 44521",
+      clientName: "New VIP Client",
+      email: "guest@soulsventure.com",
+      phone: "+91 81263 57353",
     };
 
     const newInv = createGSTInvoice({
@@ -69,8 +69,8 @@ export default function AdminGSTInvoicingSuite() {
       clientName: lead.clientName,
       clientEmail: lead.email,
       clientPhone: lead.phone,
-      billingAddress: "Altamount Road, Cumballa Hill, Mumbai, MH 400026",
-      clientGstinOrPan: "27AAAPL1234F1Z8",
+      billingAddress: "Registered Office / Residence Address Pending",
+      clientGstinOrPan: "",
       agencyGstin: "05AAECS9821R1ZM",
       sacCode: "998555",
       currency: activeCurrency,
@@ -221,7 +221,14 @@ SoulsVenture Luxury Journeys`;
           </div>
 
           <div className="space-y-2.5">
-            {invoices.map((inv) => (
+            {invoices.length === 0 ? (
+              <div className="p-8 text-center bg-[#151515] rounded-xl border border-[#262626] text-xs text-[#71717A] space-y-2">
+                <Receipt className="w-8 h-8 text-[#444] mx-auto" />
+                <p className="font-serif text-[#A0A0A0]">No Invoices Generated</p>
+                <p className="text-[11px]">Click &quot;+ New Pro-Forma Invoice&quot; above to create one.</p>
+              </div>
+            ) : (
+              invoices.map((inv) => (
               <div
                 key={inv.id}
                 onClick={() => setSelectedInvoice(inv)}
@@ -256,12 +263,12 @@ SoulsVenture Luxury Journeys`;
                   </span>
                 </div>
               </div>
-            ))}
+            )))}
           </div>
         </div>
 
         {/* Right Side: Printable Luxury Tax Letterhead (8 Cols) */}
-        {selectedInvoice && (
+        {selectedInvoice ? (
           <div className="lg:col-span-8 bg-[#151515] rounded-2xl border border-[#282828] p-6 sm:p-8 space-y-6 shadow-2xl">
             {/* Invoice Top Actions */}
             <div className="flex items-center justify-between border-b border-[#242424] pb-4">
@@ -419,6 +426,14 @@ SoulsVenture Luxury Journeys`;
                 </div>
               </div>
             </div>
+          </div>
+        ) : (
+          <div className="lg:col-span-8 bg-[#151515] rounded-2xl border border-[#282828] p-12 text-center text-xs text-[#71717A] flex flex-col items-center justify-center min-h-[400px]">
+            <Receipt className="w-12 h-12 text-[#444] mb-3" />
+            <h3 className="font-serif text-lg text-[#FDFBF7]">No Pro-Forma Invoice Selected</h3>
+            <p className="text-[11px] text-[#A0A0A0] mt-1 max-w-sm">
+              Click &quot;+ New Pro-Forma Invoice&quot; above to generate a compliant Indian tourism invoice with automated 5% GST calculation.
+            </p>
           </div>
         )}
       </div>

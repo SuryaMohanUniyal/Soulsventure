@@ -4,21 +4,15 @@ import React, { useState } from "react";
 import Link from "next/link";
 import {
   Sparkles,
-  Lock,
   ArrowRight,
-  ShieldCheck,
-  User,
   KeyRound,
   Eye,
   EyeOff,
   Phone,
-  CheckCircle2,
-  UserPlus,
 } from "lucide-react";
 import {
   verifyClientLogin,
   saveClientAuthSession,
-  INITIAL_CLIENT_ACCOUNTS,
 } from "@/lib/crmStore";
 
 export default function ClientLoginPage() {
@@ -53,13 +47,7 @@ export default function ClientLoginPage() {
     }
   };
 
-  const handleDemoLogin = (clientIndex: number) => {
-    const demoClient = INITIAL_CLIENT_ACCOUNTS[clientIndex];
-    if (demoClient) {
-      saveClientAuthSession(demoClient);
-      window.location.href = "/client/portal";
-    }
-  };
+
 
   return (
     <div className="min-h-[80vh] flex flex-col justify-center items-center py-6 sm:py-10 px-3 sm:px-4">
@@ -169,70 +157,7 @@ export default function ClientLoginPage() {
           </button>
         </form>
 
-        {/* 1-Click Instant Demo Credentials */}
-        <div className="pt-4 border-t border-[#262626] space-y-2.5">
-          <span className="text-[10px] uppercase tracking-wider text-[#71717A] font-semibold block text-center">
-            One-Click Verified Demo Access
-          </span>
 
-          <div className="space-y-2">
-            <button
-              type="button"
-              onClick={() => handleDemoLogin(0)}
-              className="w-full p-2.5 rounded-xl bg-[#202020] hover:bg-[#282828] border border-[#333333] text-left transition-colors text-xs flex items-center justify-between cursor-pointer group"
-            >
-              <div>
-                <span className="font-serif text-[#FDFBF7] group-hover:text-[#C5A059] block">
-                  Mr. Rajesh Sharma
-                </span>
-                <span className="text-[10px] text-[#71717A]">
-                  Rajasthan & Ladakh Royal Grand Tour (Ref: SV-2026-VIP)
-                </span>
-              </div>
-              <span className="text-[10px] font-mono text-[#C5A059] px-2 py-0.5 rounded bg-black/40">
-                1-Click Demo
-              </span>
-            </button>
-
-            <button
-              type="button"
-              onClick={() => handleDemoLogin(1)}
-              className="w-full p-2.5 rounded-xl bg-[#202020] hover:bg-[#282828] border border-[#333333] text-left transition-colors text-xs flex items-center justify-between cursor-pointer group"
-            >
-              <div>
-                <span className="font-serif text-[#FDFBF7] group-hover:text-[#C5A059] block">
-                  Mrs. Ananya Kapoor
-                </span>
-                <span className="text-[10px] text-[#71717A]">
-                  Kashmir Winter Expedition (Ref: SV-2026-KSH)
-                </span>
-              </div>
-              <span className="text-[10px] font-mono text-[#C5A059] px-2 py-0.5 rounded bg-black/40">
-                1-Click Demo
-              </span>
-            </button>
-
-            {INITIAL_CLIENT_ACCOUNTS[2] && (
-              <button
-                type="button"
-                onClick={() => handleDemoLogin(2)}
-                className="w-full p-2.5 rounded-xl bg-[#202020] hover:bg-[#282828] border border-[#333333] text-left transition-colors text-xs flex items-center justify-between cursor-pointer group"
-              >
-                <div>
-                  <span className="font-serif text-[#FDFBF7] group-hover:text-[#C5A059] block">
-                    Suraj Uniyal (Founder VIP Member)
-                  </span>
-                  <span className="text-[10px] text-[#71717A]">
-                    Royal Expeditions Master Account (Ref: SV-2026-VIP)
-                  </span>
-                </div>
-                <span className="text-[10px] font-mono text-[#C5A059] px-2 py-0.5 rounded bg-black/40">
-                  1-Click Demo
-                </span>
-              </button>
-            )}
-          </div>
-        </div>
 
         {/* Register Link */}
         <div className="text-center pt-2">

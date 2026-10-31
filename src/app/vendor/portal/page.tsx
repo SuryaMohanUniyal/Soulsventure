@@ -60,7 +60,6 @@ import {
   getStoredLeads,
   updateVendorBookingStatus,
   getStoredPartners,
-  INITIAL_LEADS,
   DailyRouteSchedule,
   DailyGuideSchedule,
   DailyCampAdventureSchedule,
@@ -74,7 +73,7 @@ function getDriverMealSchedule(lead: CRMLead, dayNumber: number, date?: string) 
   const isFinalDay = dayNumber === totalDays;
 
   const lunchVenue = guideDay?.diningBriefing?.lunchVenue || "1559 AD Heritage Restaurant / Fatehsagar Lake View";
-  const highTeaVenue = guideDay?.diningBriefing?.highTeaVenue || "The Oberoi Udaivilas Lakeside Domes";
+  const highTeaVenue = guideDay?.diningBriefing?.highTeaVenue || "Assigned Luxury Stay Lakeside Domes";
   const dinnerVenue = guideDay?.diningBriefing?.dinnerVenue || "Jagmandir Island Palace / Main Dining Hall";
 
   return {
@@ -116,26 +115,16 @@ export default function VendorPortalPage() {
 
   // View state: calendar vs dossiers
   const [viewMode, setViewMode] = useState<"calendar" | "dossiers">("calendar");
-  const [selectedMonth, setSelectedMonth] = useState<"2026-11" | "2026-12">("2026-11");
-  const [selectedDate, setSelectedDate] = useState<string>("2026-11-14");
+  const [selectedMonth, setSelectedMonth] = useState<string>(() => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
+  });
+  const [selectedDate, setSelectedDate] = useState<string>(() => new Date().toISOString().split("T")[0]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [expandedMenuLeadId, setExpandedMenuLeadId] = useState<string | null>("lead-sharma-2026");
-  const [activeRouteDayNumber, setActiveRouteDayNumber] = useState<Record<string, number>>({
-    "lead-sharma-2026": 1,
-    "lead-vance-2026": 1,
-    "lead-rohan-2026": 1,
-    "lead-singhania-2026": 1,
-  });
-  const [activeGuideDayNumber, setActiveGuideDayNumber] = useState<Record<string, number>>({
-    "lead-sharma-2026": 2,
-    "lead-vance-2026": 1,
-    "lead-rohan-2026": 2,
-    "lead-singhania-2026": 2,
-  });
-  const [activeCampDayNumber, setActiveCampDayNumber] = useState<Record<string, number>>({
-    "lead-vance-2026": 1,
-    "lead-sharma-2026": 3,
-  });
+  const [expandedMenuLeadId, setExpandedMenuLeadId] = useState<string | null>(null);
+  const [activeRouteDayNumber, setActiveRouteDayNumber] = useState<Record<string, number>>({});
+  const [activeGuideDayNumber, setActiveGuideDayNumber] = useState<Record<string, number>>({});
+  const [activeCampDayNumber, setActiveCampDayNumber] = useState<Record<string, number>>({});
 
   // Local state for vendor edits on lead cards
   const [statusDrafts, setStatusDrafts] = useState<Record<string, string>>({});
@@ -153,11 +142,8 @@ export default function VendorPortalPage() {
 
   const loadLeads = (currentPartner: PartnerTieUp) => {
     setLoading(true);
-    let allLeads = getStoredLeads();
-    if (!allLeads || allLeads.length === 0) {
-      allLeads = INITIAL_LEADS;
-    }
-    setLeads(allLeads);
+    const allLeads = getStoredLeads();
+    setLeads(allLeads || []);
 
     // Initialize drafts
     const initialStatuses: Record<string, string> = {};
@@ -234,7 +220,7 @@ export default function VendorPortalPage() {
   // Filter leads strictly to those assigned to this specific vendor partner
   const assignedLeads = useMemo(() => {
     if (!partner) return [];
-    const sourceLeads = leads.length > 0 ? leads : INITIAL_LEADS;
+    const sourceLeads = leads;
     return sourceLeads.filter((lead) => {
       // 1. Direct assignment match in vendorAssignments
       const assignment = lead.vendorAssignments?.[partnerRole as "hotel" | "driver" | "guide"];
@@ -515,7 +501,7 @@ export default function VendorPortalPage() {
             </button>
 
             <a
-              href={`https://wa.me/919820144521?text=${encodeURIComponent(
+              href={`https://wa.me/918126357353?text=${encodeURIComponent(
                 `Namaste Suraj & Harsh. This is ${partner.name}. Reaching out regarding our active SoulsVenture route and booking allocation.`
               )}`}
               target="_blank"
@@ -547,13 +533,13 @@ export default function VendorPortalPage() {
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Fleet Assigned</span>
-            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">Defender 110 & Maybach</div>
-            <span className="text-[10px] text-sky-400 font-mono mt-0.5 block">RJ 27 EA 0001 (VIP Tag)</span>
+            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">{filteredLeads[0]?.assignedVehicle || filteredLeads[0]?.assignedChauffeur || partner.serviceOrAssets || "Assigned Fleet"}</div>
+            <span className="text-[10px] text-sky-400 font-mono mt-0.5 block">{filteredLeads[0]?.assignedChauffeur ? "Verified Fleet Tag" : "Fleet on Standby"}</span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">First Reporting Time</span>
-            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">13:15 IST (Nov 14)</div>
-            <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">Gate 2 • Placard Ready</span>
+            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">{filteredLeads[0]?.arrivalDetails?.arrivalTime ? `${filteredLeads[0].arrivalDetails.arrivalTime} (${filteredLeads[0].arrivalDetails.arrivalDate})` : "No Active Dispatches"}</div>
+            <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">{filteredLeads[0]?.arrivalDetails?.pickupLocation ? `${filteredLeads[0].arrivalDetails.pickupLocation} • Ready` : "Awaiting Operations Schedule"}</span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Chauffeur Tariff</span>
@@ -579,10 +565,10 @@ export default function VendorPortalPage() {
               {isCampPartner ? "Accommodation Tier" : "Suite Tier"}
             </span>
             <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">
-              {isCampPartner ? "Royal Tented Pavilions" : "Kohinoor & Royal Palace"}
+              {filteredLeads[0]?.clientNuances?.roomPreferences?.[0] || partner.serviceOrAssets || "Luxury Suite Allocation"}
             </div>
             <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">
-              {isCampPartner ? "Escarpment View & Private Plunge Pool" : "High Floor Lake Sanctuary"}
+              {filteredLeads[0]?.clientNuances?.specialProtocol || (isCampPartner ? "Escarpment & Safari Sanctuary" : "Palace Heritage Wing")}
             </span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
@@ -590,10 +576,10 @@ export default function VendorPortalPage() {
               {isCampPartner ? "Safaris & Activities" : "Dietary Alerts"}
             </span>
             <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">
-              {isCampPartner ? "Dawn Leopard Safaris & Archery" : "100% Pure Veg & Jain"}
+              {filteredLeads[0]?.clientNuances?.dietaryRestrictions?.join(", ") || (filteredLeads.length > 0 ? "Standard Gourmet Menu" : "No Active Alerts")}
             </div>
             <span className="text-[10px] text-amber-300 font-mono mt-0.5 block">
-              {isCampPartner ? "Naturalist Salim & 4x4 Fleet" : "Chef's Menu Cards Active"}
+              {filteredLeads.length > 0 ? "Executive Chef Brief Active" : "Dietary Standby"}
             </span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
@@ -615,13 +601,13 @@ export default function VendorPortalPage() {
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Monuments & Sites</span>
-            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">City Palace & Royal Vaults</div>
+            <div className="text-sm font-serif text-[#FDFBF7] mt-2 truncate">{filteredLeads[0]?.guideSchedule?.[0]?.tourTheme || partner.serviceOrAssets || "Heritage Walkthroughs"}</div>
             <span className="text-[10px] text-emerald-400 font-mono mt-0.5 block">After-Hours Private Access</span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Language Fluency</span>
-            <div className="text-sm font-serif text-[#FDFBF7] mt-2">English & French</div>
-            <span className="text-[10px] text-[#888] font-mono mt-0.5 block">ASI Senior Historian</span>
+            <div className="text-sm font-serif text-[#FDFBF7] mt-2">English & Hindi</div>
+            <span className="text-[10px] text-[#888] font-mono mt-0.5 block">Licensed Senior Historian</span>
           </div>
           <div className="p-4 rounded-xl bg-[#181818] border border-[#2A2A2A]">
             <span className="text-[10px] font-mono uppercase text-[#71717A] block">Guide Tariff</span>
@@ -669,29 +655,33 @@ export default function VendorPortalPage() {
             <div className="flex items-center justify-center bg-[#101010] border border-[#2A2A2A] rounded-xl p-1 text-xs font-mono w-full sm:w-auto">
               <button
                 onClick={() => {
-                  setSelectedMonth("2026-11");
-                  setSelectedDate("2026-11-14");
+                  const now = new Date();
+                  const m = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}`;
+                  setSelectedMonth(m);
+                  setSelectedDate(`${m}-01`);
                 }}
                 className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                  selectedMonth === "2026-11"
+                  selectedMonth === `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`
                     ? "bg-[#252525] text-[#C5A059] font-bold border border-[#C5A059]/40"
                     : "text-[#71717A] hover:text-[#D4D4D8]"
                 }`}
               >
-                November 2026
+                {new Date().toLocaleDateString("en-US", { month: "long", year: "numeric" })}
               </button>
               <button
                 onClick={() => {
-                  setSelectedMonth("2026-12");
-                  setSelectedDate("2026-12-02");
+                  const nextM = new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1);
+                  const m = `${nextM.getFullYear()}-${String(nextM.getMonth() + 1).padStart(2, "0")}`;
+                  setSelectedMonth(m);
+                  setSelectedDate(`${m}-01`);
                 }}
                 className={`px-3 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                  selectedMonth === "2026-12"
+                  selectedMonth !== `${new Date().getFullYear()}-${String(new Date().getMonth() + 1).padStart(2, "0")}`
                     ? "bg-[#252525] text-[#C5A059] font-bold border border-[#C5A059]/40"
                     : "text-[#71717A] hover:text-[#D4D4D8]"
                 }`}
               >
-                December 2026
+                {new Date(new Date().getFullYear(), new Date().getMonth() + 1, 1).toLocaleDateString("en-US", { month: "long", year: "numeric" })}
               </button>
             </div>
 
@@ -721,7 +711,7 @@ export default function VendorPortalPage() {
                   <Calendar className="w-5 h-5 text-[#C5A059]" />
                   <span>
                     Operations Calendar & Date-Wise Booking Schedule (
-                    {selectedMonth === "2026-11" ? "November 2026" : "December 2026"})
+                    {new Date(selectedMonth + "-01").toLocaleDateString("en-US", { month: "long", year: "numeric" })})
                   </span>
                 </h2>
                 <p className="text-xs text-[#888888] mt-0.5">
@@ -896,7 +886,7 @@ export default function VendorPortalPage() {
                   No VIP arrivals or scheduled dispatches on this particular date.
                 </p>
                 <p className="text-xs text-[#555] font-mono">
-                  Select another highlighted day on the calendar (e.g. Nov 14, 15, 16, 18, 19).
+                  Select an active operational date from the calendar to inspect dispatches.
                 </p>
               </div>
             ) : (
@@ -1043,7 +1033,7 @@ export default function VendorPortalPage() {
                         </div>
 
                         <a
-                          href={`https://wa.me/919820144521?text=${encodeURIComponent(
+                          href={`https://wa.me/918126357353?text=${encodeURIComponent(
                             `Namaste ${lead.assignedCurator}. This is ${partner.name}. Re: Guest ${lead.clientName} (${lead.referenceCode}). Schedule on ${selectedDate}:`
                           )}`}
                           target="_blank"
@@ -1089,15 +1079,15 @@ export default function VendorPortalPage() {
                               <div>
                                 <span className="text-[10px] text-[#71717A] uppercase font-mono block">Stay Hotel & Suite</span>
                                 <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
-                                  {currentGuideDay?.stayHotel.hotelName || "The Oberoi Udaivilas"}
+                                  {currentGuideDay?.stayHotel.hotelName || "Assigned Luxury Stay"}
                                 </span>
-                                <span className="text-[9px] text-emerald-400 font-mono block">{currentGuideDay?.stayHotel.roomType || "Kohinoor Suite #204"}</span>
+                                <span className="text-[9px] text-emerald-400 font-mono block">{currentGuideDay?.stayHotel.roomType || "Allocated Suite"}</span>
                               </div>
 
                               <div>
                                 <span className="text-[10px] text-[#71717A] uppercase font-mono block">Hotel Front Desk</span>
                                 <span className="font-mono text-[#C5A059] font-medium block leading-tight">
-                                  {currentGuideDay?.stayHotel.frontDeskPhone || "+91 294 243 3300"}
+                                  {currentGuideDay?.stayHotel.frontDeskPhone || "+91 81263 57353"}
                                 </span>
                                 <span className="text-[9px] text-[#888] font-mono block">Chief Concierge Desk</span>
                               </div>
@@ -1105,7 +1095,7 @@ export default function VendorPortalPage() {
                               <div>
                                 <span className="text-[10px] text-[#71717A] uppercase font-mono block">Assigned Chauffeur & Fleet</span>
                                 <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
-                                  {currentGuideDay?.transportCoordination.chauffeurName || "Vikram Singh (Fleet Lead)"}
+                                  {currentGuideDay?.transportCoordination.chauffeurName || "Dedicated Chauffeur (Fleet Lead)"}
                                 </span>
                                 <span className="text-[9px] text-sky-400 font-mono block">
                                   {currentGuideDay?.transportCoordination.vehicleModel} ({currentGuideDay?.transportCoordination.licensePlate || "RJ 27 EA 0001"})
@@ -1263,11 +1253,11 @@ export default function VendorPortalPage() {
                                     <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-2">
                                       <span className="text-[10px] font-mono uppercase text-[#71717A] block">Hotel Front Desk / Concierge Phone:</span>
                                       <p className="font-mono text-emerald-400 font-bold text-xs">
-                                        {currentGuideDay.stayHotel.frontDeskPhone || currentGuideDay.stayHotel.conciergeContact || "+91 294 243 3300"}
+                                        {currentGuideDay.stayHotel.frontDeskPhone || currentGuideDay.stayHotel.conciergeContact || "+91 81263 57353"}
                                       </p>
                                       <div className="flex items-center gap-2 pt-0.5">
                                         <a
-                                          href={`tel:${(currentGuideDay.stayHotel.frontDeskPhone || "+91 294 243 3300").replace(/\s+/g, "")}`}
+                                          href={`tel:${(currentGuideDay.stayHotel.frontDeskPhone || "+91 81263 57353").replace(/\s+/g, "")}`}
                                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#222] hover:bg-[#2A2A2A] text-xs font-mono text-[#D4D4D8] border border-[#333]"
                                         >
                                           <Phone className="w-3 h-3 text-emerald-400" />
@@ -1296,22 +1286,22 @@ export default function VendorPortalPage() {
                                     <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
                                       <span className="text-[10px] font-mono uppercase text-[#71717A] block">Chauffeur Details:</span>
                                       <p className="font-serif text-[#FDFBF7] font-semibold text-sm">
-                                        {currentGuideDay.transportCoordination.chauffeurName || "Vikram Singh (Royal Chauffeur Fleet)"}
+                                        {currentGuideDay.transportCoordination.chauffeurName || "Dedicated Chauffeur (Royal Chauffeur Fleet)"}
                                       </p>
                                       <p className="font-mono text-xs text-[#C5A059]">
-                                        Direct: {currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222"}
+                                        Direct: {currentGuideDay.transportCoordination.chauffeurPhone || "+91 81263 57353"}
                                       </p>
                                       <div className="flex items-center gap-2 pt-1.5">
                                         <a
-                                          href={`tel:${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222").replace(/\s+/g, "")}`}
+                                          href={`tel:${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 81263 57353").replace(/\s+/g, "")}`}
                                           className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#222] hover:bg-[#2A2A2A] text-[11px] font-mono text-[#D4D4D8] border border-[#333]"
                                         >
                                           <Phone className="w-3 h-3 text-sky-400" />
                                           <span>Call Driver</span>
                                         </a>
                                         <a
-                                          href={`https://wa.me/${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                                            `Namaste ${currentGuideDay.transportCoordination.chauffeurName || "Vikram Singh"}. This is ${partner.name} (Tour Guide) re: Guest ${lead.clientName}. Day ${activeGuideDayNum} tour coordination:`
+                                          href={`https://wa.me/${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 81263 57353").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                                            `Namaste ${currentGuideDay.transportCoordination.chauffeurName || "Dedicated Chauffeur"}. This is ${partner.name} (Tour Guide) re: Guest ${lead.clientName}. Day ${activeGuideDayNum} tour coordination:`
                                           )}`}
                                           target="_blank"
                                           rel="noopener noreferrer"
@@ -1326,7 +1316,7 @@ export default function VendorPortalPage() {
                                     <div className="p-3 rounded-lg bg-[#111111] border border-[#242424] space-y-1">
                                       <span className="text-[10px] font-mono uppercase text-[#71717A] block">Vehicle Model & License Plate:</span>
                                       <p className="font-serif text-[#FDFBF7] font-semibold text-sm">
-                                        {currentGuideDay.transportCoordination.vehicleModel || "Land Rover Defender 110 4WD"}
+                                        {currentGuideDay.transportCoordination.vehicleModel || "Dedicated Luxury Vehicle"}
                                       </p>
                                       <span className="text-[10px] font-mono text-sky-300 block">
                                         Plate: {currentGuideDay.transportCoordination.licensePlate || "RJ 27 EA 0001"}
@@ -2257,7 +2247,16 @@ export default function VendorPortalPage() {
           </div>
 
           <div className="grid grid-cols-1 gap-6">
-            {filteredLeads.map((lead) => {
+            {filteredLeads.length === 0 ? (
+              <div className="py-16 text-center space-y-3 bg-[#161616] border border-dashed border-[#2A2A2A] rounded-2xl">
+                <Building2 className="w-10 h-10 mx-auto text-[#555]" />
+                <h3 className="font-serif text-lg text-[#FDFBF7]">No Booking Dossiers Assigned</h3>
+                <p className="text-xs text-[#888] max-w-md mx-auto leading-relaxed">
+                  You currently have no guest bookings or itineraries assigned to your partner account. New allocations from SoulsVenture operations will appear here in real time.
+                </p>
+              </div>
+            ) : (
+              filteredLeads.map((lead) => {
               const arr = lead.arrivalDetails;
               const assignment = lead.vendorAssignments?.[partnerRole as "hotel" | "driver" | "guide"];
               const currentStatus =
@@ -2399,7 +2398,7 @@ export default function VendorPortalPage() {
                     </div>
 
                     <a
-                      href={`https://wa.me/919820144521?text=${encodeURIComponent(
+                      href={`https://wa.me/918126357353?text=${encodeURIComponent(
                         `Namaste ${lead.assignedCurator}. This is ${partner.name}. Checking regarding VIP booking ${lead.clientName} (${lead.referenceCode}). Current status: ${currentStatus}.`
                       )}`}
                       target="_blank"
@@ -2445,15 +2444,15 @@ export default function VendorPortalPage() {
                           <div>
                             <span className="text-[10px] text-[#71717A] uppercase font-mono block">Stay Hotel & Suite</span>
                             <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
-                              {currentGuideDay?.stayHotel.hotelName || "The Oberoi Udaivilas"}
+                              {currentGuideDay?.stayHotel.hotelName || "Assigned Luxury Stay"}
                             </span>
-                            <span className="text-[9px] text-emerald-400 font-mono block">{currentGuideDay?.stayHotel.roomType || "Kohinoor Suite #204"}</span>
+                            <span className="text-[9px] text-emerald-400 font-mono block">{currentGuideDay?.stayHotel.roomType || "Allocated Suite"}</span>
                           </div>
 
                           <div>
                             <span className="text-[10px] text-[#71717A] uppercase font-mono block">Hotel Front Desk</span>
                             <span className="font-mono text-[#C5A059] font-medium block leading-tight">
-                              {currentGuideDay?.stayHotel.frontDeskPhone || "+91 294 243 3300"}
+                              {currentGuideDay?.stayHotel.frontDeskPhone || "+91 81263 57353"}
                             </span>
                             <span className="text-[9px] text-[#888] font-mono block">Chief Concierge Desk</span>
                           </div>
@@ -2461,7 +2460,7 @@ export default function VendorPortalPage() {
                           <div>
                             <span className="text-[10px] text-[#71717A] uppercase font-mono block">Assigned Chauffeur & Fleet</span>
                             <span className="font-serif text-[#FDFBF7] font-medium block leading-tight">
-                              {currentGuideDay?.transportCoordination.chauffeurName || "Vikram Singh (Fleet Lead)"}
+                              {currentGuideDay?.transportCoordination.chauffeurName || "Dedicated Chauffeur (Fleet Lead)"}
                             </span>
                             <span className="text-[9px] text-sky-400 font-mono block">
                               {currentGuideDay?.transportCoordination.vehicleModel} ({currentGuideDay?.transportCoordination.licensePlate || "RJ 27 EA 0001"})
@@ -2602,10 +2601,10 @@ export default function VendorPortalPage() {
                                   <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1.5">
                                     <span className="text-[9px] text-[#71717A] uppercase font-mono block">Front Desk / Concierge Phone:</span>
                                     <p className="font-mono text-emerald-400 font-bold text-xs">
-                                      {currentGuideDay.stayHotel.frontDeskPhone || currentGuideDay.stayHotel.conciergeContact || "+91 294 243 3300"}
+                                      {currentGuideDay.stayHotel.frontDeskPhone || currentGuideDay.stayHotel.conciergeContact || "+91 81263 57353"}
                                     </p>
                                     <a
-                                      href={`tel:${(currentGuideDay.stayHotel.frontDeskPhone || "+91 294 243 3300").replace(/\s+/g, "")}`}
+                                      href={`tel:${(currentGuideDay.stayHotel.frontDeskPhone || "+91 81263 57353").replace(/\s+/g, "")}`}
                                       className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#222] hover:bg-[#2A2A2A] text-xs font-mono text-[#D4D4D8] border border-[#333]"
                                     >
                                       <Phone className="w-3 h-3 text-emerald-400" />
@@ -2663,22 +2662,22 @@ export default function VendorPortalPage() {
                                   <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1">
                                     <span className="text-[9px] font-mono uppercase text-[#71717A] block">Chauffeur Details:</span>
                                     <p className="font-serif text-[#FDFBF7] font-semibold text-sm">
-                                      {currentGuideDay.transportCoordination.chauffeurName || "Vikram Singh (Royal Chauffeur Fleet)"}
+                                      {currentGuideDay.transportCoordination.chauffeurName || "Dedicated Chauffeur (Royal Chauffeur Fleet)"}
                                     </p>
                                     <p className="font-mono text-xs text-[#C5A059]">
-                                      Direct: {currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222"}
+                                      Direct: {currentGuideDay.transportCoordination.chauffeurPhone || "+91 81263 57353"}
                                     </p>
                                     <div className="flex items-center gap-2 pt-1.5">
                                       <a
-                                        href={`tel:${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222").replace(/\s+/g, "")}`}
+                                        href={`tel:${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 81263 57353").replace(/\s+/g, "")}`}
                                         className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-[#222] hover:bg-[#2A2A2A] text-[11px] font-mono text-[#D4D4D8] border border-[#333]"
                                       >
                                         <Phone className="w-3 h-3 text-sky-400" />
                                         <span>Call Driver</span>
                                       </a>
                                       <a
-                                        href={`https://wa.me/${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 98290 11222").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
-                                          `Namaste ${currentGuideDay.transportCoordination.chauffeurName || "Vikram Singh"}. This is ${partner.name} (Tour Guide) re: Guest ${lead.clientName}. Day ${activeGuideDayNum} tour coordination:`
+                                        href={`https://wa.me/${(currentGuideDay.transportCoordination.chauffeurPhone || "+91 81263 57353").replace(/[^0-9]/g, "")}?text=${encodeURIComponent(
+                                          `Namaste ${currentGuideDay.transportCoordination.chauffeurName || "Dedicated Chauffeur"}. This is ${partner.name} (Tour Guide) re: Guest ${lead.clientName}. Day ${activeGuideDayNum} tour coordination:`
                                         )}`}
                                         target="_blank"
                                         rel="noopener noreferrer"
@@ -2693,7 +2692,7 @@ export default function VendorPortalPage() {
                                   <div className="p-2.5 rounded-lg bg-[#111111] border border-[#222] space-y-1">
                                     <span className="text-[9px] font-mono uppercase text-[#71717A] block">Vehicle Model & Plate:</span>
                                     <p className="font-serif text-[#FDFBF7] font-semibold text-sm">
-                                      {currentGuideDay.transportCoordination.vehicleModel || "Land Rover Defender 110 4WD"}
+                                      {currentGuideDay.transportCoordination.vehicleModel || "Dedicated Luxury Vehicle"}
                                     </p>
                                     <span className="text-[10px] font-mono text-sky-300 block">
                                       Plate: {currentGuideDay.transportCoordination.licensePlate || "RJ 27 EA 0001"}
@@ -3494,7 +3493,7 @@ export default function VendorPortalPage() {
                       </button>
 
                       <a
-                        href={`https://wa.me/919820144521?text=${encodeURIComponent(
+                        href={`https://wa.me/918126357353?text=${encodeURIComponent(
                           `Namaste ${lead.assignedCurator}. This is ${partner.name}. Re: Guest ${lead.clientName} (${lead.referenceCode}). Current status: ${currentStatus}. Notes: ${currentNotes}`
                         )}`}
                         target="_blank"
@@ -3508,7 +3507,8 @@ export default function VendorPortalPage() {
                   </div>
                 </div>
               );
-            })}
+            })
+            )}
           </div>
         </div>
       )}

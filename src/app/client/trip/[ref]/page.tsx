@@ -3,10 +3,8 @@ import ClientPortalDashboard from "@/app/client/portal/page";
 
 export function generateStaticParams() {
   return [
-    { ref: "mr-sharma" },
-    { ref: "sv-2026-vip" },
     { ref: "preview" },
-    { ref: "sv-2026-ksh" },
+    { ref: "bespoke" },
   ];
 }
 
