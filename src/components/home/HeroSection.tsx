@@ -139,7 +139,7 @@ export default function HeroSection() {
           <span>Curators of Bespoke Luxury</span>
         </div>
 
-        <h1 className="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-light tracking-tight text-white leading-[1.1] drop-shadow-sm max-w-4xl mx-auto">
+        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl font-light tracking-tight text-white leading-[1.12] drop-shadow-sm max-w-4xl mx-auto">
           <span className="block text-[11px] sm:text-xs font-sans tracking-[0.3em] uppercase text-[#DFCDAE] font-semibold mb-3">
             Bespoke Luxury Travel in India
           </span>
@@ -171,10 +171,10 @@ export default function HeroSection() {
       <div className="relative z-20 max-w-5xl mx-auto px-6 w-full pt-4 pb-4">
         <form
           onSubmit={handleDiscoverySubmit}
-          className="bg-[#FDFBF7] text-[#1A1A1A] p-3 sm:p-4 shadow-2xl border border-white/20 grid grid-cols-1 md:grid-cols-4 gap-3 items-center"
+          className="bg-[#FDFBF7] text-[#1A1A1A] p-3 sm:p-4 shadow-2xl border border-white/20 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center"
         >
           {/* Destination Selector */}
-          <div className="p-2 border-b md:border-b-0 md:border-r border-[#1A1A1A]/10">
+          <div className="p-2 border-b sm:border-r lg:border-b-0 border-[#1A1A1A]/10">
             <label className="block text-[9px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold mb-1 flex items-center gap-1">
               <MapPin className="w-3 h-3" /> Destination
             </label>
@@ -193,7 +193,7 @@ export default function HeroSection() {
           </div>
 
           {/* Travel Style Selector */}
-          <div className="p-2 border-b md:border-b-0 md:border-r border-[#1A1A1A]/10">
+          <div className="p-2 border-b lg:border-b-0 lg:border-r border-[#1A1A1A]/10">
             <label className="block text-[9px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold mb-1 flex items-center gap-1">
               <Compass className="w-3 h-3" /> Travel Style
             </label>
@@ -212,7 +212,7 @@ export default function HeroSection() {
           </div>
 
           {/* Duration Selector */}
-          <div className="p-2 border-b md:border-b-0 md:border-r border-[#1A1A1A]/10">
+          <div className="p-2 border-b sm:border-b-0 sm:border-r border-[#1A1A1A]/10">
             <label className="block text-[9px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold mb-1 flex items-center gap-1">
               <Clock className="w-3 h-3" /> Ideal Duration
             </label>

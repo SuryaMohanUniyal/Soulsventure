@@ -122,7 +122,7 @@ export default function StartYourJourneySection() {
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#F5F2EB] text-[#C5A880] text-[10px] uppercase tracking-[0.25em] font-semibold mb-3">
             <Sparkles className="w-3.5 h-3.5" /> India Bespoke Collections
           </div>
-          <h2 className="font-serif text-3xl sm:text-5xl lg:text-6xl font-light tracking-[0.06em] text-[#1A1A1A] uppercase mb-4 sm:mb-6">
+          <h2 className="font-serif text-3xl sm:text-4xl lg:text-5xl xl:text-6xl font-light tracking-[0.06em] text-[#1A1A1A] uppercase mb-4 sm:mb-6">
             Start Your Journey
           </h2>
           <p className="text-[#1A1A1A]/70 text-sm sm:text-base font-light max-w-2xl mx-auto">
@@ -130,7 +130,7 @@ export default function StartYourJourneySection() {
           </p>
 
           {/* Interactive Navigation Filter Tabs */}
-          <div className="flex items-center justify-center gap-8 sm:gap-14 overflow-x-auto pb-4 border-b border-[#1A1A1A]/10 text-xs sm:text-sm uppercase tracking-[0.22em] font-medium mt-8 sm:mt-12">
+          <div className="flex items-center sm:justify-center gap-4 sm:gap-8 md:gap-10 lg:gap-12 overflow-x-auto pb-4 border-b border-[#1A1A1A]/10 text-xs sm:text-sm uppercase tracking-[0.16em] sm:tracking-[0.22em] font-medium mt-8 sm:mt-12 scrollbar-none px-2">
             {TABS.map((tab) => {
               const isActive = activeTab === tab;
               return (

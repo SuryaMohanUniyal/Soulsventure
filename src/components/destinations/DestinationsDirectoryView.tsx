@@ -7,7 +7,7 @@ import { ArrowRight, Calendar, Compass, Grid, Map, Sparkles, Search } from "luci
 import { DESTINATIONS } from "@/data/mockData";
 import InteractiveDestinationMap from "@/components/destinations/InteractiveDestinationMap";
 
-const CONTINENTS = ["All", "Africa", "Asia", "The Americas", "Europe"];
+const CONTINENTS = ["All", "Rajasthan", "Himalayas", "Central India", "South India", "Islands"];
 
 export default function DestinationsDirectoryView() {
   const [selectedContinent, setSelectedContinent] = useState("All");

@@ -100,7 +100,7 @@ export default function ExploreOurTripsCarousel() {
             <span className="text-[10px] uppercase tracking-[0.3em] text-[#C5A880] font-semibold flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5" /> Handcrafted Expeditions
             </span>
-            <h2 className="font-sans text-3xl sm:text-5xl lg:text-6xl font-bold tracking-[0.12em] text-white uppercase leading-none">
+            <h2 className="font-sans text-3xl sm:text-4xl lg:text-4xl xl:text-5xl font-bold tracking-[0.08em] sm:tracking-[0.12em] text-white uppercase leading-tight">
               Explore Our Trips
             </h2>
             <p className="font-serif italic text-white/80 text-lg sm:text-xl font-light leading-relaxed">

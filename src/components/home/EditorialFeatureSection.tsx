@@ -86,7 +86,7 @@ export default function EditorialFeatureSection() {
               </div>
 
               {/* Inset Secondary Image (Floating Card) */}
-              <div className="hidden sm:block absolute -bottom-10 -left-10 w-64 h-52 border-4 border-white shadow-2xl overflow-hidden bg-white">
+              <div className="hidden md:block lg:absolute lg:-bottom-10 lg:-left-10 w-56 lg:w-64 h-44 lg:h-52 border-4 border-white shadow-2xl overflow-hidden bg-white mt-4 lg:mt-0">
                 <Image
                   src="https://images.unsplash.com/photo-1516426122078-c23e76319801?auto=format&fit=crop&w=800&q=80"
                   alt="Wild leopard on granite rocks in Jawai"

@@ -78,7 +78,7 @@ export default function Navbar() {
           </Link>
 
           {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-xs uppercase tracking-[0.16em] font-medium whitespace-nowrap">
+          <nav className="hidden lg:flex items-center gap-3.5 xl:gap-7 lg:text-[11px] xl:text-xs uppercase tracking-[0.13em] xl:tracking-[0.16em] font-medium whitespace-nowrap">
             {/* Destinations Mega Menu */}
             <div
               className="relative"
@@ -96,7 +96,7 @@ export default function Navbar() {
 
               {/* Mega Menu Dropdown */}
               {activeDropdown === "destinations" && (
-                <div className="absolute top-full -left-20 w-[680px] bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 shadow-2xl p-6 grid grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-full -left-20 w-[620px] xl:w-[680px] max-w-[calc(100vw-2rem)] bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 shadow-2xl p-6 grid grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-2 duration-200">
                   <div className="col-span-2 space-y-4">
                     <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-2">
                       <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold">
@@ -223,7 +223,7 @@ export default function Navbar() {
           </nav>
 
           {/* Right Action Buttons */}
-          <div className="hidden lg:flex items-center gap-3 xl:gap-3.5 flex-shrink-0 whitespace-nowrap">
+          <div className="hidden lg:flex items-center gap-2 xl:gap-3 flex-shrink-0 whitespace-nowrap">
             {/* Search Popover Button */}
             <button
               onClick={() => setIsSearchOpen(true)}
@@ -240,7 +240,7 @@ export default function Navbar() {
             {/* Primary Enquire CTA */}
             <Link
               href="/enquire"
-              className="px-5 py-2.5 rounded-full text-xs uppercase tracking-[0.18em] font-semibold whitespace-nowrap transition-all duration-300 bg-[#C5A880] hover:bg-[#9E7E50] text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
+              className="px-4 py-2 xl:px-5 xl:py-2.5 rounded-full text-[11px] xl:text-xs uppercase tracking-[0.15em] xl:tracking-[0.18em] font-semibold whitespace-nowrap transition-all duration-300 bg-[#C5A880] hover:bg-[#9E7E50] text-white shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-[0.98]"
             >
               Enquire Now
             </Link>
@@ -265,6 +265,13 @@ export default function Navbar() {
 
           {/* Mobile Actions & Menu Toggle */}
           <div className="flex items-center space-x-2 lg:hidden">
+            <Link
+              href="/enquire"
+              className="hidden sm:inline-flex items-center px-3.5 py-1.5 rounded-full text-[11px] uppercase tracking-wider font-semibold bg-[#C5A880] hover:bg-[#9E7E50] text-white shadow-sm transition-colors whitespace-nowrap"
+            >
+              Enquire
+            </Link>
+
             <button
               onClick={() => setIsSearchOpen(true)}
               className={`p-2 rounded-full ${
