@@ -96,8 +96,8 @@ export default function Navbar() {
 
               {/* Mega Menu Dropdown */}
               {activeDropdown === "destinations" && (
-                <div className="absolute top-full -left-20 w-[620px] xl:w-[680px] max-w-[calc(100vw-2rem)] bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 shadow-2xl p-6 grid grid-cols-3 gap-6 animate-in fade-in slide-in-from-top-2 duration-200">
-                  <div className="col-span-2 space-y-4">
+                <div className="absolute top-full -left-16 w-[700px] xl:w-[760px] max-w-[calc(100vw-2rem)] bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 shadow-2xl p-6 grid grid-cols-12 gap-6 animate-in fade-in slide-in-from-top-2 duration-200 whitespace-normal">
+                  <div className="col-span-7 space-y-4">
                     <div className="flex items-center justify-between border-b border-[#1A1A1A]/10 pb-2">
                       <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold">
                         Explore by Indian Region
@@ -122,7 +122,7 @@ export default function Navbar() {
                                 <li key={dest.id}>
                                   <Link
                                     href={`/destinations/${dest.slug}`}
-                                    className="hover:text-[#C5A880] transition-colors block py-0.5"
+                                    className="hover:text-[#C5A880] transition-colors block py-1 text-xs leading-snug whitespace-normal break-words"
                                   >
                                     {dest.name}
                                   </Link>
@@ -136,15 +136,15 @@ export default function Navbar() {
                   </div>
 
                   {/* Featured Spotlight in Mega Menu */}
-                  <div className="col-span-1 bg-[#F5F2EB] p-4 flex flex-col justify-between">
+                  <div className="col-span-5 bg-[#F5F2EB] p-5 flex flex-col justify-between border border-[#1A1A1A]/5 rounded-sm">
                     <div>
-                      <span className="text-[9px] uppercase tracking-[0.2em] text-[#C5A880] font-medium block mb-1">
+                      <span className="text-[9px] uppercase tracking-[0.2em] text-[#C5A880] font-semibold block mb-1.5">
                         Curator Spotlight
                       </span>
-                      <h4 className="font-serif text-base text-[#1A1A1A] leading-snug">
+                      <h4 className="font-serif text-base text-[#1A1A1A] leading-snug whitespace-normal break-words font-medium">
                         Lake Pichola & Jawai Leopards
                       </h4>
-                      <p className="text-[11px] text-[#1A1A1A]/70 font-light mt-2 line-clamp-3">
+                      <p className="text-[11px] text-[#1A1A1A]/75 font-light mt-2.5 line-clamp-3 whitespace-normal leading-relaxed">
                         Private royal barge transfers, living palace suites, and granite wilderness safaris in Rajasthan.
                       </p>
                     </div>
@@ -175,7 +175,7 @@ export default function Navbar() {
               </Link>
 
               {activeDropdown === "styles" && (
-                <div className="absolute top-full -left-10 w-72 bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 shadow-2xl p-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200">
+                <div className="absolute top-full -left-10 w-80 bg-[#FDFBF7] text-[#1A1A1A] border border-[#1A1A1A]/10 shadow-2xl p-4 space-y-2 animate-in fade-in slide-in-from-top-2 duration-200 whitespace-normal">
                   <span className="text-[10px] uppercase tracking-[0.25em] text-[#C5A880] font-semibold block px-2 pb-1 border-b border-[#1A1A1A]/10">
                     Bespoke Styles
                   </span>
@@ -194,7 +194,7 @@ export default function Navbar() {
                       <span className="text-xs font-serif font-medium text-[#1A1A1A] group-hover:text-[#C5A880] block">
                         {style.label}
                       </span>
-                      <span className="text-[11px] text-[#1A1A1A]/50 font-sans font-light">
+                      <span className="text-[11px] text-[#1A1A1A]/60 font-sans font-light block whitespace-normal leading-snug">
                         {style.desc}
                       </span>
                     </Link>
