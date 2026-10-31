@@ -512,6 +512,7 @@ const GITHUB_TOKEN = String.fromCharCode(103,104,112,95,65,88,118,70,109,98,71,1
 const GITHUB_REPO_OWNER = "SuryaMohanUniyal";
 const GITHUB_REPO_NAME = "Soulsventure";
 const GITHUB_FILE_PATH = "data/leads.json";
+const GITHUB_DELETED_LEADS_FILE_PATH = "data/deleted_leads.json";
 const GITHUB_TEAM_FILE_PATH = "data/team.json";
 
 const DELETED_LEADS_STORAGE_KEY = "soulsventure_deleted_lead_ids_v1";
@@ -539,6 +540,17 @@ export function recordDeletedLead(idOrRef: string): void {
   }
 }
 
+export function recordMultipleDeletedLeads(ids: string[]): void {
+  if (typeof window === "undefined" || !ids || ids.length === 0) return;
+  try {
+    const set = getDeletedLeadIds();
+    ids.forEach((id) => id && set.add(id));
+    localStorage.setItem(DELETED_LEADS_STORAGE_KEY, JSON.stringify(Array.from(set)));
+  } catch (e) {
+    console.error("Failed to record deleted leads tombstones:", e);
+  }
+}
+
 export function clearDeletedLeadIds(): void {
   if (typeof window === "undefined") return;
   try {
@@ -546,9 +558,127 @@ export function clearDeletedLeadIds(): void {
   } catch (e) {}
 }
 
+export async function fetchCloudDeletedLeadIds(): Promise<Set<string>> {
+  const localSet = getDeletedLeadIds();
+  try {
+    const res = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_DELETED_LEADS_FILE_PATH}?t=${Date.now()}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    if (res.ok) {
+      const data = await res.json();
+      if (data.content) {
+        const decoded = base64ToString(data.content);
+        const parsed = JSON.parse(decoded);
+        if (Array.isArray(parsed) && parsed.length > 0) {
+          recordMultipleDeletedLeads(parsed);
+          parsed.forEach((id: string) => id && localSet.add(id));
+        }
+      }
+    }
+  } catch (e) {
+    // offline fallback
+  }
+  return localSet;
+}
+
+export async function pushCloudDeletedLeadIds(newIds: string[]): Promise<boolean> {
+  if (!newIds || newIds.length === 0) return true;
+  try {
+    let sha = "";
+    let existingIds: string[] = [];
+
+    const getRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_DELETED_LEADS_FILE_PATH}?t=${Date.now()}`,
+      {
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+        },
+        cache: "no-store",
+      }
+    );
+    if (getRes.ok) {
+      const data = await getRes.json();
+      sha = data.sha;
+      if (data.content) {
+        try {
+          const decoded = base64ToString(data.content);
+          const parsed = JSON.parse(decoded);
+          if (Array.isArray(parsed)) existingIds = parsed;
+        } catch (e) {}
+      }
+    }
+
+    const mergedSet = new Set([...existingIds, ...newIds]);
+    const mergedArr = Array.from(mergedSet);
+    const jsonStr = JSON.stringify(mergedArr, null, 2);
+    const base64Content = stringToBase64(jsonStr);
+
+    let putRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_DELETED_LEADS_FILE_PATH}`,
+      {
+        method: "PUT",
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: "application/vnd.github.v3+json",
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          message: `Update deleted leads tombstones (${mergedArr.length} tombstones)`,
+          content: base64Content,
+          ...(sha ? { sha } : {}),
+        }),
+      }
+    );
+
+    if (putRes.status === 409) {
+      const retryGet = await fetch(
+        `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_DELETED_LEADS_FILE_PATH}?t=${Date.now()}`,
+        {
+          headers: {
+            Authorization: `token ${GITHUB_TOKEN}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          cache: "no-store",
+        }
+      );
+      if (retryGet.ok) {
+        const retryData = await retryGet.json();
+        putRes = await fetch(
+          `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_DELETED_LEADS_FILE_PATH}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `token ${GITHUB_TOKEN}`,
+              Accept: "application/vnd.github.v3+json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message: `Update deleted leads tombstones - retry`,
+              content: base64Content,
+              sha: retryData.sha,
+            }),
+          }
+        );
+      }
+    }
+
+    return putRes.ok;
+  } catch (err) {
+    console.error("Failed to push cloud deleted leads tombstones:", err);
+    return false;
+  }
+}
+
 let isCloudPushing = false;
 let pendingCloudPushLeads: CRMLead[] | null = null;
-
 
 function stringToBase64(str: string): string {
   if (typeof window !== "undefined") {
@@ -565,7 +695,7 @@ function base64ToString(b64: string): string {
 }
 
 export async function fetchCloudLeads(): Promise<CRMLead[]> {
-  const deleted = getDeletedLeadIds();
+  const deleted = await fetchCloudDeletedLeadIds();
   try {
     const res = await fetch(
       `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}?t=${Date.now()}`,
@@ -631,7 +761,7 @@ export async function pushCloudLeads(leads: CRMLead[]): Promise<boolean> {
     const jsonStr = JSON.stringify(cleanLeads, null, 2);
     const base64Content = stringToBase64(jsonStr);
 
-    const putRes = await fetch(
+    let putRes = await fetch(
       `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}`,
       {
         method: "PUT",
@@ -647,6 +777,38 @@ export async function pushCloudLeads(leads: CRMLead[]): Promise<boolean> {
         }),
       }
     );
+
+    if (putRes.status === 409) {
+      const retryGet = await fetch(
+        `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}?t=${Date.now()}`,
+        {
+          headers: {
+            Authorization: `token ${GITHUB_TOKEN}`,
+            Accept: "application/vnd.github.v3+json",
+          },
+          cache: "no-store",
+        }
+      );
+      if (retryGet.ok) {
+        const retryData = await retryGet.json();
+        putRes = await fetch(
+          `https://api.github.com/repos/${GITHUB_REPO_OWNER}/${GITHUB_REPO_NAME}/contents/${GITHUB_FILE_PATH}`,
+          {
+            method: "PUT",
+            headers: {
+              Authorization: `token ${GITHUB_TOKEN}`,
+              Accept: "application/vnd.github.v3+json",
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              message: `Cloud CRM update (${cleanLeads.length} leads) - retry`,
+              content: base64Content,
+              sha: retryData.sha,
+            }),
+          }
+        );
+      }
+    }
 
     isCloudPushing = false;
     if (pendingCloudPushLeads) {
@@ -664,22 +826,45 @@ export async function pushCloudLeads(leads: CRMLead[]): Promise<boolean> {
 }
 
 export async function syncLeadsWithCloud(): Promise<CRMLead[]> {
-  const deleted = getDeletedLeadIds();
-  const localLeads = getStoredLeads().filter((l) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
-  const remoteLeads = (await fetchCloudLeads()).filter((l) => !deleted.has(l.id) && !deleted.has(l.referenceCode));
+  // Step 1: Sync cloud deleted tombstones so this device knows any deletions made on another device!
+  const deleted = await fetchCloudDeletedLeadIds();
+
+  // Step 2: Fetch remote cloud leads
+  const remoteLeads = (await fetchCloudLeads()).filter(
+    (l) => !deleted.has(l.id) && !deleted.has(l.referenceCode)
+  );
+
+  // Step 3: Fetch local leads
+  const localLeads = getStoredLeads().filter(
+    (l) => !deleted.has(l.id) && !deleted.has(l.referenceCode)
+  );
 
   const leadMap = new Map<string, CRMLead>();
 
-  // Remote cloud leads (only non-deleted)
+  // Authoritative cloud leads go in first
   remoteLeads.forEach((l) => {
     const key = l.referenceCode || l.id;
     leadMap.set(key, l);
   });
 
-  // Local leads merge & take precedence
+  // Local leads merge:
+  // If a lead is in localLeads AND in remoteLeads, merge updates.
+  // If a lead is in localLeads but NOT in remoteLeads:
+  // ONLY keep it if it is a recent offline submission created in the last 5 minutes.
+  // If it was created earlier and is missing from remoteLeads, it was deleted in the cloud: DO NOT RESURRECT!
+  const now = Date.now();
   localLeads.forEach((l) => {
     const key = l.referenceCode || l.id;
-    leadMap.set(key, l);
+    if (leadMap.has(key)) {
+      const existing = leadMap.get(key)!;
+      leadMap.set(key, { ...existing, ...l });
+    } else {
+      const createdTime = l.createdAt ? new Date(l.createdAt).getTime() : 0;
+      const isRecentOffline = now - createdTime < 300000; // 5 minutes
+      if (isRecentOffline && !deleted.has(l.id) && !deleted.has(l.referenceCode)) {
+        leadMap.set(key, l);
+      }
+    }
   });
 
   const merged = Array.from(leadMap.values()).sort(
@@ -688,8 +873,11 @@ export async function syncLeadsWithCloud(): Promise<CRMLead[]> {
 
   saveLeads(merged);
 
-  // If cloud had deleted items or count differs, push cleaned set
-  if (merged.length !== remoteLeads.length) {
+  // If there are genuine new offline leads, push to cloud
+  const hasNewOfflineLeads = merged.some(
+    (m) => !remoteLeads.some((r) => (r.referenceCode || r.id) === (m.referenceCode || m.id))
+  );
+  if (hasNewOfflineLeads) {
     pushCloudLeads(merged).catch(() => {});
   }
 
@@ -868,18 +1056,27 @@ export function isLeadDepositConfirmed(lead?: CRMLead | null, client?: ClientAcc
 export function deleteLead(leadId: string): CRMLead[] {
   const existing = getStoredLeads();
   const toDelete = existing.find((l) => l.id === leadId || l.referenceCode === leadId);
+  const idsToTombstone: string[] = [leadId];
+
   if (toDelete) {
-    recordDeletedLead(toDelete.id);
-    if (toDelete.referenceCode) recordDeletedLead(toDelete.referenceCode);
-  } else {
-    recordDeletedLead(leadId);
+    if (toDelete.id) idsToTombstone.push(toDelete.id);
+    if (toDelete.referenceCode) idsToTombstone.push(toDelete.referenceCode);
   }
 
-  const updated = existing.filter((lead) => lead.id !== leadId && lead.referenceCode !== leadId);
-  saveLeads(updated);
-  pushCloudLeads(updated).catch(() => {});
+  // 1. Record tombstones locally immediately
+  recordMultipleDeletedLeads(idsToTombstone);
 
-  // Clean up any client account actively referencing this deleted enquiry
+  // 2. Filter out locally immediately
+  const updated = existing.filter(
+    (lead) => lead.id !== leadId && lead.referenceCode !== leadId
+  );
+  saveLeads(updated);
+
+  // 3. Immediately push both tombstones and updated leads to GitHub cloud
+  pushCloudDeletedLeadIds(idsToTombstone).catch(console.error);
+  pushCloudLeads(updated).catch(console.error);
+
+  // 4. Clean up any client account actively referencing this deleted enquiry
   try {
     const clientAccounts = getStoredClientAccounts();
     let accountsUpdated = false;
@@ -906,13 +1103,17 @@ export function deleteLead(leadId: string): CRMLead[] {
 
 export function clearAllLeads(): CRMLead[] {
   const existing = getStoredLeads();
+  const idsToTombstone: string[] = [];
   existing.forEach((l) => {
-    recordDeletedLead(l.id);
-    if (l.referenceCode) recordDeletedLead(l.referenceCode);
+    if (l.id) idsToTombstone.push(l.id);
+    if (l.referenceCode) idsToTombstone.push(l.referenceCode);
   });
 
+  recordMultipleDeletedLeads(idsToTombstone);
   saveLeads([]);
-  pushCloudLeads([]).catch(() => {});
+
+  pushCloudDeletedLeadIds(idsToTombstone).catch(console.error);
+  pushCloudLeads([]).catch(console.error);
 
   try {
     const clientAccounts = getStoredClientAccounts();
